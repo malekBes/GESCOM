@@ -54,7 +54,8 @@ public class CommandeDAO {
 
             try {
                 String sql = "SELECT if(max(num_bon_commande) is null ,'0',max(num_bon_commande)) as 'max(num_bon_commande)' FROM pre_command_achat";
-                             // String sql = "SELECT max(num_bon_commande) FROM pre_command_achat ";
+
+                //  String sql = "SELECT max(num_bon_commande) FROM pre_command_achat ";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 
@@ -66,7 +67,7 @@ public class CommandeDAO {
             try {
                 String sql = "SELECT if(max(num_commande) is null,'0',max(num_commande)) as 'max(num_commande)' FROM commande_achat ";
 
-              //  String sql = "SELECT max(num_commande) FROM commande_achat ";
+                //  String sql = "SELECT max(num_commande) FROM commande_achat ";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 
@@ -427,7 +428,7 @@ public class CommandeDAO {
         }
     }
 
-        public void afficherDetailPre_CommandeForExcel(JTable table, String Num_Devis) {
+    public void afficherDetailPre_CommandeForExcel(JTable table, String Num_Devis) {
         PreparedStatement pst;
 
         DataBase_connect obj = new DataBase_connect();
@@ -694,17 +695,18 @@ public class CommandeDAO {
 
             java.text.SimpleDateFormat sdf
                     = new java.text.SimpleDateFormat("yyyy-MM-dd");
-
+            int i = 1;
             for (ligne_commande d : lstd) {
 
-                sql = "INSERT INTO ligne_commande_achat(num_commande, num_pre_command, date_pre_command, id_client) "
-                        + "VALUES ('" + d.getNum_commande() + "' ,'" + d.getId_pre_commande() + "','" + d.getDate_pre_command() + "'," + d.getId_client() + ")";
+                sql = "INSERT INTO ligne_commande_achat(num_commande, num_pre_command, date_pre_command, id_client,rank) "
+                        + "VALUES ('" + d.getNum_commande() + "' ,'" + d.getId_pre_commande() + "','" + d.getDate_pre_command() + "'," + d.getId_client() + ",'" + i + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
                 String s = "update pre_command_achat set id_commande ='" + d.getNum_commande() + "' where num_bon_commande='" + d.getId_pre_commande() + "'";
                 pst1 = (PreparedStatement) conn.prepareStatement(s);
                 pst1.execute();
+                i++;
             }
 
         } catch (SQLException e) {

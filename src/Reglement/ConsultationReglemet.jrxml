@@ -23,6 +23,7 @@
 	<field name="Banque" class="java.lang.String"/>
 	<field name="Num Cheque" class="java.lang.String"/>
 	<field name="Montant Relge" class="java.lang.String"/>
+	<field name="Date Reglement" class="java.lang.String"/>
 	<background>
 		<band/>
 	</background>
@@ -61,7 +62,7 @@
 	<pageHeader>
 		<band height="29">
 			<staticText>
-				<reportElement key="staticText-9" x="38" y="0" width="59" height="29" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
+				<reportElement key="staticText-9" x="18" y="0" width="59" height="29" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -76,7 +77,7 @@
 			</staticText>
 			<elementGroup/>
 			<staticText>
-				<reportElement key="staticText-9" x="97" y="0" width="69" height="29" uuid="7ef6ae92-3453-4761-83fd-fd5b3a265fd3"/>
+				<reportElement key="staticText-9" x="131" y="0" width="58" height="29" uuid="7ef6ae92-3453-4761-83fd-fd5b3a265fd3"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -90,7 +91,7 @@
 				<text><![CDATA[Date Echéance]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" x="166" y="0" width="56" height="29" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
+				<reportElement key="staticText-9" x="189" y="0" width="56" height="29" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -104,7 +105,7 @@
 				<text><![CDATA[Total TTC]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" x="222" y="0" width="66" height="29" uuid="8271bdd1-9e2e-4e16-b311-7ac6ee85e1eb"/>
+				<reportElement key="staticText-9" x="245" y="0" width="66" height="29" uuid="8271bdd1-9e2e-4e16-b311-7ac6ee85e1eb"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -118,7 +119,7 @@
 				<text><![CDATA[Montant Reglé]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="288" y="0" width="82" height="29" uuid="5752d202-32f9-4636-98b7-ed70afdd8e2b"/>
+				<reportElement x="311" y="0" width="70" height="29" uuid="5752d202-32f9-4636-98b7-ed70afdd8e2b"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -127,12 +128,12 @@
 					<rightPen lineWidth="0.5"/>
 				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font isBold="true"/>
+					<font size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Montant Restant]]></text>
 			</staticText>
 			<staticText>
-				<reportElement key="staticText-9" x="370" y="0" width="65" height="29" uuid="8eb2e3f3-df50-463b-b229-a728ebf72aa9"/>
+				<reportElement key="staticText-9" x="381" y="0" width="54" height="29" uuid="8eb2e3f3-df50-463b-b229-a728ebf72aa9"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -173,6 +174,20 @@
 				</textElement>
 				<text><![CDATA[Num Cheque]]></text>
 			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="77" y="0" width="54" height="29" uuid="4756b451-9226-49cd-8e58-8cabe0cb9273"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Reglement]]></text>
+			</staticText>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -181,7 +196,7 @@
 	<detail>
 		<band height="15">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="38" y="0" width="59" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<reportElement key="textField" x="18" y="0" width="59" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -193,7 +208,7 @@
 				<textFieldExpression><![CDATA[$F{Num Facture}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
-				<reportElement key="textField" x="97" y="0" width="69" height="15" uuid="e9e58914-2d3d-40b1-bd8c-dda5de106583"/>
+				<reportElement key="textField" x="131" y="0" width="58" height="15" uuid="e9e58914-2d3d-40b1-bd8c-dda5de106583"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -201,11 +216,13 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Date Echéance}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="288" y="0" width="82" height="15" uuid="afdae2b4-7aad-4b60-9890-8d16aae49fa4"/>
+				<reportElement x="311" y="0" width="70" height="15" uuid="afdae2b4-7aad-4b60-9890-8d16aae49fa4"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -217,7 +234,7 @@
 				<textFieldExpression><![CDATA[$F{Montant Restant}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="166" y="0" width="56" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
+				<reportElement key="textField" x="189" y="0" width="56" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -229,7 +246,7 @@
 				<textFieldExpression><![CDATA[$F{Total TTC}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="370" y="0" width="65" height="15" uuid="9d67fabc-8a4b-4134-a416-05e4b1f24005"/>
+				<reportElement x="381" y="0" width="54" height="15" uuid="9d67fabc-8a4b-4134-a416-05e4b1f24005"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -237,11 +254,13 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Type Réglement}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="222" y="0" width="66" height="15" uuid="f1f90f55-309a-4691-b494-f8e276663f64"/>
+				<reportElement x="245" y="0" width="66" height="15" uuid="f1f90f55-309a-4691-b494-f8e276663f64"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -261,7 +280,9 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center"/>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{Banque}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="true">
@@ -277,6 +298,20 @@
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{Num Cheque}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="77" y="0" width="54" height="15" uuid="4cefebb7-4571-4118-9aa8-8d1402ce24ce"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Date Reglement}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>

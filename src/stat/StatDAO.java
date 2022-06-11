@@ -1744,18 +1744,22 @@ public class StatDAO {
             columnNames.add("Date");
             columnNames.add("Nom Client");
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             df = model;
             int startAdd = 0;
             Double totalGlobal = 0.0;
+            Double totalGlobalTTC = 0.0;
+
             for (String Date : lstclient) {
                 startAdd = df.getRowCount();
                 id_client = Date;
                 String sql;
-                sql = "SELECT date_bl,c.nom, bl.Num_bl,bl.Total_HT,IF(bl.invoiced=1,'F','N') FROM `bl` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
+                sql = "SELECT date_bl,c.nom, bl.Num_bl,bl.Total_HT,bl.Total_TTC,IF(bl.invoiced=1,'F','N') FROM `bl` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
 
                 String DateClauseFrom = "";
                 if (!(id_client.isEmpty())) {
@@ -1782,12 +1786,14 @@ public class StatDAO {
                 rs = pst.executeQuery();
 
                 Double qteTotalClient = 0.0;
+                Double TTCTotalClient = 0.0;
+
                 String nomclient = "";
                 int x = 0;
                 while (rs.next()) {
 
                     nomclient = rs.getString("c.nom");
-                    Object LigneData[] = new Object[5];
+                    Object LigneData[] = new Object[6];
 
                     if (x == 0) {
 
@@ -1801,41 +1807,53 @@ public class StatDAO {
 
                     LigneData[2] = rs.getString("bl.Num_bl");
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
-                    LigneData[4] = rs.getString("IF(bl.invoiced=1,'F','N')");
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
+
+                    LigneData[5] = rs.getString("IF(bl.invoiced=1,'F','N')");
                     df.insertRow(startAdd, LigneData);
 
                     qteTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+
+                    TTCTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
                     startAdd++;
 
                 }
 
-                Object LigneData[] = new Object[5];
+                Object LigneData[] = new Object[6];
 
                 LigneData[0] = "Total";
                 LigneData[1] = "";
                 LigneData[2] = "";
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(qteTotalClient));
-                LigneData[4] = "";
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TTCTotalClient));
+
+                LigneData[5] = "";
 
                 totalGlobal += qteTotalClient;
+                totalGlobalTTC += TTCTotalClient;
+
                 df.insertRow(startAdd, LigneData);
-                Object LigneDatas[] = new Object[5];
+                Object LigneDatas[] = new Object[6];
 
                 LigneDatas[0] = "";
                 LigneDatas[1] = "";
                 LigneDatas[2] = "";
+                LigneDatas[3] = "";
+
                 LigneDatas[4] = "";
 
                 df.insertRow(startAdd + 1, LigneDatas);
             }
-            Object LigneData[] = new Object[5];
+            Object LigneData[] = new Object[6];
 
             LigneData[0] = "Total tous les Dates";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(totalGlobal);
-            LigneData[4] = "";
-            df.insertRow(startAdd + 1, LigneData);
+            LigneData[4] = Config.Commen_Proc.formatDouble(totalGlobalTTC);
+
+            LigneData[5] = "";
+            df.insertRow(startAdd + 2, LigneData);
             table.setModel(df);
 
         } catch (SQLException e) {
@@ -1854,18 +1872,22 @@ public class StatDAO {
             columnNames.add("Date");
             columnNames.add("Nom Client");
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             df = model;
             int startAdd = 0;
             Double totalGlobal = 0.0;
+            Double totalGlobalTTC = 0.0;
+
             for (String Date : lstclient) {
                 startAdd = df.getRowCount();
                 id_client = Date;
                 String sql;
-                sql = "SELECT date_devis,c.nom, bl.Num_devis,bl.Total_HT FROM `devis` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
+                sql = "SELECT date_devis,c.nom, bl.Num_devis,bl.Total_HT,bl.Total_TTC FROM `devis` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
 
                 String DateClauseFrom = "";
                 if (!(id_client.isEmpty())) {
@@ -1892,12 +1914,14 @@ public class StatDAO {
                 rs = pst.executeQuery();
 
                 Double qteTotalClient = 0.0;
+                Double TTCTotalClient = 0.0;
+
                 String nomclient = "";
                 int x = 0;
                 while (rs.next()) {
 
                     nomclient = rs.getString("c.nom");
-                    Object LigneData[] = new Object[5];
+                    Object LigneData[] = new Object[6];
 
                     if (x == 0) {
 
@@ -1911,41 +1935,54 @@ public class StatDAO {
 
                     LigneData[2] = rs.getString("bl.Num_devis");
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
-                    LigneData[4] = "";
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
+
+                    LigneData[5] = "";
                     df.insertRow(startAdd, LigneData);
 
                     qteTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                    TTCTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                     startAdd++;
 
                 }
 
-                Object LigneData[] = new Object[5];
+                Object LigneData[] = new Object[6];
 
                 LigneData[0] = "Total";
                 LigneData[1] = "";
                 LigneData[2] = "";
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(qteTotalClient));
-                LigneData[4] = "";
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TTCTotalClient));
+
+                LigneData[5] = "";
 
                 totalGlobal += qteTotalClient;
+                totalGlobalTTC += TTCTotalClient;
+
                 df.insertRow(startAdd, LigneData);
-                Object LigneDatas[] = new Object[5];
+                Object LigneDatas[] = new Object[6];
 
                 LigneDatas[0] = "";
                 LigneDatas[1] = "";
                 LigneDatas[2] = "";
+                LigneDatas[3] = "";
+
                 LigneDatas[4] = "";
+                LigneDatas[5] = "";
 
                 df.insertRow(startAdd + 1, LigneDatas);
             }
-            Object LigneData[] = new Object[5];
+            Object LigneData[] = new Object[6];
 
             LigneData[0] = "Total tous les Dates";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(totalGlobal);
-            LigneData[4] = "";
-            df.insertRow(startAdd + 1, LigneData);
+            LigneData[4] = Config.Commen_Proc.formatDouble(totalGlobalTTC);
+
+            LigneData[5] = "";
+            df.insertRow(startAdd + 2, LigneData);
             table.setModel(df);
 
         } catch (SQLException e) {
@@ -1964,18 +2001,22 @@ public class StatDAO {
             columnNames.add("Date");
             columnNames.add("Nom Client");
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             df = model;
             int startAdd = 0;
             Double totalGlobal = 0.0;
+            Double totalGlobalTTC = 0.0;
+
             for (String Date : lstclient) {
                 startAdd = df.getRowCount();
                 id_client = Date;
                 String sql;
-                sql = "SELECT date_reliquat,c.nom, bl.Num_reliquat,bl.Total_HT FROM `reliquat` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
+                sql = "SELECT date_reliquat,c.nom, bl.Num_reliquat,bl.Total_HT,bl.Total_TTC FROM `reliquat` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
 
                 String DateClauseFrom = "";
                 if (!(id_client.isEmpty())) {
@@ -2002,12 +2043,14 @@ public class StatDAO {
                 rs = pst.executeQuery();
 
                 Double qteTotalClient = 0.0;
+                Double TTCTotalClient = 0.0;
+
                 String nomclient = "";
                 int x = 0;
                 while (rs.next()) {
 
                     nomclient = rs.getString("c.nom");
-                    Object LigneData[] = new Object[5];
+                    Object LigneData[] = new Object[6];
 
                     if (x == 0) {
 
@@ -2021,41 +2064,54 @@ public class StatDAO {
 
                     LigneData[2] = rs.getString("bl.Num_reliquat");
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
-                    LigneData[4] = "";
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
+
+                    LigneData[5] = "";
                     df.insertRow(startAdd, LigneData);
 
                     qteTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                    TTCTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                     startAdd++;
 
                 }
 
-                Object LigneData[] = new Object[5];
+                Object LigneData[] = new Object[6];
 
                 LigneData[0] = "Total";
                 LigneData[1] = "";
                 LigneData[2] = "";
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(qteTotalClient));
-                LigneData[4] = "";
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TTCTotalClient));
+
+                LigneData[5] = "";
 
                 totalGlobal += qteTotalClient;
+                totalGlobalTTC += TTCTotalClient;
+
                 df.insertRow(startAdd, LigneData);
-                Object LigneDatas[] = new Object[5];
+                Object LigneDatas[] = new Object[6];
 
                 LigneDatas[0] = "";
                 LigneDatas[1] = "";
                 LigneDatas[2] = "";
+                LigneDatas[3] = "";
+
                 LigneDatas[4] = "";
+                LigneDatas[5] = "";
 
                 df.insertRow(startAdd + 1, LigneDatas);
             }
-            Object LigneData[] = new Object[5];
+            Object LigneData[] = new Object[6];
 
             LigneData[0] = "Total tous les Dates";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(totalGlobal);
-            LigneData[4] = "";
-            df.insertRow(startAdd + 1, LigneData);
+            LigneData[4] = Config.Commen_Proc.formatDouble(totalGlobalTTC);
+
+            LigneData[5] = "";
+            df.insertRow(startAdd + 2, LigneData);
             table.setModel(df);
 
         } catch (SQLException e) {
@@ -2074,18 +2130,22 @@ public class StatDAO {
             columnNames.add("Date");
             columnNames.add("Nom Client");
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             df = model;
             int startAdd = 0;
             Double totalGlobal = 0.0;
+            Double totalGlobalTTC = 0.0;
+
             for (String Date : lstclient) {
                 startAdd = df.getRowCount();
                 id_client = Date;
                 String sql;
-                sql = "SELECT date_avoir,c.nom, bl.Num_avoir,bl.Total_HT FROM `avoir` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
+                sql = "SELECT date_avoir,c.nom, bl.Num_avoir,bl.Total_HT,bl.Total_TTC FROM `avoir` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1  ";
 
                 String DateClauseFrom = "";
                 if (!(id_client.isEmpty())) {
@@ -2112,12 +2172,13 @@ public class StatDAO {
                 rs = pst.executeQuery();
 
                 Double qteTotalClient = 0.0;
+                Double TTCTotalClient = 0.0;
                 String nomclient = "";
                 int x = 0;
                 while (rs.next()) {
 
                     nomclient = rs.getString("c.nom");
-                    Object LigneData[] = new Object[4];
+                    Object LigneData[] = new Object[5];
 
                     if (x == 0) {
 
@@ -2131,42 +2192,51 @@ public class StatDAO {
 
                     LigneData[2] = rs.getString("bl.Num_avoir");
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
 
                     df.insertRow(startAdd, LigneData);
 
                     qteTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                    TTCTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                     startAdd++;
 
                 }
 
                 if (qteTotalClient != 0.0) {
-                    Object LigneData[] = new Object[4];
+                    Object LigneData[] = new Object[5];
 
                     LigneData[0] = "Total";
                     LigneData[1] = "";
                     LigneData[2] = "";
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(qteTotalClient));
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TTCTotalClient));
 
                     totalGlobal += qteTotalClient;
+                    totalGlobalTTC += TTCTotalClient;
+
                     df.insertRow(startAdd, LigneData);
                     Object LigneDatas[] = new Object[5];
 
                     LigneDatas[0] = "";
                     LigneDatas[1] = "";
                     LigneDatas[2] = "";
+                    LigneDatas[3] = "";
+
                     LigneDatas[4] = "";
 
                     df.insertRow(startAdd + 1, LigneDatas);
                 }
             }
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total tous les Dates";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(totalGlobal);
+            LigneData[4] = Config.Commen_Proc.formatDouble(totalGlobalTTC);
 
-            df.insertRow(startAdd, LigneData);
+            df.insertRow(startAdd + 2, LigneData);
             table.setModel(df);
 
         } catch (SQLException e) {
@@ -2185,18 +2255,22 @@ public class StatDAO {
             columnNames.add("Date");
             columnNames.add("Nom Client");
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             df = model;
             int startAdd = 0;
             Double totalGlobal = 0.0;
+            Double totalGlobalTTC = 0.0;
+
             for (String Date : lstclient) {
                 startAdd = df.getRowCount();
                 id_client = Date;
                 String sql;
-                sql = "SELECT date_facture,c.nom, facture.Num_facture,facture.HT FROM `facture` facture left join client c on (facture.id_client=c.numero_Client) WHERE facture.statut=1  ";
+                sql = "SELECT date_facture,c.nom, facture.Num_facture,facture.HT,facture.TTC FROM `facture` facture left join client c on (facture.id_client=c.numero_Client) WHERE facture.statut=1  ";
 
                 String DateClauseFrom = "";
                 if (!(id_client.isEmpty())) {
@@ -2223,12 +2297,14 @@ public class StatDAO {
                 rs = pst.executeQuery();
 
                 Double qteTotalClient = 0.0;
+                Double TTCTotalClient = 0.0;
+
                 String nomclient = "";
                 int x = 0;
                 while (rs.next()) {
 
                     nomclient = rs.getString("c.nom");
-                    Object LigneData[] = new Object[4];
+                    Object LigneData[] = new Object[5];
 
                     if (x == 0) {
 
@@ -2242,44 +2318,53 @@ public class StatDAO {
 
                     LigneData[2] = rs.getString("facture.Num_facture");
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.HT")));
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.TTC")));
+
                     //  LigneData[4] = rs.getString("IF(bl.invoiced=1,'F','N')");
                     df.insertRow(startAdd, LigneData);
 
                     qteTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.HT"))));
+                    TTCTotalClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.TTC"))));
+
                     startAdd++;
 
                 }
                 if (qteTotalClient != 0.0) {
 
-                    Object LigneData[] = new Object[4];
+                    Object LigneData[] = new Object[5];
 
                     LigneData[0] = "Total";
                     LigneData[1] = "";
                     LigneData[2] = "";
                     LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(qteTotalClient));
-                    //  LigneData[4] = "";
+                    LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TTCTotalClient));
 
+                    //  LigneData[4] = "";
                     totalGlobal += qteTotalClient;
+                    totalGlobalTTC += TTCTotalClient;
                     df.insertRow(startAdd, LigneData);
                     Object LigneDatas[] = new Object[5];
 
                     LigneDatas[0] = "";
                     LigneDatas[1] = "";
                     LigneDatas[2] = "";
+                    LigneDatas[3] = "";
                     LigneDatas[4] = "";
 
                     df.insertRow(startAdd, LigneDatas);
                 }
             }
 
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total tous les Dates";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(totalGlobal);
+            LigneData[4] = Config.Commen_Proc.formatDouble(totalGlobalTTC);
+
             //LigneData[4] = "";
-            df.insertRow(startAdd, LigneData);
+            df.insertRow(startAdd+2, LigneData);
             table.setModel(df);
 
         } catch (SQLException e) {
@@ -2559,7 +2644,7 @@ public class StatDAO {
         try {
 
             String sql;
-            sql = "SELECT date_bl,c.nom, bl.Num_bl,bl.Total_HT,IF(bl.invoiced=1,'F','N') FROM `bl` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
+            sql = "SELECT date_bl,c.nom, bl.Num_bl,bl.Total_HT,bl.Total_TTC,IF(bl.invoiced=1,'F','N') FROM `bl` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
 
             String DateClauseFrom = "";
             if (!(FromDate.isEmpty())) {
@@ -2586,6 +2671,8 @@ public class StatDAO {
             rs = pst.executeQuery();
 
             Double TotalHTClient = 0.0;
+            Double TotalTTCClient = 0.0;
+
             int startAdd = 0;
 
             Vector<String> columnNames = new Vector<String>();
@@ -2593,7 +2680,9 @@ public class StatDAO {
             columnNames.add("Date");
 
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -2601,25 +2690,31 @@ public class StatDAO {
             df = model;
 
             while (rs.next()) {
-                Object LigneData[] = new Object[5];
+                Object LigneData[] = new Object[6];
                 LigneData[0] = rs.getString("c.nom");
                 LigneData[1] = rs.getString("date_bl");
                 LigneData[2] = rs.getString("bl.Num_bl");
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
-                LigneData[4] = rs.getString("IF(bl.invoiced=1,'F','N')");
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
+
+                LigneData[5] = rs.getString("IF(bl.invoiced=1,'F','N')");
                 df.insertRow(startAdd, LigneData);
 
                 TotalHTClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                TotalTTCClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                 startAdd++;
 
             }
-            Object LigneData[] = new Object[5];
+            Object LigneData[] = new Object[6];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalHTClient));
-            LigneData[4] = "";
+            LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalTTCClient));
+
+            LigneData[5] = "";
             df.insertRow(startAdd, LigneData);
             table.setModel(df);
 
@@ -2637,7 +2732,7 @@ public class StatDAO {
         try {
 
             String sql;
-            sql = "SELECT date_devis,c.nom, bl.Num_devis,bl.Total_HT FROM `devis` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
+            sql = "SELECT date_devis,c.nom, bl.Num_devis,bl.Total_HT,bl.Total_TTC  FROM `devis` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
 
             String DateClauseFrom = "";
             if (!(FromDate.isEmpty())) {
@@ -2664,6 +2759,8 @@ public class StatDAO {
             rs = pst.executeQuery();
 
             Double TotalHTClient = 0.0;
+            Double TotalTTCClient = 0.0;
+
             int startAdd = 0;
 
             Vector<String> columnNames = new Vector<String>();
@@ -2671,7 +2768,9 @@ public class StatDAO {
             columnNames.add("Date");
 
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -2679,24 +2778,28 @@ public class StatDAO {
             df = model;
 
             while (rs.next()) {
-                Object LigneData[] = new Object[4];
+                Object LigneData[] = new Object[5];
                 LigneData[0] = rs.getString("c.nom");
                 LigneData[1] = rs.getString("date_devis");
                 LigneData[2] = rs.getString("bl.Num_devis");
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
 
                 df.insertRow(startAdd, LigneData);
 
                 TotalHTClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                TotalTTCClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                 startAdd++;
 
             }
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalHTClient));
+            LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalTTCClient));
 
             df.insertRow(startAdd, LigneData);
             table.setModel(df);
@@ -2715,7 +2818,7 @@ public class StatDAO {
         try {
 
             String sql;
-            sql = "SELECT date_reliquat,c.nom, bl.Num_reliquat,bl.Total_HT FROM `reliquat` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
+            sql = "SELECT date_reliquat,c.nom, bl.Num_reliquat,bl.Total_HT,bl.Total_TTC FROM `reliquat` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
 
             String DateClauseFrom = "";
             if (!(FromDate.isEmpty())) {
@@ -2742,6 +2845,8 @@ public class StatDAO {
             rs = pst.executeQuery();
 
             Double TotalHTClient = 0.0;
+            Double TotalTTCClient = 0.0;
+
             int startAdd = 0;
 
             Vector<String> columnNames = new Vector<String>();
@@ -2749,7 +2854,9 @@ public class StatDAO {
             columnNames.add("Date");
 
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -2757,24 +2864,28 @@ public class StatDAO {
             df = model;
 
             while (rs.next()) {
-                Object LigneData[] = new Object[4];
+                Object LigneData[] = new Object[5];
                 LigneData[0] = rs.getString("c.nom");
                 LigneData[1] = rs.getString("date_reliquat");
                 LigneData[2] = rs.getString("bl.Num_reliquat");
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
 
                 df.insertRow(startAdd, LigneData);
 
                 TotalHTClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                TotalTTCClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                 startAdd++;
 
             }
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalHTClient));
+            LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalTTCClient));
 
             df.insertRow(startAdd, LigneData);
             table.setModel(df);
@@ -2793,7 +2904,7 @@ public class StatDAO {
         try {
 
             String sql;
-            sql = "SELECT date_avoir,c.nom, bl.Num_avoir,bl.Total_HT FROM `avoir` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
+            sql = "SELECT date_avoir,c.nom, bl.Num_avoir,bl.Total_HT,bl.Total_TTC FROM `avoir` bl left join client c on (bl.id_client=c.numero_Client) WHERE bl.statut=1 ";
 
             String DateClauseFrom = "";
             if (!(FromDate.isEmpty())) {
@@ -2820,6 +2931,7 @@ public class StatDAO {
             rs = pst.executeQuery();
 
             Double TotalHTClient = 0.0;
+            Double TotalTTCClient = 0.0;
             int startAdd = 0;
 
             Vector<String> columnNames = new Vector<String>();
@@ -2827,7 +2939,9 @@ public class StatDAO {
             columnNames.add("Date");
 
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -2835,24 +2949,28 @@ public class StatDAO {
             df = model;
 
             while (rs.next()) {
-                Object LigneData[] = new Object[4];
+                Object LigneData[] = new Object[5];
                 LigneData[0] = rs.getString("c.nom");
                 LigneData[1] = rs.getString("date_avoir");
                 LigneData[2] = rs.getString("bl.Num_avoir");
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT")));
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC")));
 
                 df.insertRow(startAdd, LigneData);
 
                 TotalHTClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_HT"))));
+                TotalTTCClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("bl.Total_TTC"))));
+
                 startAdd++;
 
             }
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalHTClient));
+            LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalTTCClient));
 
             df.insertRow(startAdd, LigneData);
             table.setModel(df);
@@ -2871,7 +2989,7 @@ public class StatDAO {
         try {
 
             String sql;
-            sql = "SELECT date_facture,c.nom, facture.Num_facture,facture.HT FROM `facture` facture left join client c on (facture.id_client=c.numero_Client) WHERE facture.statut=1 ";
+            sql = "SELECT date_facture,c.nom, facture.Num_facture,facture.HT,facture.TTC FROM `facture` facture left join client c on (facture.id_client=c.numero_Client) WHERE facture.statut=1 ";
 
             String DateClauseFrom = "";
             if (!(FromDate.isEmpty())) {
@@ -2898,6 +3016,9 @@ public class StatDAO {
             rs = pst.executeQuery();
 
             Double TotalHTClient = 0.0;
+
+            Double TotalTTCClient = 0.0;
+
             int startAdd = 0;
 
             Vector<String> columnNames = new Vector<String>();
@@ -2905,7 +3026,9 @@ public class StatDAO {
             columnNames.add("Date");
 
             columnNames.add("Num");
-            columnNames.add("Total");
+            columnNames.add("Total HT");
+            columnNames.add("Total TTC");
+
             columnNames.add("Sort");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
@@ -2913,24 +3036,30 @@ public class StatDAO {
             df = model;
 
             while (rs.next()) {
-                Object LigneData[] = new Object[4];
+                Object LigneData[] = new Object[5];
                 LigneData[0] = rs.getString("c.nom");
                 LigneData[1] = rs.getString("date_facture");
                 LigneData[2] = rs.getString("facture.Num_facture");
                 LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.HT")));
+                LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.TTC")));
+
                 // LigneData[4] = rs.getString("IF(bl.invoiced=1,'F','N')");
                 df.insertRow(startAdd, LigneData);
 
                 TotalHTClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.HT"))));
+                TotalTTCClient += Double.valueOf(Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("facture.HT"))));
+
                 startAdd++;
 
             }
-            Object LigneData[] = new Object[4];
+            Object LigneData[] = new Object[5];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
             LigneData[2] = "";
             LigneData[3] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalHTClient));
+            LigneData[4] = Config.Commen_Proc.formatDouble(Double.valueOf(TotalTTCClient));
+
             //  LigneData[4] = "";
             df.insertRow(startAdd, LigneData);
             table.setModel(df);

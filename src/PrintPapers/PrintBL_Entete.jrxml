@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.4641000000000022"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.y" value="1152"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -30,7 +30,7 @@
 	<parameter name="PathImg" class="java.lang.String"/>
 	<parameter name="HideTotal" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM `ligne_bl` ld left join bl d on ld.id_bl=d.num_bl left join client c on c.numero_client=d.id_client where d.Num_bl=$P{num_bl}]]>
+		<![CDATA[SELECT * FROM `ligne_bl` ld left join bl d on ld.id_bl=d.num_bl left join client c on c.numero_client=d.id_client where d.Num_bl=$P{num_bl}  order by cast(ld.rank as unsigned)]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -60,6 +60,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="total_TTC" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Num_bl" class="java.lang.String">
@@ -185,6 +188,15 @@
 	<field name="UpdatedBy" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
+	<field name="classification" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="seuil_compte" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="echeance_payement" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
 	<variable name="montant_tva_1" class="java.lang.Double" resetType="Page" calculation="Sum">
 		<variableExpression><![CDATA[$F{montant_tva}]]></variableExpression>
 	</variable>
@@ -195,7 +207,7 @@
 		<band height="842">
 			<image>
 				<reportElement x="12" y="0" width="579" height="842" uuid="112c6866-e9d9-4d66-a201-bb1d70268247"/>
-				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5-no-ttc.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -300,18 +312,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id_Fiscale}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="346" y="141" width="195" height="53" uuid="f6f1a3a0-a175-4083-9112-d2225cb216ae"/>
-				<box>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" "+$F{adresse}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement key="staticText-1" x="54" y="121" width="165" height="25" uuid="4cfeb9f3-418c-42ac-b97e-9f76dfe445f8"/>
 				<textElement>
@@ -319,6 +319,18 @@
 				</textElement>
 				<text><![CDATA[Bon de livraison]]></text>
 			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="346" y="141" width="195" height="41" uuid="2a5fa97e-fe81-49da-8459-229209be0ee6"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>

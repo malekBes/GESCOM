@@ -67,6 +67,7 @@ public class FactureForm extends javax.swing.JInternalFrame {
      */
     String type_operation = "";
     String combo = "";
+    String ss = "";
 
     public FactureForm(Vector<Vector<Object>> obj, String s, String NumFacture) {
 
@@ -80,12 +81,13 @@ public class FactureForm extends javax.swing.JInternalFrame {
         lstBLexport = new Vector<Vector<Object>>();
         ClientDao clientDao = new ClientDao();
         factureDAO = new FactureDAO();
-        listNomSte = clientDao.afficherClient();
+        //  listNomSte = clientDao.afficherClient();
         Date_facture.setDate(new Date());
         Date_facture.setEnabled(false);
         numFactureAnnuleeComboBox();
         CheckBox_timbre.setSelected(true);
         txt_timbre.setText(Commen_Proc.TimbreVal);
+        ss = s;
         if (s != "Client") {
             setNumFacture();
         }
@@ -111,11 +113,11 @@ public class FactureForm extends javax.swing.JInternalFrame {
             String[] x = idClient_nom_adresse_timbre_info.split(";");
             id_client = x[0];
             txt_adresse.setText(x[2]);
-            txt_adresse.setEnabled(false);
+            //  txt_adresse.setEnabled(false);
             txt_search.setText(x[1]);
-            txt_search.setEnabled(false);
+            //  txt_search.setEnabled(false);
             txt_infos_facture.setText(x[4]);
-            txt_infos_facture.setEnabled(false);
+            //  txt_infos_facture.setEnabled(false);
             jButtonExporterBL.setEnabled(false);
             // Date_facture.setEnabled(true);
             if (x[3].equals("1")) {
@@ -131,6 +133,7 @@ public class FactureForm extends javax.swing.JInternalFrame {
             try {
                 Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
                 Date_facture.setDate(date1);
+                Date_facture.setEnabled(true);
             } catch (Exception e) {
                 JOptionPane.showMessageDialog(this, e.getMessage());
             }
@@ -160,7 +163,7 @@ public class FactureForm extends javax.swing.JInternalFrame {
             reCalculerTT();
 
         }
-        SearchBL();
+        //  SearchBL();
         this.addInternalFrameListener(new InternalFrameAdapter() {
             public void internalFrameClosing(InternalFrameEvent e) {
                 int reply = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment quitter ?", "Quitter", JOptionPane.YES_NO_OPTION);
@@ -909,19 +912,22 @@ public class FactureForm extends javax.swing.JInternalFrame {
                             clearDevisLFields();
                             lstBL = new Vector<Vector<Object>>();
                             lstBLexport = new Vector<Vector<Object>>();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error in CreateBL ActionPerformed ");
                         }
                     } else if (type_operation.equals("Modif")) {
                         if (fdao.modifierFacture(d)) {
-                            JOptionPane.showMessageDialog(null, "Facture " + txt_num_facture.getText() + " à été bien modifiée !");
+
                             ArrayList<ligne_facture> lstd;
                             lstd = setLigneDevisFromDevisTable();
                             fdao.modifierLigneFacture(lstd);
                             fdao.setBLInvoiced(lstd);
-
+                            JOptionPane.showMessageDialog(null, "Facture " + txt_num_facture.getText() + " à été bien modifiée !");
+                            this.dispose();
                             setNumFacture();
                             clearDevisLFields();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error in CreateBL ActionPerformed ");
                         }
@@ -937,6 +943,7 @@ public class FactureForm extends javax.swing.JInternalFrame {
 
                             setNumFacture();
                             clearDevisLFields();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error in CreateBL ActionPerformed ");
                         }
@@ -980,9 +987,11 @@ public class FactureForm extends javax.swing.JInternalFrame {
     private ArrayList<ligne_facture> setLigneDevisFromDevisTable() {
 
         ArrayList<ligne_facture> lst = new ArrayList<ligne_facture>();
-
+        int i = 0;
         for (int j = 0; j < Table_facture.getRowCount(); j++) {
             ligne_facture lf = new ligne_facture();
+            i++;
+            lf.setId(i);
             lf.setNum_bl(Table_facture.getValueAt(j, 2).toString());
             lf.setNum_facture(txt_num_facture.getText());
             lst.add(lf);
@@ -1005,7 +1014,9 @@ public class FactureForm extends javax.swing.JInternalFrame {
         columnName.add("Adresse");
 
         ClientDao clientDao = new ClientDao();
-        Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+        //  Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+        Vector<Vector<Object>> data1 = null;
+
         DefaultTableModel model = new DefaultTableModel(data1, columnName);
         JTable jTable = new JTable(model);
 
@@ -1099,12 +1110,15 @@ public class FactureForm extends javax.swing.JInternalFrame {
                 TableModel tableModel = new DefaultTableModel(null, columnNames);
                 BLHist_Table.setModel(tableModel);
 
-                TableModel tableModel1 = new DefaultTableModel(null, columnNames);
-                Table_facture.setModel(tableModel1);
-                lstBLexport = new Vector<Vector<Object>>();
+                if (ss != "Client") {
+                    TableModel tableModel1 = new DefaultTableModel(null, columnNames);
+                    Table_facture.setModel(tableModel1);
+
+                    lstBLexport = new Vector<Vector<Object>>();
+                }
                 lstBL = new Vector<Vector<Object>>();
                 Date_facture.setDate(new Date());
-                Date_facture.setEnabled(false);
+                Date_facture.setEnabled(true);
                 SearchBL();
             }
         });
@@ -1401,6 +1415,8 @@ public class FactureForm extends javax.swing.JInternalFrame {
         }
         if (CheckBox_timbre.isSelected()) {
             r.setTimbre(Commen_Proc.TimbreVal);
+        } else {
+            r.setTimbre("0.000");
         }
 
         /* } catch (Exception e) {

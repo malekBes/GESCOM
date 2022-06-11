@@ -14,7 +14,6 @@ import Achat.pre_commande.AnnulationPreCommandeAchatForm;
 import Achat.pre_commande.ModifPreCommandeAchatForm;
 import Achat.pre_commande.pre_commandeForm;
 import Article.ArticleForm;
-import Article.ListArticleComparativeForm;
 import avtivite.ClassificationArticleParActiviteForm;
 import Article.ListArticleForm;
 import Avoir.AnnulationAvoirForm;
@@ -46,9 +45,10 @@ import avtivite.FormTypeArticle;
 import Config.Bank.FormTypeReglement;
 import Config.Bank.FormZoneGeo;
 import Config.Bank.Formtype_clientProduit;
+import Config.Commen_Proc;
 import Config.ConfigDao;
 import Devis.AnnulationDevisForm;
-import Devis.FormDevis_old;
+import Devis.FormDevis;
 import Devis.FormDevisPassager;
 import Devis.FormReliquat;
 import Devis.ModifDevisForm;
@@ -75,11 +75,16 @@ import Recherche.RecherchAvoirAchatForm;
 import Recherche.RecherchAvoirVenteForm;
 import Recherche.RecherchBLDepotForm;
 import Recherche.RecherchFactureAchatForm;
+import Recherche.RecherchReliquatDetailForm;
 import Recherche.RecherchReliquatForm;
+import Recherche.RecherchTransactionDuJourForm;
+import Reglement.RechFactureNonPayeParRegion;
 import stat.GrandLivreForm;
 import Reglement.RecherchReglementForm;
 import Reglement.RecherchReglement_ComptableForm;
 import Reglement.SuiviFactureReglementForm;
+import alerts.AffectationAlertArticle;
+import alerts.AlertArticleForm;
 import alerts.AlertReglementForm;
 import alerts.ArticleNonVenduForm;
 import alerts.RecherchFactureDechargeForm;
@@ -101,6 +106,11 @@ import javax.swing.JPanel;
 import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
+import prospection.ListeGroupeArticleForm;
+import prospection.ProspectionGroupeArticleForm;
+import prospection.RechercheProspectionFrom;
+import prospection.RechercheSaisieProspectionFrom;
+import prospection.SaisieProspectionCommercial;
 import stat.EditionBLForm;
 import stat.*;
 import stat.StatVenteForm;
@@ -139,10 +149,34 @@ public class App extends javax.swing.JFrame {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());
         }
+        if (Commen_Proc.id_role.equals("1")) {
+
+        } else if (Commen_Proc.id_role.equals("2")) {
+            //.setVisible(false);
+            BanqueMenu.setVisible(false);
+            //VentesMenu.setVisible(false);
+            VentesPassagerMenu.setVisible(false);
+            ReglementMenu.setVisible(false);
+            Achat.setVisible(false);
+            DonneeMenu.setVisible(false);
+            stat.setVisible(false);
+            AlertMenu.setVisible(false);
+            FactureMenu.setVisible(false);
+            AvoirMenu.setVisible(false);
+            ReliquatMenuItem.setVisible(false);
+            annuldevisMenuItem.setVisible(false);
+            modifdevisMenuItem1.setVisible(false);
+            annulBLMenuItem.setVisible(false);
+            ModifBLMenuItem2.setVisible(false);
+            Facture.setVisible(false);
+            consultAvoirVente.setVisible(false);
+            RechercheMenu1.setVisible(false);
+            DevisRecherche1.setVisible(false);
+            GestionUserMenu.setVisible(false);
+            RechercheMenu.setVisible(false);
+        }
         statAchatFourParCommercial.setVisible(false);
         statglobal.setVisible(false);
-        Activite.setVisible(false);
-        CommercialMenu.setVisible(false);
 
     }
 
@@ -163,9 +197,7 @@ public class App extends javax.swing.JFrame {
         Famille = new javax.swing.JMenuItem();
         SousFamille = new javax.swing.JMenuItem();
         marque = new javax.swing.JMenuItem();
-        TypeArticle = new javax.swing.JMenuItem();
         ListArticle = new javax.swing.JMenuItem();
-        TableauComparatif = new javax.swing.JMenuItem();
         ClientMenu1 = new javax.swing.JMenu();
         clientMenuItem1 = new javax.swing.JMenuItem();
         type_client = new javax.swing.JMenuItem();
@@ -180,6 +212,7 @@ public class App extends javax.swing.JFrame {
         type_reglement = new javax.swing.JMenuItem();
         ConfigParams = new javax.swing.JMenuItem();
         Activite = new javax.swing.JMenu();
+        TypeArticle = new javax.swing.JMenuItem();
         ClassificationArticleParActivite = new javax.swing.JMenuItem();
         PreferedArticleMenu = new javax.swing.JMenuItem();
         VentesMenu = new javax.swing.JMenu();
@@ -206,7 +239,10 @@ public class App extends javax.swing.JFrame {
         BL = new javax.swing.JMenuItem();
         Facture = new javax.swing.JMenuItem();
         consultAvoirVente = new javax.swing.JMenuItem();
+        RechercheMenu1 = new javax.swing.JMenu();
         ReliquatRecherche = new javax.swing.JMenuItem();
+        ReliquatRechercheDetail = new javax.swing.JMenuItem();
+        DevisRecherche1 = new javax.swing.JMenuItem();
         VentesPassagerMenu = new javax.swing.JMenu();
         devisPassagerMenuItem = new javax.swing.JMenuItem();
         FacturePassagerMenuItem = new javax.swing.JMenuItem();
@@ -216,6 +252,7 @@ public class App extends javax.swing.JFrame {
         ConsultReglement = new javax.swing.JMenuItem();
         SuiviReglement = new javax.swing.JMenuItem();
         ConsultReglementComptable = new javax.swing.JMenuItem();
+        SuiviReglement1 = new javax.swing.JMenuItem();
         Achat = new javax.swing.JMenu();
         PreCommandFournisseur = new javax.swing.JMenu();
         Pre_CommandeMenuItem = new javax.swing.JMenuItem();
@@ -273,9 +310,22 @@ public class App extends javax.swing.JFrame {
         ArticleNonVenduMenuItem = new javax.swing.JMenuItem();
         AlertReglementMenuItem = new javax.swing.JMenuItem();
         AlertDechargeMenuItem = new javax.swing.JMenuItem();
+        AlertMenu1 = new javax.swing.JMenu();
+        AlertArticleMenuItem = new javax.swing.JMenuItem();
+        Affectation_article_clent = new javax.swing.JMenuItem();
+        GestionUserMenu = new javax.swing.JMenu();
+        ArticleNonVenduMenuItem1 = new javax.swing.JMenuItem();
+        Prospection = new javax.swing.JMenu();
+        jMenu1 = new javax.swing.JMenu();
+        ArticleNonVenduMenuItem2 = new javax.swing.JMenuItem();
+        consultationGroupeArticle = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        SaisieProspection = new javax.swing.JMenuItem();
+        consultationSaisieProspection = new javax.swing.JMenuItem();
+        RechercheProspction = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        setTitle("SOPS");
+        setTitle("SODIS");
         setSize(new java.awt.Dimension(0, 0));
 
         BanqueMenu.setMnemonic('h');
@@ -320,15 +370,6 @@ public class App extends javax.swing.JFrame {
         });
         articleMenu.add(marque);
 
-        TypeArticle.setMnemonic('c');
-        TypeArticle.setText("Type Article (RFT/C...)");
-        TypeArticle.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TypeArticleActionPerformed(evt);
-            }
-        });
-        articleMenu.add(TypeArticle);
-
         ListArticle.setMnemonic('t');
         ListArticle.setText("Consultation Article");
         ListArticle.addActionListener(new java.awt.event.ActionListener() {
@@ -337,15 +378,6 @@ public class App extends javax.swing.JFrame {
             }
         });
         articleMenu.add(ListArticle);
-
-        TableauComparatif.setMnemonic('t');
-        TableauComparatif.setText("Tableau Comparatif");
-        TableauComparatif.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                TableauComparatifActionPerformed(evt);
-            }
-        });
-        articleMenu.add(TableauComparatif);
 
         BanqueMenu.add(articleMenu);
 
@@ -464,6 +496,15 @@ public class App extends javax.swing.JFrame {
 
         Activite.setMnemonic('h');
         Activite.setText("Gestion d'activité");
+
+        TypeArticle.setMnemonic('c');
+        TypeArticle.setText("Création Activité");
+        TypeArticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                TypeArticleActionPerformed(evt);
+            }
+        });
+        Activite.add(TypeArticle);
 
         ClassificationArticleParActivite.setMnemonic('c');
         ClassificationArticleParActivite.setText("Affectation Artilces -> Activité");
@@ -678,6 +719,9 @@ public class App extends javax.swing.JFrame {
         });
         RechercheMenu.add(consultAvoirVente);
 
+        RechercheMenu1.setMnemonic('h');
+        RechercheMenu1.setText("Reliquat");
+
         ReliquatRecherche.setMnemonic('c');
         ReliquatRecherche.setText("Reliquat");
         ReliquatRecherche.addActionListener(new java.awt.event.ActionListener() {
@@ -685,7 +729,27 @@ public class App extends javax.swing.JFrame {
                 ReliquatRechercheActionPerformed(evt);
             }
         });
-        RechercheMenu.add(ReliquatRecherche);
+        RechercheMenu1.add(ReliquatRecherche);
+
+        ReliquatRechercheDetail.setMnemonic('c');
+        ReliquatRechercheDetail.setText("Détail Reliquat");
+        ReliquatRechercheDetail.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ReliquatRechercheDetailActionPerformed(evt);
+            }
+        });
+        RechercheMenu1.add(ReliquatRechercheDetail);
+
+        RechercheMenu.add(RechercheMenu1);
+
+        DevisRecherche1.setMnemonic('c');
+        DevisRecherche1.setText("Etat Du Jour");
+        DevisRecherche1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                DevisRecherche1ActionPerformed(evt);
+            }
+        });
+        RechercheMenu.add(DevisRecherche1);
 
         VentesMenu.add(RechercheMenu);
 
@@ -762,6 +826,15 @@ public class App extends javax.swing.JFrame {
             }
         });
         ReglementMenu.add(ConsultReglementComptable);
+
+        SuiviReglement1.setMnemonic('c');
+        SuiviReglement1.setText("Factures Impayées Par Region");
+        SuiviReglement1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SuiviReglement1ActionPerformed(evt);
+            }
+        });
+        ReglementMenu.add(SuiviReglement1);
 
         menuBar.add(ReglementMenu);
 
@@ -1212,7 +1285,94 @@ public class App extends javax.swing.JFrame {
         });
         AlertMenu.add(AlertDechargeMenuItem);
 
+        AlertMenu1.setMnemonic('h');
+        AlertMenu1.setText("Alert Article");
+
+        AlertArticleMenuItem.setText("Alert Articles");
+        AlertArticleMenuItem.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                AlertArticleMenuItemActionPerformed(evt);
+            }
+        });
+        AlertMenu1.add(AlertArticleMenuItem);
+
+        Affectation_article_clent.setText("Affectation Article/Client/Période");
+        Affectation_article_clent.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                Affectation_article_clentActionPerformed(evt);
+            }
+        });
+        AlertMenu1.add(Affectation_article_clent);
+
+        AlertMenu.add(AlertMenu1);
+
         menuBar.add(AlertMenu);
+
+        GestionUserMenu.setMnemonic('h');
+        GestionUserMenu.setText("Utilisateurs");
+
+        ArticleNonVenduMenuItem1.setText("Création Utilisateur");
+        ArticleNonVenduMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArticleNonVenduMenuItem1ActionPerformed(evt);
+            }
+        });
+        GestionUserMenu.add(ArticleNonVenduMenuItem1);
+
+        menuBar.add(GestionUserMenu);
+
+        Prospection.setMnemonic('h');
+        Prospection.setText("Prospection");
+
+        jMenu1.setText("Groupe Prospection");
+
+        ArticleNonVenduMenuItem2.setText("Création groupe Prospection");
+        ArticleNonVenduMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                ArticleNonVenduMenuItem2ActionPerformed(evt);
+            }
+        });
+        jMenu1.add(ArticleNonVenduMenuItem2);
+
+        consultationGroupeArticle.setText("Consultation Groupe Prospection");
+        consultationGroupeArticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultationGroupeArticleActionPerformed(evt);
+            }
+        });
+        jMenu1.add(consultationGroupeArticle);
+
+        Prospection.add(jMenu1);
+
+        jMenu2.setText("Saisie Prospection");
+
+        SaisieProspection.setText("Saisie Prospection");
+        SaisieProspection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                SaisieProspectionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(SaisieProspection);
+
+        consultationSaisieProspection.setText("Consultation Saisie Prospection");
+        consultationSaisieProspection.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                consultationSaisieProspectionActionPerformed(evt);
+            }
+        });
+        jMenu2.add(consultationSaisieProspection);
+
+        Prospection.add(jMenu2);
+
+        RechercheProspction.setText("Consultation ");
+        RechercheProspction.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                RechercheProspctionActionPerformed(evt);
+            }
+        });
+        Prospection.add(RechercheProspction);
+
+        menuBar.add(Prospection);
 
         setJMenuBar(menuBar);
 
@@ -1307,7 +1467,7 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
         /*  desktopPane.removeAll();
         desktopPane.updateUI();*/
-        Devis.FormDevis_old c = new FormDevis_old("", "");
+        Devis.FormDevis c = new FormDevis("", "");
         desktopPane.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1426,7 +1586,7 @@ public class App extends javax.swing.JFrame {
         // TODO add your handling code here:
         /*   desktopPane.removeAll();
         desktopPane.updateUI();*/
-        RecherchDevisForm c = new RecherchDevisForm();
+        RecherchDevisForm c = new RecherchDevisForm("");
         desktopPane.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -2853,9 +3013,9 @@ public class App extends javax.swing.JFrame {
         desktopPane.repaint();
     }//GEN-LAST:event_AlertDechargeMenuItemActionPerformed
 
-    private void TableauComparatifActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TableauComparatifActionPerformed
+    private void AlertArticleMenuItemActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AlertArticleMenuItemActionPerformed
         // TODO add your handling code here:
-        ListArticleComparativeForm c = new ListArticleComparativeForm();
+        AlertArticleForm c = new AlertArticleForm();
         desktopPane.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -2869,7 +3029,173 @@ public class App extends javax.swing.JFrame {
         }
         c.show();
         desktopPane.repaint();
-    }//GEN-LAST:event_TableauComparatifActionPerformed
+    }//GEN-LAST:event_AlertArticleMenuItemActionPerformed
+
+    private void ReliquatRechercheDetailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReliquatRechercheDetailActionPerformed
+        // TODO add your handling code here:
+        RecherchReliquatDetailForm c = new RecherchReliquatDetailForm();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_ReliquatRechercheDetailActionPerformed
+
+    private void SuiviReglement1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SuiviReglement1ActionPerformed
+        // TODO add your handling code here:
+        RechFactureNonPayeParRegion c = new RechFactureNonPayeParRegion();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_SuiviReglement1ActionPerformed
+
+    private void DevisRecherche1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_DevisRecherche1ActionPerformed
+        // TODO add your handling code here:
+        RecherchTransactionDuJourForm c = new RecherchTransactionDuJourForm();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_DevisRecherche1ActionPerformed
+
+    private void ArticleNonVenduMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArticleNonVenduMenuItem1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_ArticleNonVenduMenuItem1ActionPerformed
+
+    private void Affectation_article_clentActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_Affectation_article_clentActionPerformed
+//alertDAO    
+        AffectationAlertArticle c = new AffectationAlertArticle();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_Affectation_article_clentActionPerformed
+
+    private void ArticleNonVenduMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ArticleNonVenduMenuItem2ActionPerformed
+        // TODO add your handling code here:
+        ProspectionGroupeArticleForm c = new ProspectionGroupeArticleForm();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_ArticleNonVenduMenuItem2ActionPerformed
+
+    private void SaisieProspectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SaisieProspectionActionPerformed
+        // TODO add your handling code here:
+        SaisieProspectionCommercial c = new SaisieProspectionCommercial();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_SaisieProspectionActionPerformed
+
+    private void RechercheProspctionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RechercheProspctionActionPerformed
+        // TODO add your handling code here:
+        RechercheProspectionFrom c = new RechercheProspectionFrom();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_RechercheProspctionActionPerformed
+
+    private void consultationGroupeArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultationGroupeArticleActionPerformed
+        // TODO add your handling code here:ListeGroupeArticleForm
+        ListeGroupeArticleForm c = new ListeGroupeArticleForm();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_consultationGroupeArticleActionPerformed
+
+    private void consultationSaisieProspectionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consultationSaisieProspectionActionPerformed
+        // TODO add your handling code here:
+        RechercheSaisieProspectionFrom c = new RechercheSaisieProspectionFrom();
+        desktopPane.add(c);
+
+        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+        c.setSize(screenSize.width, screenSize.height);
+        c.setVisible(true);
+        c.moveToFront();
+        try {
+            c.setSelected(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        c.show();
+        desktopPane.repaint();
+    }//GEN-LAST:event_consultationSaisieProspectionActionPerformed
 
     /**
      * @param args the command line arguments
@@ -2917,8 +3243,11 @@ public class App extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JMenu Achat;
     private javax.swing.JMenu Activite;
+    private javax.swing.JMenuItem Affectation_article_clent;
+    private javax.swing.JMenuItem AlertArticleMenuItem;
     private javax.swing.JMenuItem AlertDechargeMenuItem;
     private javax.swing.JMenu AlertMenu;
+    private javax.swing.JMenu AlertMenu1;
     private javax.swing.JMenuItem AlertReglementMenuItem;
     private javax.swing.JMenuItem AnnulerBLMenuItem;
     private javax.swing.JMenuItem AnnulerBLMenuItem1;
@@ -2926,6 +3255,8 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem AnnulerBLMenuItem3;
     private javax.swing.JMenuItem Article;
     private javax.swing.JMenuItem ArticleNonVenduMenuItem;
+    private javax.swing.JMenuItem ArticleNonVenduMenuItem1;
+    private javax.swing.JMenuItem ArticleNonVenduMenuItem2;
     private javax.swing.JMenuItem AvoirFinMenuItem1;
     private javax.swing.JMenuItem AvoirFournisseurMenuItem;
     private javax.swing.JMenu AvoirMenu;
@@ -2961,6 +3292,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem ConsultblDepot;
     private javax.swing.JMenu DevisMenu;
     private javax.swing.JMenuItem DevisRecherche;
+    private javax.swing.JMenuItem DevisRecherche1;
     private javax.swing.JMenu DonneeMenu;
     private javax.swing.JMenu DonneeMenu1;
     private javax.swing.JMenuItem Etat;
@@ -2976,6 +3308,7 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem Famille;
     private javax.swing.JMenuItem Fournisseur;
     private javax.swing.JMenu GestDepot;
+    private javax.swing.JMenu GestionUserMenu;
     private javax.swing.JMenuItem GrandLivre;
     private javax.swing.JMenuItem ListArticle;
     private javax.swing.JMenuItem ListArticle1;
@@ -2991,17 +3324,22 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenu PreCommandFournisseur;
     private javax.swing.JMenuItem Pre_CommandeMenuItem;
     private javax.swing.JMenuItem PreferedArticleMenu;
+    private javax.swing.JMenu Prospection;
     private javax.swing.JMenu RechercheMenu;
+    private javax.swing.JMenu RechercheMenu1;
+    private javax.swing.JMenuItem RechercheProspction;
     private javax.swing.JMenuItem Reglement;
     private javax.swing.JMenu ReglementMenu;
     private javax.swing.JMenuItem ReliquatMenuItem;
     private javax.swing.JMenuItem ReliquatRecherche;
+    private javax.swing.JMenuItem ReliquatRechercheDetail;
     private javax.swing.JMenu RemiseMenu;
     private javax.swing.JMenuItem Resa;
+    private javax.swing.JMenuItem SaisieProspection;
     private javax.swing.JMenuItem SousFamille;
     private javax.swing.JMenu StatVenteMenu;
     private javax.swing.JMenuItem SuiviReglement;
-    private javax.swing.JMenuItem TableauComparatif;
+    private javax.swing.JMenuItem SuiviReglement1;
     private javax.swing.JMenuItem TypeArticle;
     private javax.swing.JMenu VentesMenu;
     private javax.swing.JMenu VentesPassagerMenu;
@@ -3015,10 +3353,14 @@ public class App extends javax.swing.JFrame {
     private javax.swing.JMenuItem clientListe;
     private javax.swing.JMenuItem clientMenuItem1;
     private javax.swing.JMenuItem consultAvoirVente;
+    private javax.swing.JMenuItem consultationGroupeArticle;
+    private javax.swing.JMenuItem consultationSaisieProspection;
     private javax.swing.JMenuItem crudDepot;
     private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuItem devisMenuItem;
     private javax.swing.JMenuItem devisPassagerMenuItem;
+    private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuItem marque;
     private javax.swing.JMenuBar menuBar;
     private javax.swing.JMenuItem modifdevisMenuItem1;

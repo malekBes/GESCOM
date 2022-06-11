@@ -3,7 +3,7 @@
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.9487171000000016"/>
-	<property name="ireport.x" value="289"/>
+	<property name="ireport.x" value="22"/>
 	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
@@ -15,7 +15,7 @@
 	<parameter name="date_pre_cmd" class="java.lang.String"/>
 	<parameter name="nb_rows" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[select lc.ref_article,lc.designation_article,lc.qte  from ligne_pre_commande lc WHERE lc.id_pre_commande=$P{num_pre_cmd}]]>
+		<![CDATA[select lc.ref_article,lc.designation_article,lc.qte,rank  from ligne_pre_commande lc WHERE lc.id_pre_commande=$P{num_pre_cmd} order by cast(rank as unsigned)]]>
 	</queryString>
 	<field name="ref_article" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -24,6 +24,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="qte" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<background>

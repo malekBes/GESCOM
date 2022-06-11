@@ -355,6 +355,7 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
         Table_facture = new javax.swing.JTable();
         jButton9 = new javax.swing.JButton();
         jButton10 = new javax.swing.JButton();
+        jButton11 = new javax.swing.JButton();
 
         setClosable(true);
         setMaximizable(true);
@@ -823,7 +824,7 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(101, 101, 101)
+                        .addGap(75, 75, 75)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -887,6 +888,13 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
             }
         });
 
+        jButton11.setText("Seléctionner tous");
+        jButton11.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton11ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -901,6 +909,8 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
                         .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(jButton11, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(275, 275, 275)
                         .addComponent(jButton10, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(541, 541, 541))))
@@ -913,7 +923,8 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
                 .addGap(5, 5, 5)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton10)
-                    .addComponent(jButton9))
+                    .addComponent(jButton9)
+                    .addComponent(jButton11))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 269, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1686,6 +1697,143 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
                 "", "", "", "", "", "",
                 "", "", "", "", "");
     }//GEN-LAST:event_jButton10ActionPerformed
+
+    private void jButton11ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton11ActionPerformed
+            try {
+
+            columnNames = new Vector<String>();
+            columnNames.add("id");
+            columnNames.add("Client");
+            //   columnNames.add("Fournisseur");
+            //   columnNames.add("Commercial");
+
+            columnNames.add("Num Facture");
+
+            columnNames.add("Date Facture");
+            columnNames.add("Date Echéance");
+            columnNames.add("Type Réglement");
+            columnNames.add("Montant Relge");
+            columnNames.add("Total TTC");
+            //  columnNames.add("Montant Restant");
+            columnNames.add("Banque");
+            columnNames.add("Num Cheque");
+            columnNames.add("Passager");
+            columnNames.add("Statut");
+            //  columnNames.add("CHECK");
+
+            for (int count = 0; count < DevisHist_Table.getModel().getRowCount(); count++) {
+              //  if (DevisHist_Table.getModel().getValueAt(count, 13).toString().equals("true")) {
+                    lstFacture.add(DevisHist_Table.getModel().getValueAt(count, 2).toString());
+                //}
+            }
+            //   int row = DevisHist_Table.getSelectedRow();
+            // String table_click = DevisHist_Table.getModel().getValueAt(row, 1).toString();
+            // lstFacture.add(table_click);
+            strFacture = "";
+            for (Object object : lstFacture) {
+                strFacture += "'" + object + "',";
+            }
+
+            strFacture = strFacture.substring(0, strFacture.length() - 1);
+            // System.out.println(table_click);
+            String FromDate = "";
+            String ToDate = "";
+            String FromDate_fact = "";
+            String ToDate_fact = "";
+
+            try {
+                String df = Date_Devis_from_fact.getDate().toString();
+                if (df.isEmpty() & Date_Devis_from_fact.getDate().toString().isEmpty()) {
+                } else {
+
+                    Date From = Date_Devis_from_fact.getDate();
+                    SimpleDateFormat tdate = new SimpleDateFormat("yyyy-MM-dd");
+                    FromDate_fact = tdate.format(From);
+                }
+
+            } catch (Exception e) {
+                System.out.println("date Null");
+            }
+
+            try {
+                String df = Date_Devis_To_fact.getDate().toString();
+                if (df.isEmpty() & Date_Devis_To_fact.getDate().toString().isEmpty()) {
+                } else {
+
+                    Date From = Date_Devis_To_fact.getDate();
+                    SimpleDateFormat tdate = new SimpleDateFormat("yyyy-MM-dd");
+                    ToDate_fact = tdate.format(From);
+                }
+
+            } catch (Exception e) {
+                System.out.println("date Null");
+            }
+            try {
+                String df = Date_Devis.getDate().toString();
+                if (df.isEmpty() & Date_Devis.getDate().toString().isEmpty()) {
+                } else {
+
+                    Date From = Date_Devis.getDate();
+                    SimpleDateFormat tdate = new SimpleDateFormat("yyyy-MM-dd");
+                    FromDate = tdate.format(From);
+                }
+
+            } catch (Exception e) {
+                System.out.println("date Null");
+            }
+
+            try {
+                String dt = Date_Devis_To.getDate().toString();
+                if (dt.isEmpty() & Date_Devis_To.getDate().toString().isEmpty()) {
+                } else {
+
+                    Date From = Date_Devis_To.getDate();
+                    SimpleDateFormat tdate = new SimpleDateFormat("yyyy-MM-dd");
+                    ToDate = tdate.format(From);
+                }
+
+            } catch (Exception e) {
+                System.out.println("date Null");
+            }
+
+            /* rechercheDao.afficherAvoir(DevisHist_Table, FromDate,
+                    ToDate, txt_montant_from.getText(), txt_montant_to.getText(), txt_num_devis.getText(),
+                    txt_search.getText(), type_filtre);*/
+            if (CheckBoxArticle.isSelected()) {
+                id_commercial = "";
+            }
+            if (txt_searchArticle.getText().isEmpty()) {
+                id_commercial = "";
+            }
+            String mnt_from = "";
+            mnt_from = txt_montant_from.getText();
+            String mnt_to = "";
+            mnt_to = txt_montant_to.getText();
+
+            String id_client = "";
+            if (CheckBoxClients.isSelected()) {
+                id_client = "";
+            } else {
+                id_client = nomclient;
+            }
+            String type_reglement = ComboBox_type_reglement1.getSelectedItem().toString();
+
+            rechercheDao.afficherConsumtationReglementComptabledetail(Table_facture, FromDate,
+                    ToDate, FromDate_fact, ToDate_fact, mnt_from, mnt_to, id_commercial,
+                    id_client, type_filtre, type_filtre_paid, type_reglement, strFacture);
+
+            // Table_facture.setModel(tableModel_export);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Error in Reglement/all details  :  " + e);
+        } finally {
+            try {
+
+                System.out.println("disconnected");
+            } catch (Exception ex) {
+                Logger.getLogger(RecherchBLForm.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }//GEN-LAST:event_jButton11ActionPerformed
     DefaultListModel listModel = new DefaultListModel();
 
 
@@ -1712,6 +1860,7 @@ public class RecherchReglement_ComptableForm extends javax.swing.JInternalFrame 
     private javax.swing.ButtonGroup buttonGroupFiltrePaid;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton10;
+    private javax.swing.JButton jButton11;
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;

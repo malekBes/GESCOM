@@ -4,7 +4,10 @@
  * and open the template in the editor.
  */
 package alerts;
- 
+
+import Article.ArticleDao;
+import Client.ClientDao;
+import Config.Bank.Fournisseur;
 import Conn.DataBase_connect;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -154,6 +157,120 @@ public class alertDAO {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         }
+    }
+
+    public void ajouterPeriodeArticleClient(String id_client, String ref_client, String nb_jour) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        String sql = "";
+        try {
+
+            sql = "INSERT into alert_client_article (id_client,ref_article,nb_jours_alert) "
+                    + "values('" + id_client + "','" + ref_client + "','" + nb_jour + "')";
+
+            pst = (PreparedStatement) conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Ligne Ajoutée");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(alertDAO.class.getName()).log(Level.SEVERE, null, "Error in :  " + ex);
+            }
+        }
+
+    }
+
+    public void afficherAffectationArticleClient(JTable table) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            String sql;
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            sql = "SELECT  a.id,c.nom as 'Nom Client',a.ref_article ,a.nb_jours_alert as 'Nombre Jours',id_client FROM `alert_client_article` a left join client c on a.id_client=c.numero_Client";
+
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            DefaultTableModel df = ArticleDao.buildTableModel(rs);
+            table.setModel(df);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(alertDAO.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public void updateAffectationAlertArticleClient(String id_client, String ref_article, String nb_jours, String id) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        String sql = "";
+        try {
+
+            sql = "UPDATE `alert_client_article` SET `nb_jours_alert`= '" + nb_jours + "',`id_client`='" + id_client + "',`ref_article`='" + ref_article + "' WHERE id = " + id + "";
+
+            pst = (PreparedStatement) conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Modification réussite");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientDao.class.getName()).log(Level.SEVERE, null, "Error in :  " + ex);
+            }
+        }
+
+    }
+
+    public void supprimerAffectationArticleClient(String id) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        String sql = "";
+        try {
+
+            sql = "delete from alert_client_article where id =" + id + "";
+
+            pst = (PreparedStatement) conn.prepareStatement(sql);
+            pst.execute();
+            JOptionPane.showMessageDialog(null, "Ligné Supprimée");
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ClientDao.class.getName()).log(Level.SEVERE, null, "Error in :  " + ex);
+            }
+        }
+
     }
 
 }

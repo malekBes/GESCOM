@@ -15,8 +15,11 @@ import Client.ClientDao;
 import Client.ClientForm;
 import Config.Commen_Proc;
 import Config.ConfigDao;
+import Conn.DataBase_connect;
 import Home.App;
 import Home.TestTableSortFilter;
+import PrintPapers.ReportGenarator;
+import Recherche.RecherchDevisForm;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
@@ -25,6 +28,10 @@ import java.awt.List;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 import java.math.RoundingMode;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -32,6 +39,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -100,7 +108,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
         setTableHeader();
         data_Devis_Table = new Vector<Vector<Object>>();
         if (!Commen_Proc.isRemote) {
-            autoCompleteFields();
+            //    autoCompleteFields();
         }
         combo = "0";
         //CheckBox_timbre.setSelected(true);
@@ -140,10 +148,24 @@ public class FormDevis extends javax.swing.JInternalFrame {
                         JOptionPane.showMessageDialog(this, e.getMessage());
                     }
 
+                } else if (type.contains("Import_modif")) {
+                    txt_num_devis.setText(type.split(";")[2]);
+                    String date = dart.getDateByNumDevis(type.split(";")[2]);
+                    try {
+                        Date date1 = new SimpleDateFormat("dd/MM/yyyy").parse(date);
+
+                        Date_Devis.setDate(date1);
+                        Date_Devis.setEnabled(true);
+                    } catch (Exception e) {
+                        JOptionPane.showMessageDialog(this, e.getMessage());
+                    }
                 }
-
-                String nom_and_codeTva = dart.getNameItemByIdJoinTables("devis", "num_devis", Num_Devis);
-
+                String nom_and_codeTva = "";
+                if (type.contains("Import_modif")) {
+                    nom_and_codeTva = dart.getNameItemByIdJoinTables("devis", "num_devis", type.split(";")[2]);
+                } else {
+                    nom_and_codeTva = dart.getNameItemByIdJoinTables("devis", "num_devis", Num_Devis);
+                }
                 String[] array = nom_and_codeTva.split(";");
                 id_client = array[0];
                 txt_search.setText(array[1]);
@@ -173,6 +195,23 @@ public class FormDevis extends javax.swing.JInternalFrame {
         });
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
         type_operation = type;
+        if (Commen_Proc.id_role.equals("2")) {
+            txt_Prix_U.setEnabled(false);
+            txt_Total_HT.setEnabled(false);
+            txt_Total_remise.setEnabled(false);
+            txt_total_TVA.setEnabled(false);
+            txt_Total_Net.setEnabled(false);
+            txt_ajuster.setEnabled(false);
+            txt_timbre.setEnabled(false);
+            txt_remise.setEnabled(false);
+            jButton5.setVisible(false);//btn ajuster
+            txt_ajuster.setVisible(false);
+            jButton9.setVisible(false);
+            jButton10.setVisible(false);
+            jPanel2.setVisible(false);
+            jPanel6.setVisible(false);
+            ComboBoxDevis.setVisible(false);
+        }
     }
     HashMap<String, String> NumDevisHashMap;
 
@@ -520,9 +559,10 @@ public class FormDevis extends javax.swing.JInternalFrame {
         jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
         jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Devis");
@@ -992,6 +1032,13 @@ public class FormDevis extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton6.setText("Exporter Vers BL");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
         jButton1.setText("Historique");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1006,12 +1053,30 @@ public class FormDevis extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton6.setText("Exporter Vers BL");
-        jButton6.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton6ActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
+                .addComponent(jButton1)
+                .addGap(18, 18, 18)
+                .addComponent(jButton4)
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addComponent(jButton6)
+                    .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jButton1)
+                        .addComponent(jButton4)))
+                .addContainerGap())
+        );
 
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
@@ -1020,26 +1085,19 @@ public class FormDevis extends javax.swing.JInternalFrame {
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton2)
-                .addGap(18, 18, 18)
-                .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 67, Short.MAX_VALUE)
-                .addComponent(jButton1)
-                .addGap(18, 18, 18)
-                .addComponent(jButton4)
-                .addGap(92, 92, 92))
+                .addGap(26, 26, 26)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(84, 84, 84))
         );
         jPanel4Layout.setVerticalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton2)
-                        .addComponent(jButton6))
-                    .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jButton1)
-                        .addComponent(jButton4)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addComponent(jButton2)
+                .addContainerGap(39, Short.MAX_VALUE))
+            .addGroup(jPanel4Layout.createSequentialGroup()
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1067,7 +1125,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1263,6 +1321,8 @@ public class FormDevis extends javax.swing.JInternalFrame {
 
         return res;
     }
+
+
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
             if (txt_num_devis.getText().equals(ComboBoxDevis.getSelectedItem().toString())) {
@@ -1276,7 +1336,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
                     ArrayList<ligneDevis> lstd;
                     lstd = setLigneDevisFromDevisTable();
                     //JOptionPane.showMessageDialog(null, s.toString());
-                    String s = VerifStock(lstd);
+                    String s = "";//VerifStock(lstd);
                     if (s.isEmpty()) {
                         if (devisDao.modifierDevis(d)) {
                             devisDao.modifierLigneDevis(lstd);
@@ -1285,6 +1345,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
 
                             clearDevisLFields();
                             setNumDevis();
+                            this.dispose();
                         } else {
                             JOptionPane.showMessageDialog(null, "Error in Modif ActionPerformed ");
                         }
@@ -1296,6 +1357,31 @@ public class FormDevis extends javax.swing.JInternalFrame {
                     JOptionPane.showMessageDialog(null, "Condition Date n'a pas été acceptée ");
                 }
 
+            } else if (type_operation.contains("Import")) {
+                if (c.DateCheckOnUpdate("devis", "date_devis", "num_devis", d.getNum_Devis(), d.getDate_devis())) {
+                    ArrayList<ligneDevis> lstd;
+                    lstd = setLigneDevisFromDevisTable();
+                    //JOptionPane.showMessageDialog(null, s.toString());
+                    String s = "";//VerifStock(lstd);
+                    if (s.isEmpty()) {
+                        if (devisDao.ajouterModifImportDevis(d)) {
+                            devisDao.modifierLigneDevis(lstd);
+                            JOptionPane.showMessageDialog(null, "Devis num " + txt_num_devis.getText() + " à été bien Modifié !");
+                            //devisDao.modifierStock(lstd);
+
+                            clearDevisLFields();
+                            setNumDevis();
+                            this.dispose();
+                        } else {
+                            JOptionPane.showMessageDialog(null, "Error in Modif ActionPerformed ");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, s);
+
+                    }
+                } else {
+                    JOptionPane.showMessageDialog(null, "Condition Date n'a pas été acceptée ");
+                }
             } else {
 
                 if (c.DateCheckOnUpdate("devis", "date_devis", "num_devis", d.getNum_Devis(), d.getDate_devis())) {
@@ -1304,15 +1390,16 @@ public class FormDevis extends javax.swing.JInternalFrame {
                     //JOptionPane.showMessageDialog(null, s.toString());
                     if (lstd != null) {
 
-                        String s = VerifStock(lstd);
+                        String s = "";//VerifStock(lstd);
                         if (s.isEmpty()) {
                             if (devisDao.ajouterDevis(d)) {
                                 devisDao.ajouterLigneDevis(lstd);
                                 JOptionPane.showMessageDialog(null, "Devis num " + txt_num_devis.getText() + " à été bien enregistré !");
                                 //devisDao.modifierStock(lstd);
-
+                                openEditTab();
                                 clearDevisLFields();
                                 setNumDevis();
+                                this.dispose();
                             } else {
                                 JOptionPane.showMessageDialog(null, "Error in CreateDevis ActionPerformed ");
                             }
@@ -1340,6 +1427,30 @@ public class FormDevis extends javax.swing.JInternalFrame {
         }
 
     }//GEN-LAST:event_jButton2ActionPerformed
+    public void openEditTab() {
+        String value = txt_num_devis.getText();
+        if (!value.isEmpty()) {
+
+            RecherchDevisForm c;
+
+            c = new RecherchDevisForm(value);
+
+            Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+            c.setSize(screenSize.width, screenSize.height);
+            c.setVisible(true);
+            JDesktopPane ds = getDesktopPane();
+            ds = Home.App.d;
+            ds.add(c);
+            c.moveToFront();
+            try {
+                c.setSelected(true);
+            } catch (PropertyVetoException ex) {
+                Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            }
+            c.show();
+            ds.repaint();
+        }
+    }
 
     void clearDevisLFields() {
         txt_searchArticle.setText("");
@@ -1366,7 +1477,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
         if (evt.getKeyCode() == evt.VK_BACK_SPACE || evt.getKeyCode() == evt.VK_DELETE) {
 
         } else {
-            String to_check = txt_searchArticle.getText().toLowerCase();
+           /* String to_check = txt_searchArticle.getText().toLowerCase();
             int to_check_len = to_check.length();
             for (String data : listNomArticle) {
                 data = data.toLowerCase();
@@ -1384,7 +1495,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
                     txt_searchArticle.setSelectionEnd(data.length());
                     break;
                 }
-            }
+            }*/
         }
     }//GEN-LAST:event_txt_searchArticleKeyReleased
 
@@ -1531,17 +1642,41 @@ public class FormDevis extends javax.swing.JInternalFrame {
         return d1.toString().replace(",", ".");
         //return s.substring(0, s.indexOf(".") + 4);
     }
+
+    public String checkStock() {
+        String stockNegative = String.valueOf(stock_negative);
+        String res = "";
+        double stockReel = 0;
+        double qteDevis = 0;
+
+        stockReel = qte_stock;
+
+        qteDevis = Double.valueOf(txt_qte.getText());
+        if (stockNegative.equals("0")) {
+            if ((stockReel < qteDevis)) {
+                res += "L'article " + txt_searchArticle.getText() + " à dépassé le stock \n";
+            }
+        }
+        return res;
+    }
+
     private void AjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjouterActionPerformed
         // TODO add your handling code here:
-        addLigneDevis_Table();
-        int row = Devis_Table.getSelectedRow();
-        int coll = 0;
-        reCalculerTT();
-        //df.setValueAt("5", row, coll);
-        for (int j = 0; j < df.getRowCount(); j++) {
-            Object s = df.getValueAt(j, coll);
-            // JOptionPane.showMessageDialog(null, " index : " + j + " value : " + s);
-            df.setValueAt(j + 1, j, coll);
+        String res = checkStock();
+        if (res.isEmpty()) {
+
+            addLigneDevis_Table();
+            int row = Devis_Table.getSelectedRow();
+            int coll = 0;
+            reCalculerTT();
+            //df.setValueAt("5", row, coll);
+            for (int j = 0; j < df.getRowCount(); j++) {
+                Object s = df.getValueAt(j, coll);
+                // JOptionPane.showMessageDialog(null, " index : " + j + " value : " + s);
+                df.setValueAt(j + 1, j, coll);
+            }
+        } else {
+            JOptionPane.showMessageDialog(null, res);
         }
     }//GEN-LAST:event_AjouterActionPerformed
 
@@ -1555,6 +1690,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
+
         int row = Devis_Table.getSelectedRow();
         String ref = txt_searchArticle.getText();
         String design = txt_design_article.getText();
@@ -1589,11 +1725,12 @@ public class FormDevis extends javax.swing.JInternalFrame {
         Devis_Table.getModel().setValueAt(String.valueOf(formatDouble(Total_TTC)), row, 8);
 
         reCalculerTT();
+
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        HistoriqueDevis c = new HistoriqueDevis();
+        HistoriqueDevis c = new HistoriqueDevis(type_operation + ";" + txt_num_devis.getText());
         Home.App.d.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1686,8 +1823,11 @@ public class FormDevis extends javax.swing.JInternalFrame {
         columnNames.add("Adresse");
 
         ClientDao clientDao = new ClientDao();
-        Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+        // Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+
+        Vector<Vector<Object>> data1 = null;
         DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+
         JTable jTable = new JTable(model);
 
         TableRowSorter<TableModel> rowSorter
@@ -1783,7 +1923,8 @@ public class FormDevis extends javax.swing.JInternalFrame {
         });
 
     }//GEN-LAST:event_jButton7ActionPerformed
-
+    double stock_negative = 0;
+    double qte_stock = 0;
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
 
         Vector<String> columnNames = new Vector<String>();
@@ -1794,11 +1935,12 @@ public class FormDevis extends javax.swing.JInternalFrame {
         columnNames.add("Qte");
         columnNames.add("Marge");
         columnNames.add("Réservé");
+        columnNames.add("Stock Négative");
 
         ArticleDao articleDao = new ArticleDao();
         Vector<Vector<Object>> data1;
         if (!Commen_Proc.isRemote) {
-            data1 = articleDao.afficherListeArticle();
+            data1 = articleDao.afficherListeArticleWithStock();
         } else {
             data1 = null;
         }
@@ -1829,7 +1971,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
 
                 ArticleDao articleDao = new ArticleDao();
-                Vector<Vector<Object>> data1 = articleDao.afficherListeArticle(jtxtRecherchearticle.getText(), "");
+                Vector<Vector<Object>> data1 = articleDao.afficherListeArticlewithStock(jtxtRecherchearticle.getText(), "");
 
                 DefaultTableModel model = new DefaultTableModel(data1, columnNames);
                 jTable.setModel(model);
@@ -1894,6 +2036,13 @@ public class FormDevis extends javax.swing.JInternalFrame {
                 String tva = d.getNameItemById("article", "tva", "ref", txt_searchArticle.getText());
                 String pu = jTable.getModel().getValueAt(jTable.getSelectedRow(), 3).toString();
 
+                try {
+
+                    qte_stock = Double.valueOf(jTable.getModel().getValueAt(jTable.getSelectedRow(), 4).toString());
+                    stock_negative = Double.valueOf(jTable.getModel().getValueAt(jTable.getSelectedRow(), 7).toString());
+                } catch (Exception e) {
+                    JOptionPane.showMessageDialog(null, "error lors de conversion qte ou stock négative is null : " + e.getMessage());
+                }
                 String remise = d.getRemiseById(id_client, ref);
                 txt_remise.setText(remise.isEmpty() ? "" : remise);
 
@@ -2163,6 +2312,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txt_Code_TVA;
     private javax.swing.JTextField txt_Prix_U;
@@ -2210,6 +2360,7 @@ public class FormDevis extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneDevis ld = new ligneDevis();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

@@ -252,13 +252,17 @@ public class ConfigDao {
         DataBase_connect obj = new DataBase_connect();
 
         Connection conn = obj.Open();
+        if(conn==null){
+            return "error_cnx";
+        }
         try {
 
-            String ss = "select role from users where username='" + username + "' and password='" + Password + "'";
+            String ss = "select count(*),id_role from users where username='" + username + "' and password='" + Password + "'";
             pst = conn.prepareStatement(ss);
             rs = pst.executeQuery();
             while (rs.next()) {
-                v = rs.getString("role");
+                v = rs.getString("count(*)");
+                Commen_Proc.id_role = rs.getString("id_role");
             }
         } catch (Exception e) {
             System.out.println(e.getMessage());

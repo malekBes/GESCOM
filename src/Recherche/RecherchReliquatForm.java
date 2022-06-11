@@ -837,7 +837,7 @@ public class RecherchReliquatForm extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        FormDevis_old c;
+        FormDevis c;
         int column = 1;
         int row = DevisHist_Table.getSelectedRow();
         String value = DevisHist_Table.getModel().getValueAt(row, column).toString();
@@ -846,9 +846,9 @@ public class RecherchReliquatForm extends javax.swing.JInternalFrame {
             lst.add(ListExport.getModel().getElementAt(j));
         }
         if (value.isEmpty()) {
-            c = new FormDevis_old("", "");
+            c = new FormDevis("", "");
         } else {
-            c = new FormDevis_old(value, "Modif");
+            c = new FormDevis(value, "Modif");
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setSize(screenSize.width, screenSize.height);

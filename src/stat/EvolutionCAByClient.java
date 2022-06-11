@@ -12,7 +12,7 @@ import Article.ArticleDao;
 import Client.ClientDao;
 import Config.Commen_Proc;
 import Conn.DataBase_connect;
-import static Devis.FormDevis_old.formatDouble;
+import static Devis.FormDevis.formatDouble;
 import Home.App;
 import java.awt.BorderLayout;
 import java.awt.Dimension;

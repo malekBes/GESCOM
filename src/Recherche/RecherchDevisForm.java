@@ -16,6 +16,7 @@ import Conn.DataBase_connect;
 import Home.App;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.List;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
@@ -48,6 +49,7 @@ import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
 import javax.swing.UIManager;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.InternalFrameAdapter;
@@ -77,7 +79,7 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
     /**
      * Creates new form RecherchForm
      */
-    public RecherchDevisForm() {
+    public RecherchDevisForm(String num_devis) {
         initComponents();
         setIconifiable(true);
         setMaximizable(true);
@@ -105,6 +107,13 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
         //update_table();
         //1 SearchDevis();
         RadioButton_all.setSelected(true);
+        if (!num_devis.equals("")) {
+            jPanel1.setVisible(false);
+            jButton1.setVisible(false);
+            jButton2.setVisible(false);
+            txt_num_devis.setText(num_devis);
+            SearchDevis();
+        }
     }
 
     public void SearchDevis() {
@@ -676,7 +685,9 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
     private void txt_montant_toKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_montant_toKeyReleased
         // TODO add your handling code here:
     }//GEN-LAST:event_txt_montant_toKeyReleased
-
+    JButton jbtValiderarticle;
+    JButton jbRecherchearticle;
+    JTextField jtxtRecherchearticle;
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         /*  JFrame frame = new JFrame("Row Filter");
@@ -701,13 +712,29 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
         JTextField jtfFilter = new JTextField();
 
         jbtValider = new JButton("Valider");
-
-        //jTable.setRowSorter(rowSorter);
+        jbRecherchearticle = new JButton("Recherche");
+        jtxtRecherchearticle = new JTextField(30);
+//jTable.setRowSorter(rowSorter);
         JPanel Homepanel = new JPanel(new BorderLayout());
 
         JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelbtn = new JPanel(new FlowLayout());
 
-        panel.add(jbtValider, BorderLayout.SOUTH);
+        panelbtn.add(jbtValider, BorderLayout.SOUTH);
+        panelbtn.add(jbRecherchearticle, BorderLayout.NORTH);
+        panelbtn.add(jtxtRecherchearticle, BorderLayout.NORTH);
+
+        panel.add(panelbtn, BorderLayout.SOUTH);
+        jbRecherchearticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                ClientDao articleDao = new ClientDao();
+                Vector<Vector<Object>> data1 = articleDao.afficherListClientByName(jtxtRecherchearticle.getText());
+
+                DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+                jTable.setModel(model);
+            }
+        });
 
         Homepanel.add(panel, BorderLayout.SOUTH);
 
@@ -820,7 +847,7 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
 
             ClientDao clientDao = new ClientDao();
             txt_num_devis.setText(table_click);
-            listNomSte = clientDao.afficherClient();
+         //   listNomSte = clientDao.afficherClient();
             setHeadersDetail();
             //client_table.setModel(buildTableModel(rs));
         } catch (Exception e) {
@@ -837,7 +864,7 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-        FormDevis_old c;
+        FormDevis c;
         int column = 1;
         int row = DevisHist_Table.getSelectedRow();
         String value = DevisHist_Table.getModel().getValueAt(row, column).toString();
@@ -846,9 +873,9 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
             lst.add(ListExport.getModel().getElementAt(j));
         }
         if (value.isEmpty()) {
-            c = new FormDevis_old("", "");
+            c = new FormDevis("", "");
         } else {
-            c = new FormDevis_old(value, "Modif");
+            c = new FormDevis(value, "Modif");
         }
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setSize(screenSize.width, screenSize.height);
@@ -930,7 +957,7 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
                 String total_ttc = DevisHist_Table.getModel().getValueAt(row, 3).toString();
 
                 String sql1;
-                sql1 = "select montant_tva,Total_HT from devis where num_devis='" + num_devis + "'";
+                sql1 = "select montant_tva,Total_HT from devis where num_devis='" + num_devis + "' and statut=1 ";
                 PreparedStatement pst;
                 ResultSet rs = null;
                 pst = conn.prepareStatement(sql1);
@@ -948,7 +975,7 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
                 map.put("TOTAL_TVA", Config.Commen_Proc.formatDouble(Double.parseDouble(total_tva)));
 
                 String sql;
-                sql = "select sum(remise) from devis where num_devis='" + num_devis + "'";
+                sql = "select sum(remise) from devis where num_devis='" + num_devis + "' and statut=1";
 
                 pst = conn.prepareStatement(sql);
 
@@ -962,9 +989,9 @@ public class RecherchDevisForm extends javax.swing.JInternalFrame {
                 map.put("remise", isRemise);
 
                 map.put("TOTAL_REMISE", Config.Commen_Proc.formatDouble(Double.parseDouble(total_remise)));
-                
+
                 map.put("PathImg", Commen_Proc.PathImg);
-                
+
                 String file_name = "Devis_" + num_devis;
 
                 if (JOptionPane.showConfirmDialog(null, "Avec en-tête ?", "Edition",

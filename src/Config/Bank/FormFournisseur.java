@@ -251,7 +251,7 @@ public class FormFournisseur extends javax.swing.JInternalFrame {
         c.setEmail(txt_email.getText().isEmpty() ? " " : txt_email.getText());
         c.setNum_tel(txt_Num_tel.getText().isEmpty() ? " " : txt_Num_tel.getText());
         c.setAdresse(txt_adresse.getText().isEmpty() ? " " : txt_adresse.getText());
-        // bankDao.updateDepot(c);
+       //  bankDao.updateDepot(c);
         update_table();
     }//GEN-LAST:event_jButton2ActionPerformed
 

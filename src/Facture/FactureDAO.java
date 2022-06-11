@@ -858,15 +858,15 @@ public class FactureDAO {
 
             java.text.SimpleDateFormat sdf
                     = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+            int i = 0;
             for (ligneDevis d : lstd) {
 
                 String currentTime = sdf.format(dt);
                 sql = "INSERT INTO ligne_facture_passager(id_facture_passager, ref_article, designation_article, qte, prix_u, remise, "
-                        + "tva, total_HT, total_TTC) "
+                        + "tva, total_HT, total_TTC,rank) "
                         + "VALUES ('" + d.getId_Devis() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
                         + d.getQte() + "," + d.getPrix_U() + "," + d.getRemise() + "," + d.getTVA() + "," + d.getTotal_HT()
-                        + "," + d.getTotale_TTC() + ")";
+                        + "," + d.getTotale_TTC() + ",'" + i + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
@@ -916,15 +916,16 @@ public class FactureDAO {
             sqldel = "delete from ligne_facture_passager where id_facture_passager ='-1'";
             pst = (PreparedStatement) conn.prepareStatement(sqldel);
             pst.execute();
-
+            int i = 0;
             for (ligneDevis d : lstd) {
-
+                i++;
                 String currentTime = sdf.format(dt);
                 sql = "INSERT INTO ligne_facture_passager(id_facture_passager, ref_article, designation_article, qte, prix_u, remise, "
-                        + "tva, total_HT, total_TTC) "
+                        + "tva, total_HT, total_TTC,rank) "
                         + "VALUES ('" + d.getId_Devis() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
                         + d.getQte() + "," + d.getPrix_U() + "," + d.getRemise() + "," + d.getTVA() + "," + d.getTotal_HT()
-                        + "," + d.getTotale_TTC() + ")";
+                        + "," + d.getTotale_TTC() + ",'" + i + "')";
+
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
@@ -951,15 +952,15 @@ public class FactureDAO {
 
         String sql = "";
         try {
-
+            int i = 1;
             for (ligne_facture lf : lstd) {
 
-                sql = "INSERT INTO `ligne_facture` (`num_facture`, `num_bl`) "
-                        + "VALUES ( '" + lf.getNum_facture() + "', '" + lf.getNum_bl() + "')";
+                sql = "INSERT INTO `ligne_facture` (`num_facture`, `num_bl`,rank) "
+                        + "VALUES ( '" + lf.getNum_facture() + "', '" + lf.getNum_bl() + "','" + i + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
-
+                i++;
             }
 
         } catch (SQLException e) {
@@ -1003,18 +1004,19 @@ public class FactureDAO {
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
             }
-            sqldel = "delete from ligne_facture where num_bl ='-1'";
+            /*sqldel = "delete from ligne_facture where num_bl ='-1'";
             pst = (PreparedStatement) conn.prepareStatement(sqldel);
-            pst.execute();
-
+            pst.execute();*/
+            int i = 1;
             for (ligne_facture d : lstd) {
 
                 String currentTime = sdf.format(dt);
-                sql = "INSERT INTO ligne_facture(num_facture,num_bl) "
-                        + "VALUES ('" + d.getNum_facture() + "','" + d.getNum_bl() + "')";
+                sql = "INSERT INTO ligne_facture(num_facture,num_bl,rank) "
+                        + "VALUES ('" + d.getNum_facture() + "','" + d.getNum_bl() + "','" + i + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
+                i++;
             }
 
         } catch (SQLException e) {
@@ -1038,15 +1040,15 @@ public class FactureDAO {
 
         String sql = "";
         try {
-
+            int i = 1;
             for (ligne_facture lf : lstd) {
 
-                sql = "INSERT INTO `ligne_facture_achat` (`num_facture_achat`, `num_bl_achat`) "
-                        + "VALUES ( '" + lf.getNum_facture() + "', '" + lf.getNum_bl() + "')";
+                sql = "INSERT INTO `ligne_facture_achat` (`num_facture_achat`, `num_bl_achat`,rank) "
+                        + "VALUES ( '" + lf.getNum_facture() + "', '" + lf.getNum_bl() + "','" + i + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
-
+                i++;
             }
 
         } catch (SQLException e) {
@@ -1150,7 +1152,6 @@ public class FactureDAO {
         }
     }
 
-    
     public void setFactureDecharge(String id_facture, String etatDecharge) {
         PreparedStatement pst;
 

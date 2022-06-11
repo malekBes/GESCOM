@@ -45,7 +45,7 @@ public class ArticleDao {
         Connection conn = obj.Open();
         try {
             String sql;
-            sql = "select r.ref, r.designation,fam.famille,if(mp.marque is null,'',mp.marque ) as 'marque', r.qte,r.prix_achat, r.prix_vente as prix_vente, r.marge from article r left join fournisseur f on (r.id_fournisseur=f.id) left JOIN famille_produit fam on r.id_famille=fam.id left join marque_produit mp on r.id_marque=mp.id where 1";
+            sql = "select r.ref, '-' as designation,fam.famille,mp.marque, r.qte,r.prix_achat, r.prix_vente as prix_vente, r.marge from article r left join fournisseur f on (r.id_fournisseur=f.id) left JOIN famille_produit fam on r.id_famille=fam.id left join marque_produit mp on r.id_marque=mp.id where 1";
 
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String DateClauseFrom = "";
@@ -107,7 +107,7 @@ public class ArticleDao {
         }
     }
 
-    public void afficherListeArticleComparatif(JTable table, String Depot, String Famille, String Sous_famille, String Designation, String ref, String Marque, String type_article) {
+    public void afficherListeArticleProspection(JTable table, String Depot, String Famille, String Sous_famille, String Designation, String ref, String Marque) {
         PreparedStatement pst;
 
         DataBase_connect obj = new DataBase_connect();
@@ -115,49 +115,15 @@ public class ArticleDao {
         Connection conn = obj.Open();
         try {
             String sql;
-            sql = "select r.ref, r.designation,fam.famille,if(mp.marque is null,'',mp.marque ) as 'marque', r.qte,r.prix_achat, r.prix_vente as prix_vente, r.marge,r.type_article from article r left join fournisseur f on (r.id_fournisseur=f.id) left JOIN famille_produit fam on r.id_famille=fam.id left join marque_produit mp on r.id_marque=mp.id where 1";
+            sql = "select r.ref, r.designation as designation,fam.famille,mp.marque, r.qte,r.prix_achat, r.prix_vente as prix_vente, r.marge from article r left join fournisseur f on (r.id_fournisseur=f.id) left JOIN famille_produit fam on r.id_famille=fam.id left join marque_produit mp on r.id_marque=mp.id where 1";
 
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String DateClauseFrom = "";
             if (!(Depot.isEmpty())) {
-                DateClauseFrom = " and r.id_depot = '" + Depot + "'";
+                DateClauseFrom = " and r.groupe_prospection = '" + Depot + "'";
                 sql = sql + DateClauseFrom;
             }
 
-            String DateClauseTo = "";
-            if (!(Famille.isEmpty())) {
-                DateClauseTo = " and r.id_famille = '" + Famille + "'";
-                sql = sql + DateClauseTo;
-            }
-            String MontantClauseFrom = "";
-            if (!(Sous_famille.isEmpty())) {
-                MontantClauseFrom = " and r.id_sous_famille = " + Sous_famille + "";
-                sql = sql + MontantClauseFrom;
-            }
-
-            String MontantClauseTypeArticle = "";
-            if (!(type_article.isEmpty())) {
-                MontantClauseTypeArticle = " and r.type_article = '" + type_article + "'";
-                sql = sql + MontantClauseTypeArticle;
-            }
-            String MontantClauseTo = "";
-            if (!(Designation.isEmpty())) {
-                MontantClauseTo = " and r.designation like '%" + Designation + "%'";
-                sql = sql + MontantClauseTo;
-            }
-
-            String NumDevisClause = "";
-            if (!(ref.isEmpty())) {
-                NumDevisClause = " and r.ref  like '%" + ref + "%'";
-                sql = sql + NumDevisClause;
-
-            }
-            String ClientClause = "";
-            if (!(Marque.isEmpty())) {
-                ClientClause = " and r.id_marque  = " + Marque + "";
-                sql = sql + ClientClause;
-
-            }
             sql += " ORDER BY r.`id` DESC";
 
             pst = conn.prepareStatement(sql);
@@ -168,7 +134,7 @@ public class ArticleDao {
             for (int i = rowCount - 1; i >= 0; i--) {
                 dm.removeRow(i);
             }*/
-            DefaultTableModel df = buildTableModelArticleListeComparatif(rs);
+            DefaultTableModel df = buildTableModelArticleListe(rs);
 
             table.setModel(df);
         } catch (SQLException e) {
@@ -579,11 +545,8 @@ public class ArticleDao {
                 c.setDepot(rs.getString("depot"));
                 c.setTVA(rs.getString("TVA"));
                 c.setId_depot(rs.getString("id_depot"));
-                c.setType_article(rs.getString("type_article"));
+                c.setType_article(rs.getString("classification"));
 
-                c.setCode_1(rs.getString("code_article_1"));
-                c.setCode_2(rs.getString("code_article_2"));
-                c.setCode_3(rs.getString("code_article_3"));
 
                 /* String ad = rs.getObject("datee").toString();
                 java.util.Date dat = new SimpleDateFormat("yyyy-MM-dd").parse(ad);
@@ -631,64 +594,28 @@ public class ArticleDao {
 
     public static DefaultTableModel buildTableModelArticleListe(ResultSet rs)
             throws SQLException {
-        try {
 
-            ResultSetMetaData metaData = rs.getMetaData();
+        ResultSetMetaData metaData = rs.getMetaData();
 
-            // names of columns
-            Vector<String> columnNames = new Vector<String>();
-            int columnCount = metaData.getColumnCount();
-            for (int column = 1; column <= columnCount; column++) {
-                columnNames.add(metaData.getColumnName(column));
-            }
-
-            // data of the table
-            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-            while (rs.next()) {
-                Vector<Object> vector = new Vector<Object>();
-                for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                    vector.add(rs.getObject(columnIndex).toString());
-                }
-                data.add(vector);
-            }
-
-            return new DefaultTableModel(data, columnNames);
-        } catch (Exception e) {
-            System.out.println("error" + e.getMessage());
-
+        // names of columns
+        Vector<String> columnNames = new Vector<String>();
+        int columnCount = metaData.getColumnCount();
+        for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
         }
-        return null;
-    }
 
-    public static DefaultTableModel buildTableModelArticleListeComparatif(ResultSet rs)
-            throws SQLException {
-        try {
-
-            ResultSetMetaData metaData = rs.getMetaData();
-
-            // names of columns
-            Vector<String> columnNames = new Vector<String>();
-            int columnCount = metaData.getColumnCount();
-            for (int column = 1; column <= columnCount; column++) {
-                columnNames.add(metaData.getColumnName(column));
+        // data of the table
+        Vector<Vector<Object>> data = new Vector<Vector<Object>>();
+        while (rs.next()) {
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                vector.add(rs.getObject(columnIndex).toString());
             }
-
-            // data of the table
-            Vector<Vector<Object>> data = new Vector<Vector<Object>>();
-            while (rs.next()) {
-                Vector<Object> vector = new Vector<Object>();
-                for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
-                    vector.add(rs.getObject(columnIndex).toString());
-                }
-                data.add(vector);
-            }
-
-            return new DefaultTableModel(data, columnNames);
-        } catch (Exception e) {
-            System.out.println("error" + e.getMessage());
-
+            data.add(vector);
         }
-        return null;
+
+        return new DefaultTableModel(data, columnNames);
+
     }
 
     public static DefaultTableModel buildTableModelReturnData(ResultSet rs)
@@ -792,7 +719,65 @@ public class ArticleDao {
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String sql = "select r.id, r.ref, r.designation, r.prix_vente, r.qte, r.marge, sum(lr.qte) from article r left join ligne_resa lr on r.ref=lr.ref_article GROUP by r.id order by r.designation";
             pst = conn.prepareStatement(sql);
+            //  pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            df = customBuildTableModel(rs);
+            return df;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return df;
+    }
+
+    public Vector<Vector<Object>> afficherListeArticleWithStock() {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        Vector<Vector<Object>> df = null;
+        try {
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            String sql = "select r.id, r.ref, r.designation, r.prix_vente, r.qte, r.marge, sum(lr.qte),r.stock_negative from article r left join ligne_resa lr on r.ref=lr.ref_article GROUP by r.id order by r.designation";
             pst = conn.prepareStatement(sql);
+            //  pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            df = customBuildTableModel(rs);
+            return df;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return df;
+    }
+
+    public Vector<Vector<Object>> afficherListeArticlewithoutprice() {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        Vector<Vector<Object>> df = null;
+        try {
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            String sql = "select r.id, r.ref, r.designation, 0 as 'prix_vente', r.qte, ''  as 'marge', sum(lr.qte) from article r left join ligne_resa lr on r.ref=lr.ref_article GROUP by r.id order by r.designation";
+            pst = conn.prepareStatement(sql);
+            //  pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
             df = customBuildTableModel(rs);
             return df;
@@ -820,6 +805,35 @@ public class ArticleDao {
         try {
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String sql = "select r.id, r.ref, r.designation, r.prix_vente, r.qte, r.marge, sum(lr.qte) from article r left join ligne_resa lr on r.ref=lr.ref_article  WHERE r.ref like '%" + ref + "%' or r.designation like '%" + ref + "%' GROUP by r.id order by r.designation";
+            pst = conn.prepareStatement(sql);
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            df = customBuildTableModel(rs);
+            return df;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return df;
+    }
+
+    public Vector<Vector<Object>> afficherListeArticlewithStock(String ref, String s) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        Vector<Vector<Object>> df = null;
+        try {
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            String sql = "select r.id, r.ref, r.designation, r.prix_vente, r.qte, r.marge, sum(lr.qte),r.stock_negative from article r left join ligne_resa lr on r.ref=lr.ref_article  WHERE r.ref like '%" + ref + "%' or r.designation like '%" + ref + "%' GROUP by r.id order by r.designation";
             pst = conn.prepareStatement(sql);
             pst = conn.prepareStatement(sql);
             rs = pst.executeQuery();
@@ -913,9 +927,6 @@ public class ArticleDao {
 
             String sql = "UPDATE article SET "
                     + "designation='" + c.getDesignation() + "',"
-                    + "code_article_1 ='" + c.getCode_1() + "', "
-                    + "code_article_2 ='" + c.getCode_2() + "', "
-                    + "code_article_3 ='" + c.getCode_3() + "', "
                     + "id_marque=" + c.getMarque() + ","
                     + "id_fournisseur='" + c.getId_fournisseur() + "',"
                     + "id_famille='" + c.getId_famille() + "',"
@@ -1043,16 +1054,16 @@ public class ArticleDao {
             String remise = (c.getRemise_four() == null) ? "" : c.getRemise_four();
 
             String currentTime = sdf.format(dt);
-            sql = "INSERT INTO article( ref, code_article_1, code_article_2, code_article_3, designation, id_marque, id_fournisseur, id_famille, "
+            sql = "INSERT INTO article( ref, designation, id_marque, id_fournisseur, id_famille, "
                     + "id_sous_famille, TVA, isImporte, prix_achat, prix_vente, remise_four, detail_qte ,qte, "
-                    + "stock_negative, marge, VIP, VIP_pourcentage, code_barres, pays_origine, depot,id_depot,type_article) "
-                    + "VALUES ( '" + c.getRef() + "','" + c.getCode_1() + "','" + c.getCode_2() + "','" + c.getCode_3() + "', '" + c.getDesignation() + "', " + c.getMarque() + ", '" + c.getId_fournisseur() + "', '" + c.getId_famille() + "', "
+                    + "stock_negative, marge, VIP, VIP_pourcentage, code_barres, pays_origine, depot,id_depot) "
+                    + "VALUES ( '" + c.getRef() + "', '" + c.getDesignation() + "', " + c.getMarque() + ", '" + c.getId_fournisseur() + "', '" + c.getId_famille() + "', "
                     + "" + c.getId_sous_famille() + ", '" + c.getTVA() + "', '" + c.getIsImporte() + "', " + c.getPrix_achat() + ", " + c.getPrix_vente() + ", "
                     + "'" + remise + "'," + c.getDetail_qte() + ", " + c.getQte() + ","
                     + " " + c.getStock_negative() + "," + c.getMarge()
                     + ",'" + c.getVIP() + "', " + c.getVIP_pourcentage() + ", '"
                     + c.getCode_barres() + "','" + c.getPays_origine() + "', '"
-                    + c.getDepot() + "'," + c.getId_depot() + ",'" + c.getType_article() + "')";
+                    + c.getDepot() + "'," + c.getId_depot() + ")";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
             pst = (PreparedStatement) conn.prepareStatement(sql);
             pst.execute();
@@ -1223,6 +1234,48 @@ public class ArticleDao {
             for (Vector<Object> object : lstArticleToUpdate) {
 
                 sql = "update article set classification ='" + type_article + "'  where ref='" + object.elementAt(0) + "'";
+                pst = (PreparedStatement) conn.prepareStatement(sql);
+                pst.execute();
+            }
+
+//sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
+            //  JOptionPane.showMessageDialog(null, "l'article avec ref : " + c.getRef() + " a été bien Ajoutée !");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, "Error in :  " + ex);
+            }
+        }
+    }
+
+    public void updateArticleProspection(String groupe_prospection, Vector<Vector<Object>> lstArticleToUpdate) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+
+        String sql = "";
+        try {
+            //max_id upadate
+
+            /*  java.util.Date dt = new java.util.Date();
+
+            java.text.SimpleDateFormat sdf
+                    = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+             */
+            //  String remise = (c.getRemise_four() == null) ? "" : c.getRemise_four();
+            //  String currentTime = sdf.format(dt);
+            /*   sql = "delete from article_activite where type_article = '" + type_article + "'";
+            pst = (PreparedStatement) conn.prepareStatement(sql);
+            pst.execute();*/
+            for (Vector<Object> object : lstArticleToUpdate) {
+
+                sql = "update article set groupe_prospection ='" + groupe_prospection + "'  where ref='" + object.elementAt(0) + "'";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
             }
@@ -1453,6 +1506,53 @@ public class ArticleDao {
 
     }
 
+    public HashMap<String, String> listProspection(JComboBox<String> ComboBox_marque) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+        HashMap<String, String> map = new HashMap<>();
+
+        Connection conn = obj.Open();
+        try {
+            ComboBox_marque.removeAllItems();
+            // ComboBox_marque.addItem("-");
+        } catch (Exception e) {
+        }
+        try {
+            String sql = "select ref, groupe_prospection from article where groupe_prospection <> '-' ";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+
+                map.put(rs.getString("groupe_prospection"), rs.getString("ref"));
+
+                //comboBox.addItem(comm);
+            }
+            try {
+
+                for (String s : map.keySet()) {
+                    ComboBox_marque.addItem(s);
+                }
+            } catch (Exception e) {
+            }
+            return map;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+
+                System.out.println("disconnected");
+
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return map;
+
+    }
+
     public HashMap<String, String> listTypeArticle(JComboBox<String> ComboBox) {
         PreparedStatement pst;
 
@@ -1530,6 +1630,39 @@ public class ArticleDao {
             }
         }
         return s;
+    }
+
+    public String getNameItemByIdVerifStock(String table_name, String Column_Name, String Id_Column, String Id_value) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+        String sql = "";
+        Connection conn = obj.Open();
+        String s = "";
+        try {
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            sql = "select " + Column_Name + " from " + table_name + " where " + Id_Column + " = '" + Id_value + "'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            s = "";
+
+            while (rs.next()) {
+                s = rs.getString(Column_Name);
+            }
+            return s;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e + " sql : " + sql);
+            return s;
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     public String getIdItemByName(String table_name, String Column_Name, String Id_Column, String Id_value) {

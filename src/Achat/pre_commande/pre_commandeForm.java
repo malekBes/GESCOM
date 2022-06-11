@@ -88,7 +88,7 @@ public class pre_commandeForm extends javax.swing.JInternalFrame {
 
     public pre_commandeForm(String Num_Devis, String type) {
         year = Commen_Proc.YearVal;
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -170,6 +170,7 @@ public class pre_commandeForm extends javax.swing.JInternalFrame {
         columnNames_Devis_Table.add("Référence");
         columnNames_Devis_Table.add("Designation");
         columnNames_Devis_Table.add("Quantité");
+        columnNames_Devis_Table.add("Rank");
         df = new DefaultTableModel(data_Devis_Table, columnNames_Devis_Table);
         Devis_Table.setModel(df);
 
@@ -224,6 +225,7 @@ public class pre_commandeForm extends javax.swing.JInternalFrame {
         columnNames_Devis_Table.add("Référence");
         columnNames_Devis_Table.add("Designation");
         columnNames_Devis_Table.add("Quantité");
+        columnNames_Devis_Table.add("Rank");
         int i = 0;
         for (String string : columnNames_Devis_Table) {
 
@@ -1114,9 +1116,9 @@ public class pre_commandeForm extends javax.swing.JInternalFrame {
             columnNames.add("ref");
             columnNames.add("designation");
             columnNames.add("Prix Unitaire");
-            String ss = daoArticle.getNameItemById("fournisseur", "id", "nom", ComboBox_four.getSelectedItem().toString());
+            //   String ss = daoArticle.getNameItemById("fournisseur", "id", "nom", ComboBox_four.getSelectedItem().toString());
             ArticleDao articleDao = new ArticleDao();
-            Vector<Vector<Object>> data1 = articleDao.afficherListeArticle(ss);
+            Vector<Vector<Object>> data1 = null;//articleDao.afficherListeArticle(ss);
 
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
             JTable jTable = new JTable(model);
@@ -1409,6 +1411,7 @@ public class pre_commandeForm extends javax.swing.JInternalFrame {
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());
                 ld.setQte(Devis_Table.getValueAt(j, 3).toString());
+                ld.setRank(Devis_Table.getValueAt(j, 4).toString());
 
                 lst.add(ld);
 

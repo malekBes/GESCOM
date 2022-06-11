@@ -120,7 +120,7 @@ public class EditionBLForm extends javax.swing.JInternalFrame {
      */
     public EditionBLForm() {
         year = Commen_Proc.YearVal;
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -681,7 +681,7 @@ public class EditionBLForm extends javax.swing.JInternalFrame {
                 statDao.afficherAvoirEtat(DevisHist_Table, FromDate,
                         ToDate, source, groupeby,
                         client);
-            }else if (source.equals("Reliquat")) {
+            } else if (source.equals("Reliquat")) {
                 statDao.afficherReliquatEtat(DevisHist_Table, FromDate,
                         ToDate, source, groupeby,
                         client);
@@ -922,10 +922,13 @@ public class EditionBLForm extends javax.swing.JInternalFrame {
             JasperReport jr = null;
             if (RadioButtonClient.isSelected()) {
                 jr = JasperCompileManager.compileReport(
-                        ClassLoader.getSystemResourceAsStream("statPrint/Etat_D_BL_F_Client.jrxml"));
+                        ClassLoader.getSystemResourceAsStream("statPrint/Etat_F_Client.jrxml"));
+
             } else {
+
                 jr = JasperCompileManager.compileReport(
-                        ClassLoader.getSystemResourceAsStream("statPrint/Etat_D_BL_F_date.jrxml"));
+                        ClassLoader.getSystemResourceAsStream("statPrint/Etat_F_date.jrxml"));
+
             }
 
             JasperPrint jp = JasperFillManager.fillReport(jr, h, new JRTableModelDataSource(model));

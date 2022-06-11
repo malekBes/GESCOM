@@ -320,7 +320,15 @@ public class ExpotToExcel extends JFrame {
             if (num.contains("D")) {
                 sql1 = "select  if(c.nom is null,b.passager,c.nom) as client, DATE_FORMAT(b.date_devis,'%d/%m/%Y') as date,if(c.id_Fiscale is null,b.Code_TVA,c.id_Fiscale) as code_tva from devis b left join client c on b.id_client=c.numero_client where b.num_devis='" + num + "'";
             } else if (num.contains("F")) {
-                sql1 = "select c.nom as client, DATE_FORMAT(b.date_facture,'%d/%m/%Y') as date,c.id_Fiscale as code_tva from facture b left join client c on b.id_client=c.numero_client where b.num_facture='" + num + "'";
+                /*   if (num.contains("#Passager")) {
+                    num.replace("#Passager", "");
+                    sql1 = "select c.nom as client, DATE_FORMAT(b.date_facture,'%d/%m/%Y') as date,c.id_Fiscale as code_tva from facture b left join client c on b.id_client=c.numero_client where b.num_facture='" + num + "'";
+
+                } else {
+                    sql1 = "select c.nom as client, DATE_FORMAT(b.date_facture,'%d/%m/%Y') as date,c.id_Fiscale as code_tva from facture b left join client c on b.id_client=c.numero_client where b.num_facture='" + num + "'";
+                }*/
+                sql1 = "select if(type_facture = 'Passager',passager, c.nom) as client, DATE_FORMAT(b.date_facture,'%d/%m/%Y') as date, if(type_facture = 'Passager',code_tva_passager, c.id_Fiscale) as code_tva from facture b left join client c on b.id_client=c.numero_client where b.num_facture='" + num + "'";
+
             } else if (num.contains("B")) {
                 sql1 = "select c.nom as client, DATE_FORMAT(b.date_bl,'%d/%m/%Y') as date,c.id_Fiscale as code_tva from bl b left join client c on b.id_client=c.numero_client where b.num_bl='" + num + "'";
             } else if (num.contains("A")) {
@@ -391,6 +399,58 @@ public class ExpotToExcel extends JFrame {
             fw.write("\n");
             fw.write("\n");
             for (int i = 0; i < m.getRowCount(); i++) {
+                for (int j = 0; j < m.getColumnCount(); j++) {
+                    if (m.getValueAt(i, j) == null) {
+                        fw.write("" + "\t");
+                    } else {
+                        fw.write(m.getValueAt(i, j).toString() + "\t");
+                    }
+                }
+                fw.write("\n");
+            }
+
+            fw.close();
+            return "";
+        } catch (Exception e) {
+            System.out.println(e);
+            return e.getMessage();
+        }
+    }
+
+    public static String exportExcelStatparPeriod(JTable table, File file, String titre, Object tab[]) {
+        try {
+            //  String params = getDataForExcel(num);
+            //   String[] tabParams_client_date_tva = params.split(";");
+
+            TableModel m = table.getModel();
+            FileWriter fw = new FileWriter(file);
+
+            fw.write("\nTunis le : " + new SimpleDateFormat("dd/MM/yyyy").format(new Date()));
+            fw.write("\n");
+
+            fw.write("\n");
+
+            fw.write("\t");
+            fw.write("\t");
+            fw.write("\t");
+            fw.write(titre);
+            //  fw.write("Date : " + tabParams_client_date_tva[1]);
+            fw.write("\n");
+            fw.write("\n");
+            fw.write("\n");
+            int jj = 0;
+            for (int i = 0; i < m.getColumnCount()-2; i++) {
+                if (i > 0 && i < 5) {
+                    fw.write(m.getColumnName(i) + " " + tab[jj] + "\t");
+                    jj++;
+                } else {
+                    fw.write(m.getColumnName(i) + "\t");
+                }
+            }
+
+            fw.write("\n");
+            fw.write("\n");
+            for (int i = 0; i < m.getRowCount()-2; i++) {
                 for (int j = 0; j < m.getColumnCount(); j++) {
                     if (m.getValueAt(i, j) == null) {
                         fw.write("" + "\t");

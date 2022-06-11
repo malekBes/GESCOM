@@ -9,11 +9,8 @@ import Client.Client;
 import Client.ClientDao;
 import Commercial.CommercialDao;
 import Config.Commen_Proc;
-import UploadImgServer.UploadTask;
 import java.awt.BorderLayout;
 import java.awt.FlowLayout;
-import java.beans.PropertyChangeEvent;
-import java.io.File;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +21,6 @@ import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
-import javax.swing.JProgressBar;
 import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
@@ -163,15 +159,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
         ComboBox_Depot = new javax.swing.JComboBox<>();
         txt_VIP = new javax.swing.JTextField();
         CheckBox_VIP = new javax.swing.JCheckBox();
-        txt_code_1 = new javax.swing.JTextField();
-        jLabel17 = new javax.swing.JLabel();
-        txt_code_2 = new javax.swing.JTextField();
-        jLabel18 = new javax.swing.JLabel();
-        jLabel19 = new javax.swing.JLabel();
-        txt_code_3 = new javax.swing.JTextField();
-        txt_lien_img = new javax.swing.JTextField();
-        jLabel20 = new javax.swing.JLabel();
-        save1 = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         jLabel10 = new javax.swing.JLabel();
         txt_qte = new javax.swing.JTextField();
@@ -246,7 +233,7 @@ public class ArticleForm extends javax.swing.JInternalFrame {
 
         CheckBox_importe.setText("Importé");
 
-        jLabel8.setText("Type Article (RFT/C...)");
+        jLabel8.setText("Type Article");
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -257,7 +244,7 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(CheckBox_importe)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addContainerGap(130, Short.MAX_VALUE))
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -294,21 +281,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel17.setText("Indice de vitesse *");
-
-        jLabel18.setText("Indice de charge *");
-
-        jLabel19.setText("Profil *");
-
-        jLabel20.setText("Lien Image");
-
-        save1.setText("Ajouter");
-        save1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                save1ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -323,8 +295,7 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                                     .addComponent(jLabel7)
                                     .addComponent(jLabel5)
                                     .addComponent(jLabel6)
-                                    .addComponent(jLabel13)
-                                    .addComponent(jLabel20))
+                                    .addComponent(jLabel13))
                                 .addGap(18, 18, 18))
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                                 .addComponent(txt_VIP, javax.swing.GroupLayout.PREFERRED_SIZE, 60, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -337,32 +308,21 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                             .addComponent(ComboBox_four, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(txt_pays)
                             .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(ComboBox_Depot, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txt_lien_img, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(save1)
-                                .addGap(0, 0, Short.MAX_VALUE))))
+                            .addComponent(ComboBox_Depot, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel1)
                             .addComponent(jLabel2)
                             .addComponent(jLabel3)
                             .addComponent(jLabel4)
-                            .addComponent(jLabel9)
-                            .addComponent(jLabel17)
-                            .addComponent(jLabel18)
-                            .addComponent(jLabel19))
+                            .addComponent(jLabel9))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txt_desgination)
                             .addComponent(ComboBox_famille, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(ComboBoxSous_famille, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(ComboBox_marque, javax.swing.GroupLayout.Alignment.TRAILING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txt_ref)
-                            .addComponent(txt_code_1)
-                            .addComponent(txt_code_2)
-                            .addComponent(txt_code_3)))))
+                            .addComponent(txt_ref)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -387,18 +347,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                     .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_code_1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel17, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_code_2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel18, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_code_3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel19, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_desgination, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel9, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -417,11 +365,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txt_pays, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txt_lien_img, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel20, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(save1))
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -687,7 +630,7 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(90, Short.MAX_VALUE))
         );
 
         pack();
@@ -758,10 +701,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
 
             txt_ref.setText(c.getRef().toString());
 
-            txt_code_1.setText(c.getCode_1().toString());
-            txt_code_2.setText(c.getCode_2().toString());
-            txt_code_3.setText(c.getCode_3().toString());
-
             txt_pays.setText(c.getPays_origine());
             txt_desgination.setText(c.getDesignation());
             txt_tva.setText(c.getTVA());
@@ -821,10 +760,9 @@ public class ArticleForm extends javax.swing.JInternalFrame {
 
                 ComboBox_marque.setSelectedItem(ss);
             }
-            if (c.getType_article() != null) {
-                if (!c.getType_article().isEmpty()) {
-                    ComboBoxTypeArticle.setSelectedItem(c.getType_article());
-                }
+
+            if (!c.getType_article().isEmpty()) {
+                ComboBoxTypeArticle.setSelectedItem(c.getType_article());
             }
 
         }
@@ -877,41 +815,18 @@ public class ArticleForm extends javax.swing.JInternalFrame {
                 r.setRef("");
                 return null;
             }
-
-            if (!txt_code_1.getText().isEmpty()) {
-                r.setCode_1(txt_code_1.getText());
-            } else {
-                r.setCode_1("");
-                return null;
-            }
-
-            if (!txt_code_2.getText().isEmpty()) {
-                r.setCode_2(txt_code_2.getText());
-            } else {
-                r.setCode_2("");
-                return null;
-            }
-
-            if (!txt_code_3.getText().isEmpty()) {
-                r.setCode_3(txt_code_3.getText());
-            } else {
-                r.setCode_3("");
-                return null;
-            }
-
             if (!txt_pays.getText().isEmpty()) {
                 r.setPays_origine(txt_pays.getText());
             } else {
                 r.setPays_origine("");
             }
-
             if (!txt_desgination.getText().isEmpty()) {
                 r.setDesignation(txt_desgination.getText());
             } else {
                 r.setDesignation("");
                 return null;
-            }
 
+            }
             if (!txt_tva.getText().isEmpty()) {
                 r.setTVA(txt_tva.getText());
             } else {
@@ -1227,27 +1142,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
         });
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
-    private JProgressBar progressBar = new JProgressBar(0, 100);
-
- 
-    private void save1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_save1ActionPerformed
-
-        String host = "192.168.26.145";
-        int port = Integer.parseInt("21");
-        String username = "knowageftp";
-        String password = "knowageftp";
-        String uploadPath = "/logs";
-        
-        String filePath = txt_lien_img.getText();
-
-        File uploadFile = new File(filePath);
-        progressBar.setValue(0);
-        UploadTask task = new UploadTask(host, port, username, password,
-                uploadPath, uploadFile);
-    
-        task.execute();
-// TODO add your handling code here:
-    }//GEN-LAST:event_save1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -1272,11 +1166,7 @@ public class ArticleForm extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
     private javax.swing.JLabel jLabel16;
-    private javax.swing.JLabel jLabel17;
-    private javax.swing.JLabel jLabel18;
-    private javax.swing.JLabel jLabel19;
     private javax.swing.JLabel jLabel2;
-    private javax.swing.JLabel jLabel20;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
@@ -1291,15 +1181,10 @@ public class ArticleForm extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel5;
     private javax.swing.JLabel l;
     private javax.swing.JButton save;
-    private javax.swing.JButton save1;
     private javax.swing.JTextField txt_VIP;
-    private javax.swing.JTextField txt_code_1;
-    private javax.swing.JTextField txt_code_2;
-    private javax.swing.JTextField txt_code_3;
     private javax.swing.JTextField txt_code_barres;
     private javax.swing.JTextField txt_desgination;
     private javax.swing.JTextField txt_detail_qte;
-    private javax.swing.JTextField txt_lien_img;
     private javax.swing.JTextField txt_marge;
     private javax.swing.JTextField txt_pays;
     private javax.swing.JTextField txt_prix_achat;
@@ -1313,10 +1198,6 @@ public class ArticleForm extends javax.swing.JInternalFrame {
 
     private void clearTxt() {
         txt_ref.setText("");
-        txt_code_1.setText("");
-        txt_code_2.setText("");
-        txt_code_3.setText("");
-
         txt_detail_qte.setText("");
         txt_pays.setText("");
         txt_desgination.setText("");

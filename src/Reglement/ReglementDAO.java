@@ -73,6 +73,7 @@ public class ReglementDAO {
             }
         }
     }
+
     public void supprimerReglement(String id_reglement) {
         PreparedStatement pst;
 
@@ -85,6 +86,37 @@ public class ReglementDAO {
             String sql = "UPDATE reglement SET "
                     + "statut=0 "
                     + " WHERE id ='" + id_reglement + "'";
+            pst = (PreparedStatement) conn.prepareStatement(sql);
+            pst.execute();
+
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                System.out.println(ex.getMessage());
+                Logger.getLogger(ReglementDAO.class.getName()).log(Level.SEVERE, null, ex);
+
+            }
+        }
+    }
+
+    public void modifierFactureReglement(String id_reglement) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+
+        try {
+
+            String sql = "UPDATE facture SET "
+                    + "reglement='Non' "
+                    + " WHERE num_facture ='" + id_reglement + "'";
             pst = (PreparedStatement) conn.prepareStatement(sql);
             pst.execute();
 
@@ -563,7 +595,7 @@ public class ReglementDAO {
 
     public String formatDouble(Double d) {
         // String s = d.toString().replace(".", ";");
-        DecimalFormat df = new DecimalFormat("0.000"); 
+        DecimalFormat df = new DecimalFormat("0.000");
         df.setRoundingMode(RoundingMode.CEILING); // import java.text.DecimalFormat;
         String s = "0.0";
         try {

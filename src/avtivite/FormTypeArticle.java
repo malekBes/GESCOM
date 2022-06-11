@@ -69,11 +69,11 @@ public class FormTypeArticle extends javax.swing.JInternalFrame {
 
         setClosable(true);
         setResizable(true);
-        setTitle("Type Article");
+        setTitle("Création Activité");
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Création Activité"));
 
-        jLabel1.setText("Type");
+        jLabel1.setText("Activité");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);

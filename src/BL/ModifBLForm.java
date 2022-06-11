@@ -7,22 +7,37 @@ package BL;
 
 import Devis.*;
 import BL.BLDao;
+import Client.ClientDao;
 import Reglement.*;
 import Home.App;
 import Reglement.Avoir.ReglementAvoirClientFormDetail;
 import Reglement.Avoir.ReglementAvoirFournisseurFormDetail;
 import Reglement.Avoir.ReglementAvoirPassagerFormDetail;
+import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
 import java.util.ArrayList;
+import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JButton;
 import javax.swing.JDesktopPane;
+import javax.swing.JFrame;
 import javax.swing.JOptionPane;
+import javax.swing.JPanel;
+import javax.swing.JScrollPane;
+import javax.swing.JTable;
+import javax.swing.JTextField;
+import javax.swing.RowFilter;
+import javax.swing.event.DocumentEvent;
+import javax.swing.event.DocumentListener;
 import javax.swing.event.InternalFrameAdapter;
 import javax.swing.event.InternalFrameEvent;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableModel;
+import javax.swing.table.TableRowSorter;
 
 /**
  *
@@ -34,7 +49,7 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
      * Creates new form ReglementForm
      */
     public ModifBLForm() {
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -72,6 +87,7 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
         txt_num_devis = new javax.swing.JTextField();
         txt_total = new javax.swing.JTextField();
         jButton2 = new javax.swing.JButton();
+        jButton7 = new javax.swing.JButton();
 
         setClosable(true);
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
@@ -166,12 +182,21 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        jButton7.setText("Liste BL");
+        jButton7.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton7ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(130, 130, 130)
+                .addGap(42, 42, 42)
+                .addComponent(jButton7)
+                .addGap(29, 29, 29)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(txt_Res)
@@ -180,7 +205,7 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
                     .addGroup(layout.createSequentialGroup()
                         .addGap(124, 124, 124)
                         .addComponent(jButton1)))
-                .addContainerGap(151, Short.MAX_VALUE))
+                .addContainerGap(135, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -188,7 +213,9 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(25, 25, 25)
-                        .addComponent(txt_Res))
+                        .addComponent(txt_Res)
+                        .addGap(21, 21, 21)
+                        .addComponent(jButton7))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -403,12 +430,134 @@ public class ModifBLForm extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_jButton2ActionPerformed
 
+    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
+        // TODO add your handling code here:
+        /*  JFrame frame = new JFrame("Row Filter");
+        frame.add(TestTableSortFilter());
+        frame.pack();
+        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        frame.setLocationRelativeTo(null);
+        frame.setVisible(true);*/
+        Vector<String> columnNames = new Vector<String>();
+        columnNames.add("Client");
 
+        columnNames.add("Num BL");
+        columnNames.add("Date BL");
+        columnNames.add("Total");
+        columnNames.add("F/N");
+
+        BLDao DaoBL = new BLDao();
+        Vector<Vector<Object>> data1 = DaoBL.afficherListBL("");
+        DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+        JTable jTable = new JTable(model);
+
+        TableRowSorter<TableModel> rowSorter
+                = new TableRowSorter<>(jTable.getModel());
+
+        JTextField jtfFilter = new JTextField();
+
+        jbtValider = new JButton("Valider");
+        jbRecherchearticle = new JButton("Recherche");
+        jtxtRecherchearticle = new JTextField(30);
+        //jTable.setRowSorter(rowSorter);
+        JPanel Homepanel = new JPanel(new BorderLayout());
+
+        JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelbtn = new JPanel(new FlowLayout());
+
+        panelbtn.add(jbtValider, BorderLayout.SOUTH);
+        panelbtn.add(jbRecherchearticle, BorderLayout.NORTH);
+        panelbtn.add(jtxtRecherchearticle, BorderLayout.NORTH);
+
+        panel.add(panelbtn, BorderLayout.SOUTH);
+        jbRecherchearticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                ClientDao articleDao = new ClientDao();
+                Vector<Vector<Object>> data1 = articleDao.afficherListClientByName(jtxtRecherchearticle.getText());
+
+                DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+                jTable.setModel(model);
+            }
+        });
+
+        Homepanel.add(panel, BorderLayout.SOUTH);
+
+        Homepanel.add(
+                new JScrollPane(jTable), BorderLayout.CENTER);
+
+        jtfFilter.getDocument()
+                .addDocumentListener(new DocumentListener() {
+
+                    @Override
+                    public void insertUpdate(DocumentEvent e
+                    ) {
+                        String text = jtfFilter.getText();
+
+                        if (text.trim().length() == 0) {
+                            rowSorter.setRowFilter(null);
+                        } else {
+                            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                        }
+                    }
+
+                    @Override
+                    public void removeUpdate(DocumentEvent e
+                    ) {
+                        String text = jtfFilter.getText();
+
+                        if (text.trim().length() == 0) {
+                            rowSorter.setRowFilter(null);
+                        } else {
+                            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + text));
+                        }
+                    }
+
+                    @Override
+                    public void changedUpdate(DocumentEvent e
+                    ) {
+                        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+                    }
+
+                }
+                );
+
+        frameListeClient = new JFrame("Liste Clients");
+        frameListeClient.add(Homepanel);
+        frameListeClient.pack();
+        frameListeClient.setDefaultCloseOperation(DISPOSE_ON_CLOSE);
+        frameListeClient.setLocationRelativeTo(null);
+        frameListeClient.setVisible(true);
+        jbtValider.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                nomclient = jTable.getModel().getValueAt(jTable.getSelectedRow(), 1).toString();
+                BLDao blDao = new BLDao();
+                txt_num_devis.setText(nomclient);
+                //  df = blDao.afficherDetailBL(Table_detail, table_click);
+                String s = blDao.afficherBLPourModif(null, nomclient);
+                if (!s.isEmpty()) {
+                    String[] x = s.split(";");
+                    txt_client.setText(x[2]);
+                    txt_total.setText(x[1]);
+                    txt_date.setText(x[0]);
+                    Invoiced = x[4]; //JOptionPane.showMessageDialog(this, s);}
+                }
+                frameListeClient.dispose();
+            }
+        });
+    }//GEN-LAST:event_jButton7ActionPerformed
+    JButton jbRecherchearticle;
+    JTextField jtxtRecherchearticle;
+    JButton jbtValider;
+    JFrame frameListeClient;
+    String nomclient;
+    JButton jbtValiderarticle;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.ButtonGroup buttonGroup2;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton7;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

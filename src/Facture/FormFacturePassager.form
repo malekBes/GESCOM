@@ -200,14 +200,12 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" alignment="0" attributes="0">
                       <EmptySpace min="-2" max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="CheckBox_afficher_totale" alignment="0" max="32767" attributes="0"/>
-                          <Component id="CheckBox_editer_ref" alignment="0" max="32767" attributes="0"/>
-                          <Component id="CheckBox_Afficher_prix" alignment="0" max="32767" attributes="0"/>
-                          <Component id="CheckBox_afficher_validiter" alignment="0" max="32767" attributes="0"/>
-                          <Component id="CheckBox_proformat" alignment="0" pref="127" max="32767" attributes="0"/>
-                          <Component id="CheckBox_exh_tva" alignment="0" max="32767" attributes="0"/>
-                          <Component id="CheckBox_afficher_entet" alignment="0" max="32767" attributes="0"/>
+                      <Group type="103" groupAlignment="0" attributes="0">
+                          <Component id="jPanel6" min="-2" max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="CheckBox_afficher_totale" alignment="0" pref="127" max="32767" attributes="0"/>
+                              <Component id="CheckBox_exh_tva" alignment="0" max="32767" attributes="0"/>
+                          </Group>
                       </Group>
                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                   </Group>
@@ -220,27 +218,14 @@
                       <Component id="CheckBox_afficher_totale" max="32767" attributes="0"/>
                       <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Component id="CheckBox_exh_tva" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="CheckBox_proformat" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="CheckBox_afficher_validiter" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="CheckBox_Afficher_prix" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="CheckBox_editer_ref" max="32767" attributes="0"/>
-                      <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
-                      <Component id="CheckBox_afficher_entet" max="32767" attributes="0"/>
-                      <EmptySpace min="-2" max="-2" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="jPanel6" max="32767" attributes="0"/>
+                      <EmptySpace min="-2" pref="11" max="-2" attributes="0"/>
                   </Group>
               </Group>
             </DimensionLayout>
           </Layout>
           <SubComponents>
-            <Component class="javax.swing.JCheckBox" name="CheckBox_proformat">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Facture proformat"/>
-              </Properties>
-            </Component>
             <Component class="javax.swing.JCheckBox" name="CheckBox_afficher_totale">
               <Properties>
                 <Property name="text" type="java.lang.String" value="Afficher Total"/>
@@ -254,26 +239,70 @@
                 <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="CheckBox_exh_tvaActionPerformed"/>
               </Events>
             </Component>
-            <Component class="javax.swing.JCheckBox" name="CheckBox_Afficher_prix">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Afficher Prix"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="CheckBox_editer_ref">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Editer Ref&#xe9;rence"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="CheckBox_afficher_validiter">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Afficher Validiter"/>
-              </Properties>
-            </Component>
-            <Component class="javax.swing.JCheckBox" name="CheckBox_afficher_entet">
-              <Properties>
-                <Property name="text" type="java.lang.String" value="Afficher Ent&#xea;t"/>
-              </Properties>
-            </Component>
+            <Container class="javax.swing.JPanel" name="jPanel6">
+
+              <Layout>
+                <DimensionLayout dim="0">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                              <Component id="CheckBox_editer_ref" alignment="0" max="32767" attributes="0"/>
+                              <Component id="CheckBox_Afficher_prix" alignment="0" max="32767" attributes="0"/>
+                              <Component id="CheckBox_afficher_validiter" alignment="0" max="32767" attributes="0"/>
+                              <Component id="CheckBox_proformat" alignment="0" pref="127" max="32767" attributes="0"/>
+                              <Component id="CheckBox_afficher_entet" alignment="0" max="32767" attributes="0"/>
+                          </Group>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+                <DimensionLayout dim="1">
+                  <Group type="103" groupAlignment="0" attributes="0">
+                      <Group type="102" attributes="0">
+                          <EmptySpace max="-2" attributes="0"/>
+                          <Component id="CheckBox_proformat" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <Component id="CheckBox_afficher_validiter" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <Component id="CheckBox_Afficher_prix" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <Component id="CheckBox_editer_ref" max="32767" attributes="0"/>
+                          <EmptySpace type="unrelated" min="-2" max="-2" attributes="0"/>
+                          <Component id="CheckBox_afficher_entet" max="32767" attributes="0"/>
+                          <EmptySpace max="-2" attributes="0"/>
+                      </Group>
+                  </Group>
+                </DimensionLayout>
+              </Layout>
+              <SubComponents>
+                <Component class="javax.swing.JCheckBox" name="CheckBox_afficher_validiter">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Afficher Validiter"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="CheckBox_afficher_entet">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Afficher Ent&#xea;t"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="CheckBox_editer_ref">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Editer Ref&#xe9;rence"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="CheckBox_proformat">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Facture proformat"/>
+                  </Properties>
+                </Component>
+                <Component class="javax.swing.JCheckBox" name="CheckBox_Afficher_prix">
+                  <Properties>
+                    <Property name="text" type="java.lang.String" value="Afficher Prix"/>
+                  </Properties>
+                </Component>
+              </SubComponents>
+            </Container>
           </SubComponents>
         </Container>
         <Component class="com.toedter.calendar.JDateChooser" name="Date_Devis">

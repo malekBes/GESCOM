@@ -62,14 +62,14 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
      * Creates new form ArticleForm
      */
     public ListArticleForm() {
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         jPanel4.setVisible(false);
         setComboBox();
         //SearchStockArticle();
-        listNomSte = daoArticle.afficherArticle();
+        //   listNomSte = daoArticle.afficherArticle();
         this.addInternalFrameListener(new InternalFrameAdapter() {
             public void internalFrameClosing(InternalFrameEvent e) {
                 int reply = JOptionPane.showConfirmDialog(null, "Voulez vous vraiment quitter ?", "Quitter", JOptionPane.YES_NO_OPTION);
@@ -416,7 +416,7 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addContainerGap()
-                        .addComponent(jScrollPane1)))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 986, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -430,8 +430,8 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 382, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(89, 89, 89))
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 166, Short.MAX_VALUE)
+                .addGap(19, 19, 19))
         );
 
         pack();
@@ -452,7 +452,7 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
             sousFamilleComboBox(s);
         } catch (Exception e) {
         }
-      //  SearchStockArticle();
+        //  SearchStockArticle();
     }//GEN-LAST:event_ComboBox_familleActionPerformed
 
     private void txt_searchArticleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_searchArticleActionPerformed
@@ -530,7 +530,7 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_ComboBox_DepotItemStateChanged
 
     private void ComboBox_DepotActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBox_DepotActionPerformed
-      //  SearchStockArticle();
+        //  SearchStockArticle();
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboBox_DepotActionPerformed
 
@@ -542,10 +542,11 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
 
     private void Table_ArticleMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_Table_ArticleMousePressed
         // TODO add your handling code here:
- 
+
 
     }//GEN-LAST:event_Table_ArticleMousePressed
-    StockDAO stockDAO = new StockDAO();    JFrame frameListeClient;
+    StockDAO stockDAO = new StockDAO();
+    JFrame frameListeClient;
     JButton jbtValider;
 
     JButton jbtValiderarticle;
@@ -564,12 +565,12 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txt_desginationKeyPressed
 
     private void ComboBoxSous_familleActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBoxSous_familleActionPerformed
-      //  SearchStockArticle();
+        //  SearchStockArticle();
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboBoxSous_familleActionPerformed
 
     private void ComboBox_marqueActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ComboBox_marqueActionPerformed
-     //   SearchStockArticle();
+        //   SearchStockArticle();
         // TODO add your handling code here:
     }//GEN-LAST:event_ComboBox_marqueActionPerformed
 
@@ -603,7 +604,7 @@ public class ListArticleForm extends javax.swing.JInternalFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-         SearchStockArticle();
+        SearchStockArticle();
     }//GEN-LAST:event_jButton5ActionPerformed
 
     private Article setArticleFromEditText() {

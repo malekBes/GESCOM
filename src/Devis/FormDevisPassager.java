@@ -81,7 +81,7 @@ public class FormDevisPassager extends javax.swing.JInternalFrame {
      */
     public FormDevisPassager(String Num_Devis, String client) {
         year = Commen_Proc.YearVal;
-        initComponents();
+         initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -943,14 +943,15 @@ public class FormDevisPassager extends javax.swing.JInternalFrame {
 
         if (CheckBox_exh_tva.isSelected()) {
             txt_TVA.setEnabled(false);
-            txt_TVA.setText("0");
+            txt_TVA.setText("0.0");
 
         } else {
             txt_TVA.setEnabled(true);
         }
         setTvaColumn();
     }//GEN-LAST:event_CheckBox_exh_tvaActionPerformed
-    public void setTvaColumn() {
+    
+     public void setTvaColumn() {
         String tvaVal = "";
         if (CheckBox_exh_tva.isSelected()) {
             tvaVal = "0";
@@ -965,7 +966,6 @@ public class FormDevisPassager extends javax.swing.JInternalFrame {
         reCalculerTT();
 
     }
-
     private Devis setDevisFromEditText() {
         Devis r = new Devis();
 
@@ -978,7 +978,7 @@ public class FormDevisPassager extends javax.swing.JInternalFrame {
             if (id_client != null) {
                 r.setId_client(Integer.valueOf(id_client));
             } else {
-                r.setId_client(0);
+                r.setId_client(99999999);
             }
 
             if (!txt_passager.getText().isEmpty()) {
@@ -1712,6 +1712,7 @@ public class FormDevisPassager extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneDevis ld = new ligneDevis();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

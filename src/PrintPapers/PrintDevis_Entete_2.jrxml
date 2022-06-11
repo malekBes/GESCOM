@@ -1,0 +1,590 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isSummaryNewPage="true" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.9487171000000092"/>
+	<property name="ireport.x" value="43"/>
+	<property name="ireport.y" value="96"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<style name="table">
+		<box>
+			<pen lineWidth="1.0" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="Table Dataset 1" uuid="386a88e6-ed40-4112-ac95-049989cd19e9"/>
+	<parameter name="num_devis" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CUST_ACC" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TOTAL_HT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_devis" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_PATH" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="remise" class="java.lang.String"/>
+	<parameter name="TOTAL_TVA" class="java.lang.String"/>
+	<parameter name="TOTAL_TTC" class="java.lang.String"/>
+	<parameter name="TOTAL_REMISE" class="java.lang.String"/>
+	<parameter name="PathImg" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT *, ROUND(prix_u , 3) as prix_formated FROM `ligne_devis` ld left join devis d on ld.id_devis=d.Num_devis left join client c on c.numero_client=d.id_client  where d.Num_devis=$P{num_devis} group by ld.ref_article order by cast(ld.rank as unsigned)]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_devis" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ref_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="designation_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qte" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prix_u" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="remise" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tva" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_HT" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_TTC" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Num_devis" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_devis" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_client" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="adresse" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="montant_tva" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="timbre" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="exh_TVA" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Code_TVA" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Infos_devis" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Afficher_total" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="facture_proformat" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Afficher_validiter" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Afficher_prix" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Edit_ref" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="passager" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="year" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="statut" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="numero_Client" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="num_Tel" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Ville" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="pays" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="code_Postale" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="zone_Geo" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_Fiscale" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Email" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="site" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="fax" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="adresse_livraison" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="contact_Client" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="type_Client" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Etat_Paiement" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="agence" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Compte_Bank" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Fournisseur_Preced" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="actif" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Id_Commercial" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Create_Date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="Last_Update_Date" class="java.sql.Date">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="CreatedBy" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="UpdatedBy" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="classification" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="seuil_compte" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="echeance_payement" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prix_formated" class="java.lang.Double"/>
+	<variable name="montant_tva_1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{montant_tva}]]></variableExpression>
+	</variable>
+	<variable name="total_HT_1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{total_HT}]]></variableExpression>
+	</variable>
+	<variable name="remise_1" class="java.lang.Double" resetType="Page" calculation="Sum">
+		<variableExpression><![CDATA[$F{remise}]]></variableExpression>
+	</variable>
+	<background>
+		<band height="842">
+			<image>
+				<reportElement x="14" y="0" width="579" height="842" uuid="ac74345b-03be-4095-a411-03ea4b607326"/>
+				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="232">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" mode="Transparent" x="54" y="138" width="118" height="13" backcolor="#FFFFFF" uuid="926ff090-e7a0-4892-b4c7-18b01b2fa229"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° : "+ $P{num_devis}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" mode="Transparent" x="93" y="169" width="78" height="13" backcolor="#FFFFFF" uuid="62bb44d5-e203-4850-a9ca-a822f9ee95bc"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$P{date_devis}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-1" x="54" y="111" width="58" height="27" uuid="f7cb9405-700b-46ae-a95c-1782557a0705"/>
+				<textElement>
+					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Devis]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="54" y="169" width="39" height="13" uuid="e7ec47f3-4339-4128-8e15-611a8d43af5e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<elementGroup/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="359" y="96" width="185" height="37" uuid="003c8f52-e0fa-4cfe-8a7b-716d70805fdf"/>
+				<box leftPadding="3">
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{id_client} == 99999999 ? $F{passager}:$F{nom})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="359" y="132" width="53" height="20" uuid="0a05cb1d-805f-48a0-bfb3-f0bb824d11d9"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[ Code TVA :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="412" y="132" width="132" height="20" uuid="cf2cf66c-4898-4131-89f2-acbc173de41f"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($F{id_Fiscale}== null ? $F{Code_TVA}:$F{id_Fiscale})]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="31" y="207" width="100" height="20" uuid="0a2addd4-1990-4da9-b48f-41dbba824502"/>
+				<text><![CDATA[Désignation produit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="207" width="47" height="20" uuid="46f9446d-6b66-4fc6-9978-480bd3e3d760"/>
+				<text><![CDATA[P.U HT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="207" width="47" height="20" uuid="8dbd3019-ed2d-479a-bedf-2d3d9e6fa2ce"/>
+				<text><![CDATA[Quant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="207" width="47" height="20" uuid="bd201e5d-c4d2-4900-9431-539b990f7eaf"/>
+				<text><![CDATA[Total HT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="207" width="30" height="20" uuid="25a6ed3b-f03b-43be-abcf-6c8878ff47b0"/>
+				<text><![CDATA[TVA]]></text>
+			</staticText>
+			<image>
+				<reportElement x="11" y="17" width="220" height="76" uuid="30532742-07c6-4f08-9ba3-0365aa3c8037"/>
+				<imageExpression><![CDATA[$P{PathImg}+"sodis_logo.png"]]></imageExpression>
+			</image>
+			<textField>
+				<reportElement x="561" y="207" width="30" height="20" uuid="f3e0b78c-04ef-421b-9812-a6e226ed9464"/>
+				<textFieldExpression><![CDATA[$P{remise} == "Non" ?"":"Remise"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="359" y="152" width="185" height="41" uuid="f8201573-3938-4224-95e2-2d4cfda53508"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="509" y="207" width="48" height="20" uuid="6aa8e009-cc6f-4a9c-8d44-33afef517b23"/>
+				<text><![CDATA[Total TTC]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="17" y="0" width="280" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_article} + " "+  $F{designation_article}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.000" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="418" y="2" width="40" height="12" uuid="adedfa15-0033-42f9-a515-ea67b7d44153"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_HT}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="474" y="2" width="24" height="14" uuid="45641bc8-c28c-43cc-b3f4-3ad5f0971f9c"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="561" y="2" width="30" height="14" uuid="72fa13b7-6bdc-4476-92dc-f1eca275dd14"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "" : $F{remise} +" %" )]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.000" isBlankWhenNull="false">
+				<reportElement key="textField" x="297" y="2" width="55" height="11" uuid="3d7434a4-20d6-4f2b-8bd7-b0f92b8edc90"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prix_u}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="13" width="100" height="1" uuid="be24ea68-1d8e-4835-926f-9cd0d7b4dc39">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 25 == 0]]></printWhenExpression>
+				</reportElement>
+			</break>
+			<textField pattern="" isBlankWhenNull="true">
+				<reportElement key="textField" x="363" y="2" width="36" height="14" uuid="6bf32c67-7040-48a9-99db-9f1430e2b9b6"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["" + $F{qte}.intValue()]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.000" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="509" y="2" width="48" height="14" uuid="95ba1af9-fe7b-4c58-9ebf-56c594988532"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_TTC}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="160">
+			<staticText>
+				<reportElement x="407" y="105" width="163" height="54" uuid="c80a5883-ee76-4e8d-bcf1-c3550052f72f"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code TVA : 1046742 - PBM-000
+Code de Douane : 834203H 
+R.C.N : B 0127792008]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="21" y="105" width="190" height="47" uuid="44f0a688-f2ff-492e-ad04-7c2faacb210c"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Société de distribution et de services 
+21 Avenue de Tunis 2080 - Ariana 
+Tél : +216 23 554 000 - Fax : +216 70 740 247]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="239" y="108" width="130" height="34" uuid="2cc91ed6-94d3-42ce-b341-a808e97069d5"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Email : info@sodiss.com
+www.sodiss.com]]></text>
+			</staticText>
+			<image>
+				<reportElement x="9" y="43" width="138" height="44" uuid="30e211ef-40f7-4688-9014-6ba29f6f288c"/>
+				<imageExpression><![CDATA[$P{PathImg}+"sodis_logo.png"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement key="line-7" x="16" y="97" width="556" height="1" uuid="2071b011-f75f-495d-816a-fcdfc5fb6090"/>
+			</line>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="297" y="139" width="23" height="13" uuid="122aebb3-e2c1-4a71-b546-b7e556f87d3c"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="255" y="139" width="41" height="13" uuid="39755310-9131-4cb4-9735-267f41f60963"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="321" y="139" width="21" height="13" uuid="e5aa139b-31ee-47f2-a05f-7e9f6220cefd"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="193">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="491" y="30" width="54" height="14" uuid="4de67aa8-7651-479d-8dec-0e687219a83a"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? $P{TOTAL_TTC} :  $P{TOTAL_REMISE}+"\n"+$P{TOTAL_TTC} )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-11" x="435" y="1" width="56" height="14" uuid="bca88a3f-8587-4ebd-9041-68be4189057e"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total HT]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-9" x="437" y="0" width="111" height="1" uuid="6079d86f-bc9d-4278-9c24-b9af543aff4e"/>
+			</line>
+			<line>
+				<reportElement key="line-10" x="437" y="14" width="111" height="1" uuid="d2ad0d35-bbfb-4dcf-a84f-f56861b98116"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-11" x="435" y="15" width="56" height="14" uuid="cc9b5582-fd47-4695-81b6-f96bd25e66b5"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total TVA]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-10" x="435" y="29" width="111" height="1" uuid="d607ecdc-2c3e-4ba7-a3d4-b74bbfe7dd3d"/>
+			</line>
+			<textField>
+				<reportElement x="491" y="15" width="54" height="15" uuid="0c2e5ad2-8a67-4544-9817-45b0f39d3dbc"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{TOTAL_TVA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-7" x="12" y="127" width="545" height="1" uuid="70acf94c-7e85-4bcf-bd09-8a9ed4171a55"/>
+			</line>
+			<textField>
+				<reportElement x="491" y="0" width="54" height="16" uuid="78b14e1b-9608-4bbd-b1ad-84164da6a2e8"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{TOTAL_HT}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="238" y="139" width="130" height="34" uuid="3e567018-fa38-42f4-a596-fe05822f92f1"/>
+				<textElement textAlignment="Center">
+					<font size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Email : info@sodiss.com
+www.sodiss.com]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="20" y="136" width="190" height="47" uuid="a5275c44-1996-4608-9d4c-7941b3b62138"/>
+				<textElement>
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Société de distribution et de services 
+21 Avenue de Tunis 2080 - Ariana 
+Tél : +216 23 554 000 - Fax : +216 70 740 247]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="406" y="136" width="163" height="54" uuid="a079ac15-fc01-41d8-8333-c7b0ac5942ad"/>
+				<textElement textAlignment="Justified" verticalAlignment="Top">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Code TVA : 1046742 - PBM-000
+Code de Douane : 834203H 
+R.C.N : B 0127792008]]></text>
+			</staticText>
+			<image>
+				<reportElement x="6" y="74" width="138" height="44" uuid="253d2bef-9304-4865-82ca-e9dc3e701e59"/>
+				<imageExpression><![CDATA[$P{PathImg}+"sodis_logo.png"]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="295" y="173" width="23" height="13" uuid="314516bd-b57c-4b66-bca8-6f51f0286f5a"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="253" y="173" width="41" height="13" uuid="bb4820fa-61ab-452f-a028-f37888364172"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="319" y="173" width="21" height="13" uuid="089d19fe-4a15-416d-be82-3b9912972bdf"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="435" y="30" width="56" height="14" uuid="23150d17-f46f-4a06-86fe-624d08fbf447"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "Total TTC" :  "Remise \n"+"Total TTC" )]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

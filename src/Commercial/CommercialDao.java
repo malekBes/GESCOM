@@ -263,6 +263,34 @@ public class CommercialDao {
         return df;
     }
 
+    public Vector<Vector<Object>> afficherListeGroupeArticle() {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        Vector<Vector<Object>> df = null;
+        try {
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            String sql = "select distinct groupe_prospection from article where groupe_prospection <> '-'";
+            pst = conn.prepareStatement(sql);
+            rs = pst.executeQuery();
+            df = customBuildTableModel(rs);
+            return df;
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(ArticleDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return df;
+    }
+
     public HashMap listCommercial(JComboBox comboBox) {
         PreparedStatement pst;
 

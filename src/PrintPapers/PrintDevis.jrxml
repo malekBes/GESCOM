@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isSummaryNewPage="true" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.000000000000004"/>
-	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="96"/>
+	<property name="ireport.zoom" value="2.3579476910000117"/>
+	<property name="ireport.x" value="151"/>
+	<property name="ireport.y" value="1305"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -50,7 +50,7 @@
 	<parameter name="TOTAL_REMISE" class="java.lang.String"/>
 	<parameter name="PathImg" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT *, ROUND(prix_u , 3) as prix_formated FROM `ligne_devis` ld left join devis d on ld.id_devis=d.Num_devis left join client c on c.numero_client=d.id_client  where d.Num_devis=$P{num_devis} group by ld.ref_article]]>
+		<![CDATA[SELECT *, ROUND(prix_u , 3) as prix_formated FROM `ligne_devis` ld left join devis d on ld.id_devis=d.Num_devis left join client c on c.numero_client=d.id_client  where d.Num_devis=$P{num_devis} group by ld.ref_article order by cast(ld.rank as unsigned)]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -80,6 +80,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="total_TTC" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Num_devis" class="java.lang.String">
@@ -267,7 +270,7 @@
 			</staticText>
 			<elementGroup/>
 			<textField isBlankWhenNull="true">
-				<reportElement x="359" y="106" width="185" height="34" uuid="003c8f52-e0fa-4cfe-8a7b-716d70805fdf"/>
+				<reportElement x="359" y="96" width="185" height="37" uuid="003c8f52-e0fa-4cfe-8a7b-716d70805fdf"/>
 				<box leftPadding="3">
 					<topPen lineWidth="1.0"/>
 					<leftPen lineWidth="1.0"/>
@@ -276,17 +279,17 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[($F{nom} == null ? $F{passager}:$F{nom})]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{id_client} == 99999999 ? $F{passager}:$F{nom})]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="359" y="139" width="53" height="20" uuid="0a05cb1d-805f-48a0-bfb3-f0bb824d11d9"/>
+				<reportElement x="359" y="132" width="53" height="20" uuid="0a05cb1d-805f-48a0-bfb3-f0bb824d11d9"/>
 				<box>
 					<leftPen lineWidth="1.0"/>
 				</box>
 				<text><![CDATA[ Code TVA :]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="412" y="139" width="132" height="20" uuid="cf2cf66c-4898-4131-89f2-acbc173de41f"/>
+				<reportElement x="412" y="132" width="132" height="20" uuid="cf2cf66c-4898-4131-89f2-acbc173de41f"/>
 				<box>
 					<rightPen lineWidth="1.0"/>
 				</box>
@@ -295,9 +298,33 @@
 				</textElement>
 				<textFieldExpression><![CDATA[($F{id_Fiscale}== null ? $F{Code_TVA}:$F{id_Fiscale})]]></textFieldExpression>
 			</textField>
+			<staticText>
+				<reportElement x="31" y="207" width="100" height="20" uuid="0a2addd4-1990-4da9-b48f-41dbba824502"/>
+				<text><![CDATA[Désignation produit]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="305" y="207" width="47" height="20" uuid="46f9446d-6b66-4fc6-9978-480bd3e3d760"/>
+				<text><![CDATA[P.U HT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="362" y="207" width="47" height="20" uuid="8dbd3019-ed2d-479a-bedf-2d3d9e6fa2ce"/>
+				<text><![CDATA[Quant.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="418" y="207" width="47" height="20" uuid="bd201e5d-c4d2-4900-9431-539b990f7eaf"/>
+				<text><![CDATA[Total HT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="474" y="207" width="30" height="20" uuid="25a6ed3b-f03b-43be-abcf-6c8878ff47b0"/>
+				<text><![CDATA[TVA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="561" y="207" width="30" height="20" uuid="f3e0b78c-04ef-421b-9812-a6e226ed9464"/>
+				<textFieldExpression><![CDATA[$P{remise} == "Non" ?"":"Remise"]]></textFieldExpression>
+			</textField>
 			<textField isBlankWhenNull="true">
-				<reportElement x="359" y="158" width="185" height="38" uuid="f6f1a3a0-a175-4083-9112-d2225cb216ae"/>
-				<box leftPadding="3">
+				<reportElement x="359" y="152" width="185" height="41" uuid="f8201573-3938-4224-95e2-2d4cfda53508"/>
+				<box leftPadding="2">
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
@@ -308,29 +335,9 @@
 				<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="31" y="207" width="100" height="20" uuid="0a2addd4-1990-4da9-b48f-41dbba824502"/>
-				<text><![CDATA[Désignation produit]]></text>
+				<reportElement x="509" y="207" width="48" height="20" uuid="6aa8e009-cc6f-4a9c-8d44-33afef517b23"/>
+				<text><![CDATA[Total TTC]]></text>
 			</staticText>
-			<staticText>
-				<reportElement x="337" y="207" width="47" height="20" uuid="46f9446d-6b66-4fc6-9978-480bd3e3d760"/>
-				<text><![CDATA[P.U HT]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="394" y="207" width="47" height="20" uuid="8dbd3019-ed2d-479a-bedf-2d3d9e6fa2ce"/>
-				<text><![CDATA[Quant.]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="450" y="207" width="47" height="20" uuid="bd201e5d-c4d2-4900-9431-539b990f7eaf"/>
-				<text><![CDATA[Total HT]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="512" y="207" width="30" height="20" uuid="25a6ed3b-f03b-43be-abcf-6c8878ff47b0"/>
-				<text><![CDATA[TVA]]></text>
-			</staticText>
-			<textField>
-				<reportElement x="545" y="207" width="39" height="20" uuid="f3e0b78c-04ef-421b-9812-a6e226ed9464"/>
-				<textFieldExpression><![CDATA[$P{remise} == "Non" ?"":"Remise"]]></textFieldExpression>
-			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -339,7 +346,7 @@
 	<detail>
 		<band height="16">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="17" y="0" width="315" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<reportElement key="textField" x="17" y="0" width="280" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
 				<box leftPadding="3"/>
 				<textElement verticalAlignment="Top">
 					<font size="8"/>
@@ -347,23 +354,23 @@
 				<textFieldExpression><![CDATA[$F{ref_article} + " "+  $F{designation_article}]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.000" isBlankWhenNull="false">
-				<reportElement key="textField-2" x="450" y="2" width="40" height="12" uuid="adedfa15-0033-42f9-a515-ea67b7d44153"/>
+				<reportElement key="textField-2" x="418" y="2" width="40" height="12" uuid="adedfa15-0033-42f9-a515-ea67b7d44153"/>
 				<box leftPadding="3"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_HT}]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.00" isBlankWhenNull="false">
-				<reportElement key="textField-2" x="512" y="2" width="24" height="14" uuid="45641bc8-c28c-43cc-b3f4-3ad5f0971f9c"/>
+				<reportElement key="textField-2" x="474" y="2" width="24" height="14" uuid="45641bc8-c28c-43cc-b3f4-3ad5f0971f9c"/>
 				<box leftPadding="3"/>
-				<textElement textAlignment="Right" verticalAlignment="Top">
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.00" isBlankWhenNull="false">
-				<reportElement key="textField-2" x="546" y="2" width="37" height="14" uuid="72fa13b7-6bdc-4476-92dc-f1eca275dd14"/>
+				<reportElement key="textField-2" x="561" y="2" width="30" height="14" uuid="72fa13b7-6bdc-4476-92dc-f1eca275dd14"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font size="8"/>
@@ -371,7 +378,7 @@
 				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "" : $F{remise} +" %" )]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.000" isBlankWhenNull="false">
-				<reportElement key="textField" x="329" y="2" width="63" height="11" uuid="3d7434a4-20d6-4f2b-8bd7-b0f92b8edc90"/>
+				<reportElement key="textField" x="297" y="2" width="55" height="11" uuid="3d7434a4-20d6-4f2b-8bd7-b0f92b8edc90"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
@@ -384,12 +391,20 @@
 				</reportElement>
 			</break>
 			<textField pattern="" isBlankWhenNull="true">
-				<reportElement key="textField" x="395" y="2" width="36" height="14" uuid="6bf32c67-7040-48a9-99db-9f1430e2b9b6"/>
+				<reportElement key="textField" x="363" y="2" width="36" height="14" uuid="6bf32c67-7040-48a9-99db-9f1430e2b9b6"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA["" + $F{qte}.intValue()]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.000" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="509" y="2" width="48" height="14" uuid="95ba1af9-fe7b-4c58-9ebf-56c594988532"/>
+				<box leftPadding="3"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_TTC}]]></textFieldExpression>
 			</textField>
 		</band>
 	</detail>
@@ -399,21 +414,21 @@
 	<pageFooter>
 		<band height="160">
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField" x="505" y="98" width="23" height="13" uuid="122aebb3-e2c1-4a71-b546-b7e556f87d3c"/>
+				<reportElement key="textField" x="297" y="139" width="23" height="13" uuid="122aebb3-e2c1-4a71-b546-b7e556f87d3c"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="staticText-2" x="463" y="98" width="41" height="13" uuid="39755310-9131-4cb4-9735-267f41f60963"/>
+				<reportElement key="staticText-2" x="255" y="139" width="41" height="13" uuid="39755310-9131-4cb4-9735-267f41f60963"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Page]]></text>
 			</staticText>
 			<textField evaluationTime="Report" isBlankWhenNull="false">
-				<reportElement key="textField-3" x="529" y="98" width="21" height="13" uuid="e5aa139b-31ee-47f2-a05f-7e9f6220cefd"/>
+				<reportElement key="textField-3" x="321" y="139" width="21" height="13" uuid="e5aa139b-31ee-47f2-a05f-7e9f6220cefd"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
@@ -465,21 +480,21 @@
 				<textFieldExpression><![CDATA[$P{TOTAL_HT}]]></textFieldExpression>
 			</textField>
 			<textField isBlankWhenNull="false">
-				<reportElement key="textField" x="503" y="132" width="23" height="13" uuid="314516bd-b57c-4b66-bca8-6f51f0286f5a"/>
+				<reportElement key="textField" x="295" y="173" width="23" height="13" uuid="314516bd-b57c-4b66-bca8-6f51f0286f5a"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement key="staticText-2" x="461" y="132" width="41" height="13" uuid="bb4820fa-61ab-452f-a028-f37888364172"/>
+				<reportElement key="staticText-2" x="253" y="173" width="41" height="13" uuid="bb4820fa-61ab-452f-a028-f37888364172"/>
 				<textElement textAlignment="Right">
 					<font size="8"/>
 				</textElement>
 				<text><![CDATA[Page]]></text>
 			</staticText>
 			<textField evaluationTime="Report" isBlankWhenNull="false">
-				<reportElement key="textField-3" x="527" y="132" width="21" height="13" uuid="089d19fe-4a15-416d-be82-3b9912972bdf"/>
+				<reportElement key="textField-3" x="319" y="173" width="21" height="13" uuid="089d19fe-4a15-416d-be82-3b9912972bdf"/>
 				<textElement textAlignment="Left">
 					<font size="8"/>
 				</textElement>

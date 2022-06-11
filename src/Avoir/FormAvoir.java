@@ -15,7 +15,7 @@ import Client.ClientDao;
 import Client.ClientForm;
 import Config.Commen_Proc;
 import Config.ConfigDao;
-import static Devis.FormDevis_old.formatDouble;
+import static Devis.FormDevis.formatDouble;
 import Facture.FactureDAO;
 import Home.App;
 import Home.TestTableSortFilter;
@@ -1081,6 +1081,7 @@ public class FormAvoir extends javax.swing.JInternalFrame {
 
                     clearDevisLFields();
                     setNumAvoir();
+                    this.dispose();
                 } else {
                     JOptionPane.showMessageDialog(null, "Error in CreateAvoir ActionPerformed ");
                 }
@@ -1952,6 +1953,7 @@ public class FormAvoir extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneAvoir ld = new ligneAvoir();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

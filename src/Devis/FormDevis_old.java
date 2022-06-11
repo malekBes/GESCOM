@@ -1554,13 +1554,13 @@ public class FormDevis_old extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        HistoriqueDevis c = new HistoriqueDevis();
+      /*  HistoriqueDevis c = new HistoriqueDevis();
         Home.App.d.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setSize(screenSize.width, screenSize.height);
         dispose();
-        c.setVisible(true);
+        c.setVisible(true);*/
     }//GEN-LAST:event_jButton4ActionPerformed
 
 

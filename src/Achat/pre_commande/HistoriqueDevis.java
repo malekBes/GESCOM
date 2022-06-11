@@ -92,7 +92,7 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
             }
         });
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        update_table();
+       // update_table();
         //TestTableSortFilter();
     }
 
@@ -104,7 +104,7 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
 
             ClientDao clientDao = new ClientDao();
 
-            listNomSte = clientDao.afficherClient();
+          //  listNomSte = clientDao.afficherClient();
             //client_table.setModel(buildTableModel(rs));
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Error in ClientFrom/load_Update_table :  " + e);
@@ -723,7 +723,7 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
             FormBL fr = new FormBL("", "", "");
             int row = DevisHist_Table.getSelectedRow();
             String table_click = DevisHist_Table.getModel().getValueAt(row, 1).toString();
-            devisDao.afficherDetailDevis(DevisHistDetail_Table, table_click);
+            devisDao.afficherDetailDevisPreCommande(DevisHistDetail_Table, table_click);
 
             ClientDao clientDao = new ClientDao();
             txt_num_devis.setText(table_click);

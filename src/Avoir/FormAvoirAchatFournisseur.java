@@ -1757,6 +1757,7 @@ public class FormAvoirAchatFournisseur extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneAvoir ld = new ligneAvoir();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

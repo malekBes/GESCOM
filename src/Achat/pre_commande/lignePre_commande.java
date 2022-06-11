@@ -13,12 +13,21 @@ import Devis.*;
  */
 public class lignePre_commande {
 
-    int id; 
+    int id;
     String id_pre_commande;
     String ref_article;
     String design;
     String qte;
     Double Prix_u;
+    String rank;
+
+    public String getRank() {
+        return rank;
+    }
+
+    public void setRank(String rank) {
+        this.rank = rank;
+    }
 
     public int getId() {
         return id;
@@ -67,6 +76,5 @@ public class lignePre_commande {
     public void setQte(String qte) {
         this.qte = qte;
     }
-    
-    
+
 }

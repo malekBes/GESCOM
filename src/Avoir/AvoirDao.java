@@ -223,10 +223,10 @@ public class AvoirDao {
 
                 String currentTime = sdf.format(dt);
                 sql = "INSERT INTO ligne_avoir(id_avoir, ref_article, designation_article, qte, prix_u, remise, "
-                        + "tva, total_HT, total_TTC) "
+                        + "tva, total_HT, total_TTC,rank) "
                         + "VALUES ('" + d.getId_Devis() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
                         + d.getQte() + "," + d.getPrix_U() + "," + d.getRemise() + "," + d.getTVA() + "," + d.getTotal_HT()
-                        + "," + d.getTotale_TTC() + ")";
+                        + "," + d.getTotale_TTC() + ",'" + d.getId() + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
@@ -264,10 +264,10 @@ public class AvoirDao {
 
                 String currentTime = sdf.format(dt);
                 sql = "INSERT INTO ligne_avoir_achat(id_avoir_achat, ref_article, designation_article, qte, prix_u, remise, "
-                        + "tva, total_HT, total_TTC) "
+                        + "tva, total_HT, total_TTC,rank) "
                         + "VALUES ('" + d.getId_Devis() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
                         + d.getQte() + "," + d.getPrix_U() + "," + d.getRemise() + "," + d.getTVA() + "," + d.getTotal_HT()
-                        + "," + d.getTotale_TTC() + ")";
+                        + "," + d.getTotale_TTC() + ",'" + d.getId() + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();

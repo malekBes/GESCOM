@@ -921,7 +921,7 @@ public class FormAvoirPassager extends javax.swing.JInternalFrame {
             if (id_client != null) {
                 r.setId_client(Integer.valueOf(id_client));
             } else {
-                r.setId_client(0);
+                r.setId_client(99999999);
             }
 
             if (!txt_infos_devis.getText().isEmpty()) {
@@ -1271,7 +1271,7 @@ public class FormAvoirPassager extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        HistoriqueDevis c = new HistoriqueDevis();
+        HistoriqueDevis c = new HistoriqueDevis("");
         Home.App.d.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1756,6 +1756,7 @@ public class FormAvoirPassager extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneAvoir ld = new ligneAvoir();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

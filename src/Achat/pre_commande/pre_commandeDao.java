@@ -120,6 +120,7 @@ public class pre_commandeDao {
         Connection conn = obj.Open();
 
         String sql = "";
+
         try {
             //max_id upadate
 
@@ -127,17 +128,27 @@ public class pre_commandeDao {
 
             java.text.SimpleDateFormat sdf
                     = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-
+            String values = "";
+            int i = 0;
+            int x = lstd.size();
             for (lignePre_commande d : lstd) {
-
+                i++;
                 String currentTime = sdf.format(dt);
-                sql = "INSERT INTO ligne_pre_commande(id_pre_commande, ref_article, designation_article, qte) "
-                        + "VALUES ('" + d.getId_pre_commande() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
-                        + d.getQte() + ")";
+                sql = "INSERT INTO ligne_pre_commande(id_pre_commande, ref_article, designation_article, qte,rank) "
+                        + "VALUES ";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
-                pst = (PreparedStatement) conn.prepareStatement(sql);
-                pst.execute();
+
+                if (i == x) {
+                    values += " ('" + d.getId_pre_commande() + "'  ,'" + d.getRef_article() + "'  ,'" + d.getDesign() + "'  ,"
+                            + d.getQte() + ",'" + d.getRank() + "') ";
+                } else {
+                    values += " ('" + d.getId_pre_commande() + "'  ,'" + d.getRef_article() + "'  ,'" + d.getDesign() + "'  ,"
+                            + d.getQte() + ",'" + d.getRank() + "'), ";
+                }
+
             }
+            pst = (PreparedStatement) conn.prepareStatement(sql + values);
+            pst.execute();
 
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e + sql);
@@ -187,9 +198,9 @@ public class pre_commandeDao {
             for (lignePre_commande d : lstd) {
 
                 String currentTime = sdf.format(dt);
-                sql = "INSERT INTO ligne_pre_commande(id_pre_commande, ref_article, designation_article, qte) "
+                sql = "INSERT INTO ligne_pre_commande(id_pre_commande, ref_article, designation_article, qte, rank) "
                         + "VALUES ('" + d.getId_pre_commande() + "','" + d.getRef_article() + "','" + d.getDesign() + "',"
-                        + d.getQte() + ")";
+                        + d.getQte() + ",'" + d.getRank() + "')";
 //sql = "insert into client_info(id,name,address,contact,datee) values (NULL,'" + c.Adresse + "','" + c.Compte_Bank + "','" + c.Compte_Bank + "','" + c.Adresse + "')";
                 pst = (PreparedStatement) conn.prepareStatement(sql);
                 pst.execute();
@@ -435,8 +446,9 @@ public class pre_commandeDao {
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
 
             try {
-
                 String sql = "SELECT if(max(num_bon_commande) is null ,'0',max(num_bon_commande)) as 'max(num_bon_commande)' FROM pre_command_achat";
+
+                //    String sql = "SELECT max(num_bon_commande) FROM pre_command_achat";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 
@@ -446,8 +458,9 @@ public class pre_commandeDao {
             } catch (Exception e) {
             }
             try {
-
                 String sql = "SELECT if(max(num_commande) is null,'0',max(num_commande)) as 'max(num_commande)' FROM commande_achat ";
+
+                // String sql = "SELECT max(num_commande) FROM commande_achat ";
                 pst = conn.prepareStatement(sql);
                 rs = pst.executeQuery();
 
@@ -455,9 +468,6 @@ public class pre_commandeDao {
                     cmd = rs.getString("max(num_commande)");
                 }
             } catch (Exception e) {
-            }
-            if (cmd.isEmpty()) {
-                cmd = "0";
             }
             if (Integer.valueOf(cmd) > Integer.valueOf(pre_cmd)) {
                 return cmd;

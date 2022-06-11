@@ -5,7 +5,6 @@
  */
 package stat;
 
-import Recherche.RechercheDAO;
 import Recherche.*;
 import BL.*;
 import Devis.*;
@@ -986,7 +985,7 @@ public class StatVenteParArticleParClientForm extends javax.swing.JInternalFrame
         ClientDao clientDao = new ClientDao();
         Vector<Vector<Object>> data1 = null;//clientDao.afficherListClient();
         ArticleDao articleDao = new ArticleDao();
-        data1 = articleDao.afficherListeArticle();
+      //  data1 = articleDao.afficherListeArticle();
         DefaultTableModel model = new DefaultTableModel(data1, columnNames);
         JTable jTable = new JTable(model);
 

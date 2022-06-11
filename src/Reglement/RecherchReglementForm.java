@@ -79,7 +79,7 @@ public class RecherchReglementForm extends javax.swing.JInternalFrame {
      * Creates new form RecherchForm
      */
     public RecherchReglementForm() {
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -1022,9 +1022,12 @@ public class RecherchReglementForm extends javax.swing.JInternalFrame {
             try {
                 String id = "";
                 id = DevisHist_Table.getModel().getValueAt(DevisHist_Table.getSelectedRow(), 0).toString();
+
                 if (!id.isEmpty()) {
                     regd.supprimerReglement(id);
-
+                    String id_facture = "";
+                    id_facture = DevisHist_Table.getModel().getValueAt(DevisHist_Table.getSelectedRow(), 4).toString();
+                    regd.modifierFactureReglement(id_facture);
                     JOptionPane.showMessageDialog(null, "Annulation avec Succès !");
                     SearchDevis();
                 }

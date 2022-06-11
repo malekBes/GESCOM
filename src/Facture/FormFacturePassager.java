@@ -95,6 +95,8 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
         if (!Commen_Proc.isRemote) {
             autoCompleteFields();
         }
+        jPanel6.setVisible(false);
+                
         //curent date
         Date_Devis.setDate(new Date());
         Date_Devis.setEnabled(false);
@@ -464,13 +466,14 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
         txt_infos_devis = new javax.swing.JTextField();
         txt_num_devis = new javax.swing.JTextField();
         jPanel2 = new javax.swing.JPanel();
-        CheckBox_proformat = new javax.swing.JCheckBox();
         CheckBox_afficher_totale = new javax.swing.JCheckBox();
         CheckBox_exh_tva = new javax.swing.JCheckBox();
-        CheckBox_Afficher_prix = new javax.swing.JCheckBox();
-        CheckBox_editer_ref = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
         CheckBox_afficher_validiter = new javax.swing.JCheckBox();
         CheckBox_afficher_entet = new javax.swing.JCheckBox();
+        CheckBox_editer_ref = new javax.swing.JCheckBox();
+        CheckBox_proformat = new javax.swing.JCheckBox();
+        CheckBox_Afficher_prix = new javax.swing.JCheckBox();
         Date_Devis = new com.toedter.calendar.JDateChooser();
         jLabel4 = new javax.swing.JLabel();
         txt_passager = new javax.swing.JTextField();
@@ -527,8 +530,6 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
 
         jLabel5.setText("Info Facture");
 
-        CheckBox_proformat.setText("Facture proformat");
-
         CheckBox_afficher_totale.setText("Afficher Total");
 
         CheckBox_exh_tva.setText("Exh TVA");
@@ -538,38 +539,34 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
             }
         });
 
-        CheckBox_Afficher_prix.setText("Afficher Prix");
-
-        CheckBox_editer_ref.setText("Editer Reférence");
-
         CheckBox_afficher_validiter.setText("Afficher Validiter");
 
         CheckBox_afficher_entet.setText("Afficher Entêt");
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        CheckBox_editer_ref.setText("Editer Reférence");
+
+        CheckBox_proformat.setText("Facture proformat");
+
+        CheckBox_Afficher_prix.setText("Afficher Prix");
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CheckBox_afficher_totale, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(CheckBox_editer_ref, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckBox_Afficher_prix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckBox_afficher_validiter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(CheckBox_proformat, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
-                    .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(CheckBox_proformat, javax.swing.GroupLayout.PREFERRED_SIZE, 127, Short.MAX_VALUE)
                     .addComponent(CheckBox_afficher_entet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addContainerGap())
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(CheckBox_afficher_totale, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(3, 3, 3)
-                .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CheckBox_proformat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CheckBox_afficher_validiter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -580,6 +577,31 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CheckBox_afficher_entet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                        .addComponent(CheckBox_afficher_totale, javax.swing.GroupLayout.DEFAULT_SIZE, 127, Short.MAX_VALUE)
+                        .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGap(0, 0, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(CheckBox_afficher_totale, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(3, 3, 3)
+                .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(11, 11, 11))
         );
 
         jLabel4.setText("Num Facture");
@@ -913,7 +935,7 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
                     .addComponent(jButton3))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 114, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 11, Short.MAX_VALUE))
+                .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -993,7 +1015,8 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
 
         if (CheckBox_exh_tva.isSelected()) {
             txt_TVA.setEnabled(false);
-            txt_TVA.setText("0");
+            txt_TVA.setText("0.0");
+
         } else {
             txt_TVA.setEnabled(true);
         }
@@ -1011,7 +1034,7 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
             if (id_client != null) {
                 r.setId_client(Integer.valueOf(id_client));
             } else {
-                r.setId_client(0);
+                r.setId_client(99999999);
             }
             if (!txt_adresse.getText().isEmpty()) {
                 r.setAdresse(txt_adresse.getText());
@@ -1711,6 +1734,7 @@ public class FormFacturePassager extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txt_Code_TVA;
     private javax.swing.JTextField txt_Prix_U;
@@ -1758,6 +1782,7 @@ FactureDAO factureDAO = new FactureDAO();
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneDevis ld = new ligneDevis();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

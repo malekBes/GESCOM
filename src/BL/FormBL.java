@@ -13,7 +13,7 @@ import Client.ClientForm;
 import Commercial.CommercialDao;
 import Config.Commen_Proc;
 import Config.ConfigDao;
-import static Devis.FormDevis_old.formatDouble;
+import static Devis.FormDevis.formatDouble;
 import Facture.Facture;
 import Facture.FactureDAO;
 import Facture.FactureForm;
@@ -99,7 +99,7 @@ public class FormBL extends javax.swing.JInternalFrame {
         CheckBox_timbre.setVisible(false);
         data_Devis_Table = new Vector<Vector<Object>>();
         if (!Commen_Proc.isRemote) {
-            autoCompleteFields();
+            //    autoCompleteFields();
         }
         //  CheckBox_timbre.setSelected(true);
         //curent date
@@ -121,7 +121,7 @@ public class FormBL extends javax.swing.JInternalFrame {
             ArticleDao dart = new ArticleDao();
 
             if (type.equals("Modif")) {
-                // Date_BL.setEnabled(true);
+                Date_BL.setEnabled(true);
 
                 type_operation = type;
                 setBLToModify(Num_Devis);
@@ -182,6 +182,39 @@ public class FormBL extends javax.swing.JInternalFrame {
 
         } else {
             setTableHeader();
+            if (Commen_Proc.id_role.equals("2")) {
+                TableColumnModel columnModel = Devis_Table.getColumnModel();
+                //prix unitaire
+                columnModel.getColumn(3).setMaxWidth(0);
+                columnModel.getColumn(3).setMinWidth(0);
+                columnModel.getColumn(3).setWidth(0);
+                //
+                columnModel.getColumn(5).setMaxWidth(0);
+                columnModel.getColumn(5).setMinWidth(0);
+                columnModel.getColumn(5).setWidth(0);
+                //
+                columnModel.getColumn(6).setMaxWidth(0);
+                columnModel.getColumn(6).setMinWidth(0);
+                columnModel.getColumn(6).setWidth(0);
+                //
+                columnModel.getColumn(7).setMaxWidth(0);
+                columnModel.getColumn(7).setMinWidth(0);
+                columnModel.getColumn(7).setWidth(0);
+                //
+                columnModel.getColumn(8).setMaxWidth(0);
+                columnModel.getColumn(8).setMinWidth(0);
+                columnModel.getColumn(8).setWidth(0);
+                jPanel5.setVisible(false);
+                txt_Prix_U.setVisible(false);
+                jLabel10.setVisible(false);
+                txt_remise.setEnabled(false);
+                jPanel2.setVisible(false);
+                jPanel6.setVisible(false);
+                ComboBoxNum_BL.setVisible(false);
+                ComboBox_Commercial.setVisible(false);
+                jButton11.setVisible(false);
+                jButton10.setVisible(false);
+            }
         }
         this.addInternalFrameListener(new InternalFrameAdapter() {
             public void internalFrameClosing(InternalFrameEvent e) {
@@ -264,6 +297,7 @@ public class FormBL extends javax.swing.JInternalFrame {
         columnNames_Devis_Table.add("TVA %");
         columnNames_Devis_Table.add("Totale TTC");
         df = new DefaultTableModel(data_Devis_Table, columnNames_Devis_Table);
+
         Devis_Table.setModel(df);
 
     }
@@ -314,36 +348,112 @@ public class FormBL extends javax.swing.JInternalFrame {
     }
 
     public void reCalculerTT() {
+        try {
 
-        D_Total_HT = 0.0;
-        D_Total_Net = 0.0;
+            D_Total_HT = 0.0;
+            D_Total_Net = 0.0;
 
-        D_Total_remise = 0.0;
-        D_montant_TVA = 0.0;
+            D_Total_remise = 0.0;
+            D_montant_TVA = 0.0;
 
-        for (int j = 0; j < Devis_Table.getRowCount(); j++) {
+            for (int j = 0; j < Devis_Table.getRowCount(); j++) {
+                Double Total_TTC = 0.0;
+                Double Total_HT = 0.0;
+                Double Prix_U = 0.0;
+                Double montant_Tva = 0.0;
+                Double montant_remise = 0.0;
+                Double TVA = 0.0;
+                String l_txt_TVA = Devis_Table.getValueAt(j, 7).toString();
+                String l_txt_remise = Devis_Table.getValueAt(j, 6).toString();
+                String l_txt_qte = Devis_Table.getValueAt(j, 4).toString();
+                String l_txt_Prix_U = Devis_Table.getValueAt(j, 3).toString();
+
+                if (l_txt_TVA.isEmpty()) {
+                    TVA = 0.0;
+                } else {
+                    TVA = Double.valueOf(l_txt_TVA);
+                }
+
+                Double remise;
+                if (l_txt_remise.isEmpty()) {
+                    remise = 0.0;
+                } else {
+                    remise = Double.valueOf(l_txt_remise);
+                    if (remise >= 100) {
+                        JOptionPane.showMessageDialog(null, "Remise ne depasse pas 100% ! ");
+                        return;
+                    }
+                }
+
+                Double qte;
+                if (l_txt_qte.isEmpty()) {
+                    qte = 1.0;
+                } else {
+                    qte = Double.valueOf(l_txt_qte);
+                }
+                if (!l_txt_Prix_U.isEmpty()) {
+                    Prix_U = Double.valueOf(l_txt_Prix_U);
+
+                    Total_HT = Prix_U * qte;
+                    if (remise != 0.0) {
+                        montant_remise = Total_HT * (remise / 100);
+                    }
+                    if (!CheckBox_exh_tva.isSelected()) {
+                        montant_Tva = (Total_HT - montant_remise) * (TVA / 100);
+                    }
+
+                    // Total_TTC += (Total_HT + montant_Tva) - montant_remise;
+                    Total_TTC += (Total_HT + montant_Tva) - montant_remise;
+
+                }
+
+                D_Total_HT += Total_HT;
+                D_Total_Net += Total_TTC;
+                if (!l_txt_remise.isEmpty()) {
+                    D_Total_remise += (Total_HT * (Double.valueOf(l_txt_remise) / 100));
+                }
+                D_montant_TVA += montant_Tva;
+            }
+            Double timbre = 0.0;
+            // if (CheckBox_timbre.isSelected()) {
+            //  timbre = Double.valueOf(txt_timbre.getText());
+            // }
+            D_Total_Net += timbre;
+            txt_Total_HT.setText(String.valueOf(formatDouble(D_Total_HT)));
+            txt_Total_Net.setText(String.valueOf(formatDouble(D_Total_Net)));
+            txt_Total_remise.setText(String.valueOf(formatDouble(D_Total_remise)));
+            txt_total_TVA.setText(String.valueOf(formatDouble(D_montant_TVA)));
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.println(e);
+        }
+    }
+
+    public void addLigneDevis_Table() {
+        try {
+
+            Vector<LigneBL> vector = new Vector<LigneBL>();
+            i++;
+
+            //   decimformat.setMaximumFractionDigits(3);
+            //  decimformat.setMaximumFractionDigits(3);
             Double Total_TTC = 0.0;
             Double Total_HT = 0.0;
             Double Prix_U = 0.0;
             Double montant_Tva = 0.0;
             Double montant_remise = 0.0;
-            Double TVA = 0.0;
-            String l_txt_TVA = Devis_Table.getValueAt(j, 7).toString();
-            String l_txt_remise = Devis_Table.getValueAt(j, 6).toString();
-            String l_txt_qte = Devis_Table.getValueAt(j, 4).toString();
-            String l_txt_Prix_U = Devis_Table.getValueAt(j, 3).toString();
-
-            if (l_txt_TVA.isEmpty()) {
+            Double TVA;
+            if (txt_TVA.getText().isEmpty()) {
                 TVA = 0.0;
             } else {
-                TVA = Double.valueOf(l_txt_TVA);
+                TVA = Double.valueOf(txt_TVA.getText());
             }
 
             Double remise;
-            if (l_txt_remise.isEmpty()) {
+            if (txt_remise.getText().isEmpty()) {
                 remise = 0.0;
             } else {
-                remise = Double.valueOf(l_txt_remise);
+                remise = Double.valueOf(txt_remise.getText());
                 if (remise >= 100) {
                     JOptionPane.showMessageDialog(null, "Remise ne depasse pas 100% ! ");
                     return;
@@ -351,133 +461,66 @@ public class FormBL extends javax.swing.JInternalFrame {
             }
 
             Double qte;
-            if (l_txt_qte.isEmpty()) {
+            if (txt_qte.getText().isEmpty()) {
                 qte = 1.0;
             } else {
-                qte = Double.valueOf(l_txt_qte);
+                qte = Double.valueOf(txt_qte.getText());
             }
-            if (!l_txt_Prix_U.isEmpty()) {
-                Prix_U = Double.valueOf(l_txt_Prix_U);
+            if (!txt_Prix_U.getText().isEmpty()) {
+                Prix_U = Double.valueOf(txt_Prix_U.getText());
 
                 Total_HT = Prix_U * qte;
-                if (remise != 0.0) {
+                if (!txt_remise.getText().isEmpty()) {
                     montant_remise = Total_HT * (remise / 100);
                 }
                 if (!CheckBox_exh_tva.isSelected()) {
+
                     montant_Tva = (Total_HT - montant_remise) * (TVA / 100);
                 }
 
-                // Total_TTC += (Total_HT + montant_Tva) - montant_remise;
+                //Total_TTC = (Total_HT + montant_Tva) - montant_remise;
                 Total_TTC += (Total_HT + montant_Tva) - montant_remise;
 
             }
 
+            Object LigneData[] = new Object[9];
+
+            LigneData[0] = i;
+            LigneData[1] = txt_searchArticle.getText();
+            LigneData[2] = txt_design_article.getText();
+            LigneData[3] = formatDouble(Prix_U);
+            LigneData[4] = txt_qte.getText();
+            LigneData[5] = formatDouble(Total_HT);
+            LigneData[6] = remise.toString();
+            LigneData[7] = TVA.toString();
+            LigneData[8] = formatDouble(Total_TTC);
+            if (Devis_Table.getSelectedRow() == -1) {
+                df.addRow(LigneData);
+            } else {
+                df.insertRow(Devis_Table.getSelectedRow() + 1, LigneData);
+            }
+            Devis_Table.clearSelection();
             D_Total_HT += Total_HT;
             D_Total_Net += Total_TTC;
-            if (!l_txt_remise.isEmpty()) {
-                D_Total_remise += (Total_HT * (Double.valueOf(l_txt_remise) / 100));
+            if (!txt_remise.getText().isEmpty()) {
+                D_Total_remise += (Total_HT * (Double.valueOf(txt_remise.getText()) / 100));
             }
             D_montant_TVA += montant_Tva;
+
+            Double timbre = 0.0;
+            //  if (CheckBox_timbre.isSelected()) {
+            // timbre = Double.valueOf(txt_timbre.getText());
+            //  }
+
+            txt_Total_HT.setText(String.valueOf(formatDouble(D_Total_HT)));
+            txt_Total_Net.setText(String.valueOf(formatDouble(D_Total_Net /*+ timbre*/)));
+            txt_Total_remise.setText(String.valueOf(formatDouble(D_Total_remise)));
+            txt_total_TVA.setText(String.valueOf(formatDouble(D_montant_TVA)));
+            clearFields();
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.println(e);
         }
-        Double timbre = 0.0;
-        // if (CheckBox_timbre.isSelected()) {
-        //  timbre = Double.valueOf(txt_timbre.getText());
-        // }
-        D_Total_Net += timbre;
-        txt_Total_HT.setText(String.valueOf(formatDouble(D_Total_HT)));
-        txt_Total_Net.setText(String.valueOf(formatDouble(D_Total_Net)));
-        txt_Total_remise.setText(String.valueOf(formatDouble(D_Total_remise)));
-        txt_total_TVA.setText(String.valueOf(formatDouble(D_montant_TVA)));
-
-    }
-
-    public void addLigneDevis_Table() {
-
-        Vector<LigneBL> vector = new Vector<LigneBL>();
-        i++;
-
-        //   decimformat.setMaximumFractionDigits(3);
-        //  decimformat.setMaximumFractionDigits(3);
-        Double Total_TTC = 0.0;
-        Double Total_HT = 0.0;
-        Double Prix_U = 0.0;
-        Double montant_Tva = 0.0;
-        Double montant_remise = 0.0;
-        Double TVA;
-        if (txt_TVA.getText().isEmpty()) {
-            TVA = 0.0;
-        } else {
-            TVA = Double.valueOf(txt_TVA.getText());
-        }
-
-        Double remise;
-        if (txt_remise.getText().isEmpty()) {
-            remise = 0.0;
-        } else {
-            remise = Double.valueOf(txt_remise.getText());
-            if (remise >= 100) {
-                JOptionPane.showMessageDialog(null, "Remise ne depasse pas 100% ! ");
-                return;
-            }
-        }
-
-        Double qte;
-        if (txt_qte.getText().isEmpty()) {
-            qte = 1.0;
-        } else {
-            qte = Double.valueOf(txt_qte.getText());
-        }
-        if (!txt_Prix_U.getText().isEmpty()) {
-            Prix_U = Double.valueOf(txt_Prix_U.getText());
-
-            Total_HT = Prix_U * qte;
-            if (!txt_remise.getText().isEmpty()) {
-                montant_remise = Total_HT * (remise / 100);
-            }
-            if (!CheckBox_exh_tva.isSelected()) {
-
-                montant_Tva = (Total_HT - montant_remise) * (TVA / 100);
-            }
-
-            //Total_TTC = (Total_HT + montant_Tva) - montant_remise;
-            Total_TTC += (Total_HT + montant_Tva) - montant_remise;
-
-        }
-
-        Object LigneData[] = new Object[9];
-
-        LigneData[0] = i;
-        LigneData[1] = txt_searchArticle.getText();
-        LigneData[2] = txt_design_article.getText();
-        LigneData[3] = formatDouble(Prix_U);
-        LigneData[4] = txt_qte.getText();
-        LigneData[5] = formatDouble(Total_HT);
-        LigneData[6] = remise.toString();
-        LigneData[7] = TVA.toString();
-        LigneData[8] = formatDouble(Total_TTC);
-        if (Devis_Table.getSelectedRow() == -1) {
-            df.addRow(LigneData);
-        } else {
-            df.insertRow(Devis_Table.getSelectedRow() + 1, LigneData);
-        }
-        Devis_Table.clearSelection();
-        D_Total_HT += Total_HT;
-        D_Total_Net += Total_TTC;
-        if (!txt_remise.getText().isEmpty()) {
-            D_Total_remise += (Total_HT * (Double.valueOf(txt_remise.getText()) / 100));
-        }
-        D_montant_TVA += montant_Tva;
-
-        Double timbre = 0.0;
-        //  if (CheckBox_timbre.isSelected()) {
-        // timbre = Double.valueOf(txt_timbre.getText());
-        //  }
-
-        txt_Total_HT.setText(String.valueOf(formatDouble(D_Total_HT)));
-        txt_Total_Net.setText(String.valueOf(formatDouble(D_Total_Net /*+ timbre*/)));
-        txt_Total_remise.setText(String.valueOf(formatDouble(D_Total_remise)));
-        txt_total_TVA.setText(String.valueOf(formatDouble(D_montant_TVA)));
-        clearFields();
     }
 
     public void autoCompleteFields() {
@@ -556,11 +599,12 @@ public class FormBL extends javax.swing.JInternalFrame {
         jButton10 = new javax.swing.JButton();
         jPanel4 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
-        jButton6 = new javax.swing.JButton();
         CheckBox_timbre = new javax.swing.JCheckBox();
+        jPanel6 = new javax.swing.JPanel();
+        jButton6 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
+        jButton4 = new javax.swing.JButton();
+        jButton1 = new javax.swing.JButton();
 
         setClosable(true);
         setTitle("Bon de Livraisons");
@@ -979,7 +1023,7 @@ public class FormBL extends javax.swing.JInternalFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 27, Short.MAX_VALUE))))
+                        .addGap(0, 6, Short.MAX_VALUE))))
         );
 
         jPanel4.setBorder(javax.swing.BorderFactory.createTitledBorder("Validation BL"));
@@ -991,17 +1035,11 @@ public class FormBL extends javax.swing.JInternalFrame {
             }
         });
 
-        jButton1.setText("Historique");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        CheckBox_timbre.setSelected(true);
+        CheckBox_timbre.setText("Timbre");
+        CheckBox_timbre.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
-
-        jButton4.setText("Devis");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
+                CheckBox_timbreActionPerformed(evt);
             }
         });
 
@@ -1012,14 +1050,6 @@ public class FormBL extends javax.swing.JInternalFrame {
             }
         });
 
-        CheckBox_timbre.setSelected(true);
-        CheckBox_timbre.setText("Timbre");
-        CheckBox_timbre.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CheckBox_timbreActionPerformed(evt);
-            }
-        });
-
         jButton9.setText("Reliquat");
         jButton9.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -1027,21 +1057,61 @@ public class FormBL extends javax.swing.JInternalFrame {
             }
         });
 
+        jButton4.setText("Devis");
+        jButton4.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton4ActionPerformed(evt);
+            }
+        });
+
+        jButton1.setText("Historique");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel6Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jButton6)
+                .addContainerGap())
+        );
+
         javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
         jPanel4.setLayout(jPanel4Layout);
         jPanel4Layout.setHorizontalGroup(
             jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel4Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton4, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel4Layout.createSequentialGroup()
                         .addGap(10, 10, 10)
                         .addComponent(CheckBox_timbre))
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel4Layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 123, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel4Layout.setVerticalGroup(
@@ -1050,14 +1120,8 @@ public class FormBL extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jButton2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton1)
+                .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton4)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton9)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jButton6)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(CheckBox_timbre))
         );
 
@@ -1082,9 +1146,9 @@ public class FormBL extends javax.swing.JInternalFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 10, Short.MAX_VALUE)
                 .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(141, 141, 141))
+                .addGap(189, 189, 189))
         );
 
         pack();
@@ -1139,13 +1203,13 @@ public class FormBL extends javax.swing.JInternalFrame {
 
         if (CheckBox_exh_tva.isSelected()) {
             txt_TVA.setEnabled(false);
-            txt_TVA.setText("0");
-
+            txt_TVA.setText("0.0");
         } else {
             txt_TVA.setEnabled(true);
         }
         setTvaColumn();
     }//GEN-LAST:event_CheckBox_exh_tvaActionPerformed
+
     public void setTvaColumn() {
         String tvaVal = "";
         if (CheckBox_exh_tva.isSelected()) {
@@ -1245,6 +1309,19 @@ public class FormBL extends javax.swing.JInternalFrame {
     ArrayList<LigneBL> lstdmodif;
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         try {
+            if (CheckBox_exh_tva.isSelected()) {
+
+                if (JOptionPane.showConfirmDialog(null, "Vous êtes sûr que ce client est Exonéré TVA !!!", "WARNING",
+                        JOptionPane.YES_NO_OPTION) == JOptionPane.YES_OPTION) {
+                    // yes option
+
+                } else {
+                    // no option
+                    return;
+
+                }
+
+            }
             if (!id_client.isEmpty()) {
 
                 DevisDao devisDao = new DevisDao();
@@ -1265,7 +1342,7 @@ public class FormBL extends javax.swing.JInternalFrame {
                                 devisDao.modifierStockBLOnUpdate(lstd);
                                 BLDao.modifierLigneBL(lstd);
                                 JOptionPane.showMessageDialog(null, "num Bl " + txt_num_BL.getText() + " à été bien modifié !");
-
+                                this.dispose();
                                 // clearDevisLFields();
                                 //setNumBL();
                             } else {
@@ -1290,8 +1367,9 @@ public class FormBL extends javax.swing.JInternalFrame {
                                     BLDao.ajouterLigneBL(lstd);
                                     devisDao.modifierStockBL(lstd);
                                     clearDevisLFields();
-                                    setNumBL();
                                     JOptionPane.showMessageDialog(null, "num Bl " + txt_num_BL.getText() + " à été bien enregistré !");
+                                    setNumBL();
+                                    this.dispose();
                                 } else {
                                     JOptionPane.showMessageDialog(null, "Ref Article est vide !");
 
@@ -1446,15 +1524,24 @@ public class FormBL extends javax.swing.JInternalFrame {
 
     private void AjouterActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AjouterActionPerformed
         // TODO add your handling code here:
-        addLigneDevis_Table();
-        int row = Devis_Table.getSelectedRow();
-        int coll = 0;
-        reCalculerTT();
-        //df.setValueAt("5", row, coll);
-        for (int j = 0; j < df.getRowCount(); j++) {
-            Object s = df.getValueAt(j, coll);
-            // JOptionPane.showMessageDialog(null, " index : " + j + " value : " + s);
-            df.setValueAt(j + 1, j, coll);
+
+        try {
+
+            addLigneDevis_Table();
+            int row = Devis_Table.getSelectedRow();
+            int coll = 0;
+            reCalculerTT();
+            //df.setValueAt("5", row, coll);
+            for (int j = 0; j < df.getRowCount(); j++) {
+                Object s = df.getValueAt(j, coll);
+                // JOptionPane.showMessageDialog(null, " index : " + j + " value : " + s);
+                df.setValueAt(j + 1, j, coll);
+            }
+            // Devis_Table.setModel(df);
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+            System.out.println(e);
         }
     }//GEN-LAST:event_AjouterActionPerformed
     public String formatString(String s) {
@@ -1632,7 +1719,9 @@ public class FormBL extends javax.swing.JInternalFrame {
         columnNames.add("Adresse");
 
         ClientDao clientDao = new ClientDao();
-        Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+        // Vector<Vector<Object>> data1 = clientDao.afficherListClient();
+        Vector<Vector<Object>> data1 = null;
+
         DefaultTableModel model = new DefaultTableModel(data1, columnNames);
         JTable jTable = new JTable(model);
 
@@ -1722,8 +1811,10 @@ public class FormBL extends javax.swing.JInternalFrame {
                 String code_tva = d.getNameItemById("client", "id_Fiscale", "nom", txt_search.getText());
                 txt_Code_TVA.setText(code_tva);
                 id_client = s;
-                Date_BL.setDate(new Date());
-                Date_BL.setEnabled(false);
+                if (type_operation.equals("Modif") || type_operation.equals("ModifFromDevis")) {
+                    // Date_BL.setDate(new Date());
+                    Date_BL.setEnabled(false);
+                }
                 frameListeClient.dispose();
             }
         });
@@ -1743,14 +1834,20 @@ public class FormBL extends javax.swing.JInternalFrame {
 
         ClientDao clientDao = new ClientDao();
         Vector<Vector<Object>> data1;
-        if (!Commen_Proc.isRemote) {
+        /*   if (!Commen_Proc.isRemote) {
             data1 = clientDao.afficherListClient();
         } else {
             data1 = null;
         }
-
+         */
         ArticleDao articleDao = new ArticleDao();
-        data1 = articleDao.afficherListeArticle();
+        if (Commen_Proc.id_role.equals("1")) {
+            //     data1 = articleDao.afficherListeArticle();
+
+        } else {
+            //  data1 = articleDao.afficherListeArticlewithoutprice();
+        }
+        data1 = null;
         DefaultTableModel model = new DefaultTableModel(data1, columnNames);
         JTable jTable = new JTable(model);
 
@@ -1847,7 +1944,11 @@ public class FormBL extends javax.swing.JInternalFrame {
                 txt_remise.setText(remise.isEmpty() ? "" : remise);
 
                 txt_design_article.setText(design);
-                txt_TVA.setText(tva);
+                if (CheckBox_exh_tva.isSelected()) {
+                    txt_TVA.setText("0");
+                } else {
+                    txt_TVA.setText(tva);
+                }
                 txt_Prix_U.setText(pu);
 
                 frameListeClient.dispose();
@@ -1984,7 +2085,7 @@ public class FormBL extends javax.swing.JInternalFrame {
                 }
                 BLDao devisDao = new BLDao();
                 //   FormBL fr = new FormBL("", "", "");
-                devisDao.afficherDetailBL(Devis_Table, ComboBoxNum_BL.getSelectedItem().toString());
+                // devisDao.afficherDetailBLV2(Devis_Table, ComboBoxNum_BL.getSelectedItem().toString(), df);
 
             } catch (Exception e) {
             }
@@ -2147,6 +2248,7 @@ public class FormBL extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextField txt_Code_TVA;
     private javax.swing.JTextField txt_Prix_U;

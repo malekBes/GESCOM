@@ -73,7 +73,7 @@ public class RecherchAvoirVenteForm extends javax.swing.JInternalFrame {
      * Creates new form RecherchForm
      */
     public RecherchAvoirVenteForm() {
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -476,16 +476,18 @@ public class RecherchAvoirVenteForm extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_DevisHist_TableMouseClicked
     private void setHeadersDetail() {
-        DevisHistDetail_Table.getColumnModel().getColumn(0).setHeaderValue("id");
-        DevisHistDetail_Table.getColumnModel().getColumn(1).setHeaderValue("Num Avoir");
-        DevisHistDetail_Table.getColumnModel().getColumn(2).setHeaderValue("Référence");
-        DevisHistDetail_Table.getColumnModel().getColumn(3).setHeaderValue("Designation");
-        DevisHistDetail_Table.getColumnModel().getColumn(4).setHeaderValue("Quantité");
-        DevisHistDetail_Table.getColumnModel().getColumn(5).setHeaderValue("Prix Unit HT");
-        DevisHistDetail_Table.getColumnModel().getColumn(6).setHeaderValue("Remise %");
-        DevisHistDetail_Table.getColumnModel().getColumn(7).setHeaderValue("TVA %");
-        DevisHistDetail_Table.getColumnModel().getColumn(8).setHeaderValue("Totale HT");
-        DevisHistDetail_Table.getColumnModel().getColumn(9).setHeaderValue("Totale TTC");
+        DevisHistDetail_Table.getColumnModel().getColumn(0).setHeaderValue("Client");
+        DevisHistDetail_Table.getColumnModel().getColumn(1).setHeaderValue("id");
+
+        DevisHistDetail_Table.getColumnModel().getColumn(2).setHeaderValue("Num Avoir");
+        DevisHistDetail_Table.getColumnModel().getColumn(3).setHeaderValue("Référence");
+        DevisHistDetail_Table.getColumnModel().getColumn(4).setHeaderValue("Designation");
+        DevisHistDetail_Table.getColumnModel().getColumn(5).setHeaderValue("Quantité");
+        DevisHistDetail_Table.getColumnModel().getColumn(6).setHeaderValue("Prix Unit HT");
+        DevisHistDetail_Table.getColumnModel().getColumn(7).setHeaderValue("Remise %");
+        DevisHistDetail_Table.getColumnModel().getColumn(8).setHeaderValue("TVA %");
+        DevisHistDetail_Table.getColumnModel().getColumn(9).setHeaderValue("Totale HT");
+        DevisHistDetail_Table.getColumnModel().getColumn(10).setHeaderValue("Totale TTC");
         DevisHistDetail_Table.getTableHeader().resizeAndRepaint();
     }
     private void txt_montant_fromKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_montant_fromKeyPressed

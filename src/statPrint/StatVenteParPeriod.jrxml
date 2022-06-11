@@ -9,6 +9,10 @@
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
 	<parameter name="table_title" class="java.lang.String"/>
+	<parameter name="val_1_m" class="java.lang.String"/>
+	<parameter name="val_1_a" class="java.lang.String"/>
+	<parameter name="val_3_m" class="java.lang.String"/>
+	<parameter name="val_6_m" class="java.lang.String"/>
 	<queryString>
 		<![CDATA[]]>
 	</queryString>
@@ -22,7 +26,7 @@
 		<band/>
 	</background>
 	<title>
-		<band height="39">
+		<band height="38">
 			<textField isStretchWithOverflow="true">
 				<reportElement x="179" y="12" width="242" height="26" uuid="a80b2ce0-8092-4f14-88c0-45f9e4617968"/>
 				<textElement textAlignment="Center">
@@ -40,9 +44,9 @@
 		</band>
 	</title>
 	<pageHeader>
-		<band height="14">
-			<staticText>
-				<reportElement key="staticText-9" x="131" y="0" width="85" height="14" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
+		<band height="21">
+			<textField>
+				<reportElement key="staticText-9" x="153" y="0" width="97" height="21" uuid="ea4a5e44-532b-4d35-8884-20660a763bb7"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -50,14 +54,14 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="8" isBold="true"/>
 				</textElement>
-				<text><![CDATA[1 An]]></text>
-			</staticText>
-			<elementGroup/>
+				<textFieldExpression><![CDATA["1 An\n"+
+$P{val_1_a}]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement key="staticText-9" x="37" y="0" width="94" height="14" uuid="c25f50d1-248a-4029-b2f9-4369a48b214e"/>
+				<reportElement key="staticText-9" x="59" y="0" width="94" height="21" uuid="c0a1d1c0-5167-46ca-a674-0f9caf2b3566"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -65,13 +69,13 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center">
+				<textElement textAlignment="Center" markup="none">
 					<font size="9" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Ref Article]]></text>
 			</staticText>
-			<staticText>
-				<reportElement key="staticText-9" x="216" y="0" width="77" height="14" uuid="7ef6ae92-3453-4761-83fd-fd5b3a265fd3"/>
+			<textField>
+				<reportElement key="staticText-9" x="250" y="0" width="88" height="21" uuid="ea0bc84d-385f-4ab6-808f-5e69ff5b3b1d"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -79,13 +83,14 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[6 Mois]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-9" x="293" y="0" width="77" height="14" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
+				<textFieldExpression><![CDATA["6 Mois\n"+
+$P{val_6_m}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-9" x="338" y="0" width="94" height="21" uuid="62152111-33b2-40a3-a2db-20219ec5a12c"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -93,13 +98,14 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[3 Mois]]></text>
-			</staticText>
-			<staticText>
-				<reportElement key="staticText-9" x="370" y="0" width="127" height="14" uuid="8271bdd1-9e2e-4e16-b311-7ac6ee85e1eb"/>
+				<textFieldExpression><![CDATA["3 Mois\n"+
+$P{val_3_m}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement key="staticText-9" x="432" y="0" width="127" height="21" uuid="4be26ea6-cb34-43d8-99dd-fd018f3a7098"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -107,25 +113,12 @@
 					<bottomPen lineWidth="0.5"/>
 					<rightPen lineWidth="0.5"/>
 				</box>
-				<textElement textAlignment="Center">
-					<font size="9" isBold="true"/>
+				<textElement textAlignment="Center" markup="none">
+					<font size="7" isBold="true"/>
 				</textElement>
-				<text><![CDATA[1 Mois]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="497" y="0" width="66" height="14" uuid="5752d202-32f9-4636-98b7-ed70afdd8e2b"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
-				</textElement>
-				<text><![CDATA[Total]]></text>
-			</staticText>
+				<textFieldExpression><![CDATA["1 Mois\n"+
+$P{val_1_m}]]></textFieldExpression>
+			</textField>
 		</band>
 	</pageHeader>
 	<columnHeader>
@@ -134,7 +127,7 @@
 	<detail>
 		<band height="15">
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="131" y="0" width="85" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<reportElement key="textField" x="153" y="0" width="97" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -148,7 +141,7 @@
 				<textFieldExpression><![CDATA[$F{1 an}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="37" y="0" width="94" height="15" uuid="064c7cfa-afd4-4dfa-965c-25400fa89c1b"/>
+				<reportElement key="textField" x="59" y="0" width="94" height="15" uuid="064c7cfa-afd4-4dfa-965c-25400fa89c1b"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -162,7 +155,7 @@
 				<textFieldExpression><![CDATA[$F{Ref Article}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="216" y="0" width="77" height="15" uuid="e9e58914-2d3d-40b1-bd8c-dda5de106583"/>
+				<reportElement key="textField" x="250" y="0" width="88" height="15" uuid="e9e58914-2d3d-40b1-bd8c-dda5de106583"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -176,7 +169,7 @@
 				<textFieldExpression><![CDATA[$F{6 mois}]]></textFieldExpression>
 			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="293" y="0" width="77" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
+				<reportElement key="textField" x="338" y="0" width="94" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>
@@ -189,22 +182,8 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{3 mois}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="497" y="0" width="66" height="15" uuid="afdae2b4-7aad-4b60-9890-8d16aae49fa4"/>
-				<box>
-					<pen lineWidth="0.5"/>
-					<topPen lineWidth="0.5"/>
-					<leftPen lineWidth="0.5"/>
-					<bottomPen lineWidth="0.5"/>
-					<rightPen lineWidth="0.5"/>
-				</box>
-				<textElement textAlignment="Center">
-					<font size="8"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{Total}]]></textFieldExpression>
-			</textField>
 			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
-				<reportElement key="textField" x="370" y="0" width="127" height="15" uuid="830ce53d-c1e7-4384-af7c-7ec5c17aa294"/>
+				<reportElement key="textField" x="432" y="0" width="127" height="15" uuid="830ce53d-c1e7-4384-af7c-7ec5c17aa294"/>
 				<box>
 					<pen lineWidth="0.5"/>
 					<topPen lineWidth="0.5"/>

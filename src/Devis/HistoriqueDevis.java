@@ -73,16 +73,21 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
     /**
      * Creates new form form
      */
-    public HistoriqueDevis() {
+    String num_devis_update_import = "";
+
+    public HistoriqueDevis(String num_devis) {
         year = Commen_Proc.YearVal;
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
         setTableHeader();
         data_Devis_Table = new Vector<Vector<Object>>();
-           if (!Commen_Proc.isRemote) {
+        if (!Commen_Proc.isRemote) {
             autoCompleteFields();
+        }
+        if (!num_devis.isEmpty()) {
+            num_devis_update_import = num_devis;
         }
         //curent date
         this.addInternalFrameListener(new InternalFrameAdapter() {
@@ -94,7 +99,7 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
             }
         });
         setDefaultCloseOperation(javax.swing.WindowConstants.DO_NOTHING_ON_CLOSE);
-        update_table();
+       // update_table();
         //TestTableSortFilter();
     }
     DefaultTableModel Devis_df = null;
@@ -823,24 +828,28 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        FormDevis_old c;
+        FormDevis c;
         int column = 1;
         int row = DevisHist_Table.getSelectedRow();
         String value = DevisHist_Table.getModel().getValueAt(row, column).toString();
-       // ArrayList<String> lst = new ArrayList<>();
+        // ArrayList<String> lst = new ArrayList<>();
         String s = "";
 
         for (int j = 0; j < ListExport.getModel().getSize(); j++) {
-           // lst.add(ListExport.getModel().getElementAt(j));
+            // lst.add(ListExport.getModel().getElementAt(j));
             s += "'" + ListExport.getModel().getElementAt(j) + "',";
         }
         s = s.substring(0, s.length() - 1);
 
-        if (s.isEmpty()) {
-            c = new FormDevis_old(s, "");
+        if (s.isEmpty() && !num_devis_update_import.contains("Modif")) {
+            c = new FormDevis(s, "");
+
+        } else if (num_devis_update_import.contains("Modif")) {
+            c = new FormDevis(s, "Import_modif;" + num_devis_update_import);
         } else {
-            c = new FormDevis_old(s, "Import");
+            c = new FormDevis(s, "Import");
         }
+
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         c.setSize(screenSize.width, screenSize.height);
         c.setVisible(true);
@@ -855,6 +864,7 @@ public class HistoriqueDevis extends javax.swing.JInternalFrame {
         }
         c.show();
         ds.repaint();
+        this.dispose();
     }//GEN-LAST:event_jButton4ActionPerformed
 
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed

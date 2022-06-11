@@ -5,7 +5,6 @@
  */
 package stat;
 
-import Recherche.RechercheDAO;
 import Recherche.*;
 import BL.*;
 import Devis.*;
@@ -123,7 +122,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
      */
     public StatVenteParArticleParPeridoForm() {
         year = Commen_Proc.YearVal;
-         initComponents();
+        initComponents();
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -466,7 +465,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel3)
                                 .addGap(44, 44, 44)
-                                .addComponent(txt_searchArticle)
+                                .addComponent(txt_searchArticle, javax.swing.GroupLayout.PREFERRED_SIZE, 352, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                                 .addComponent(jButton8))
                             .addGroup(jPanel1Layout.createSequentialGroup()
@@ -1161,7 +1160,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
         ClientDao clientDao = new ClientDao();
         Vector<Vector<Object>> data1 = null;// clientDao.afficherListClient();
         ArticleDao articleDao = new ArticleDao();
-        data1 = articleDao.afficherListeArticle();
+        //   data1 = articleDao.afficherListeArticle();
         DefaultTableModel model = new DefaultTableModel(data1, columnNames);
         JTable jTable = new JTable(model);
 
@@ -1300,7 +1299,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
     private void txt_searchArticleKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txt_searchArticleKeyReleased
         //  daoArticle.searchClient(client_table, txt_search.getText());
 
-        if (evt.getKeyCode() == evt.VK_BACK_SPACE || evt.getKeyCode() == evt.VK_DELETE) {
+   /*     if (evt.getKeyCode() == evt.VK_BACK_SPACE || evt.getKeyCode() == evt.VK_DELETE) {
 
         } else {
             String to_check = txt_searchArticle.getText().toLowerCase();
@@ -1322,7 +1321,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
                     break;
                 }
             }
-        }
+        }*/
     }//GEN-LAST:event_txt_searchArticleKeyReleased
 
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
@@ -1335,8 +1334,18 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
             DataBase_connect obj = new DataBase_connect();
 
             HashMap<String, Object> h = new HashMap<>();
+
             DefaultTableModel model = (DefaultTableModel) DevisHist_Table.getModel();
             h.put("table_title", "Stat Vente Par Article Par Période");
+            h.put("val_1_m", FromDate1Month + " - " + ToDate1Month);
+            h.put("val_3_m", FromDate3Month + " - " + ToDate3Month);
+            h.put("val_6_m", FromDate6Month + " - " + ToDate6Month);
+            h.put("val_1_a", FromDate1Year + " - " + ToDate1Year);
+            Object LigneData[] = new Object[4];
+            LigneData[0] = FromDate1Year + " - " + ToDate1Year;
+            LigneData[1] = FromDate6Month + " - " + ToDate6Month;
+            LigneData[2] = FromDate3Month + " - " + ToDate3Month;
+            LigneData[3] = FromDate1Month + " - " + ToDate1Month;
 
             JasperReport jr = JasperCompileManager.compileReport(
                     ClassLoader.getSystemResourceAsStream("statPrint/StatVenteParPeriod.jrxml"));
@@ -1346,7 +1355,7 @@ public class StatVenteParArticleParPeridoForm extends javax.swing.JInternalFrame
             JasperExportManager.exportReportToPdfFile(jp, Commen_Proc.PathPDF + "Stat Vente Par Article Par Période.pdf");
 
             File myObj = new File(Commen_Proc.PathExcel + "Stat Vente Par Article Par Période" + ".xls");
-            Config.ExpotToExcel.exportExcelStat(DevisHist_Table, myObj, "Stat Vente Par Article Par Période");
+            Config.ExpotToExcel.exportExcelStatparPeriod(DevisHist_Table, myObj, "Stat Vente Par Article Par Période", LigneData);
             JasperViewer.viewReport(jp, false);
         } catch (Exception e) {
             JOptionPane.showMessageDialog(this, e.getMessage());

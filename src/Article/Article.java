@@ -38,9 +38,6 @@ public class Article {
     String id_client;
     Double remise;
     String type_article;
-    String code_1;
-    String code_2;
-    String code_3;
 
     public Article() {
     }
@@ -75,30 +72,6 @@ public class Article {
         this.code_barres = code_barres;
         this.pays_origine = pays_origine;
         this.depot = depot;
-    }
-
-    public String getCode_1() {
-        return code_1;
-    }
-
-    public void setCode_1(String code_1) {
-        this.code_1 = code_1;
-    }
-
-    public String getCode_2() {
-        return code_2;
-    }
-
-    public void setCode_2(String code_2) {
-        this.code_2 = code_2;
-    }
-
-    public String getCode_3() {
-        return code_3;
-    }
-
-    public void setCode_3(String code_3) {
-        this.code_3 = code_3;
     }
 
     public Double getRemise() {

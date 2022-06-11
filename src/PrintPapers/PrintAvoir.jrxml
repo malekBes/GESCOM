@@ -4,7 +4,7 @@
 	<property name="ireport.encoding" value="UTF-8"/>
 	<property name="ireport.zoom" value="1.2100000000000006"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -28,7 +28,7 @@
 	<parameter name="TOTAL_TTC" class="java.lang.String"/>
 	<parameter name="PathImg" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT * FROM `ligne_avoir` ld left join avoir d on ld.id_avoir=d.num_avoir left join client c on c.numero_client=d.id_client where d.Num_avoir=$P{num_avoir} group by ref_article]]>
+		<![CDATA[SELECT * FROM `ligne_avoir` ld left join avoir d on ld.id_avoir=d.num_avoir left join client c on c.numero_client=d.id_client where d.Num_avoir=$P{num_avoir} group by ref_article order by cast(ld.rank as unsigned)]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -58,6 +58,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="total_TTC" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="num_facture" class="java.lang.String">
@@ -291,7 +294,7 @@
 				</box>
 				<text><![CDATA[ Code TVA :]]></text>
 			</staticText>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="410" y="138" width="132" height="20" uuid="cf2cf66c-4898-4131-89f2-acbc173de41f"/>
 				<box>
 					<rightPen lineWidth="1.0"/>
@@ -301,9 +304,9 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id_Fiscale}]]></textFieldExpression>
 			</textField>
-			<textField>
+			<textField isBlankWhenNull="true">
 				<reportElement x="357" y="158" width="185" height="32" uuid="f6f1a3a0-a175-4083-9112-d2225cb216ae"/>
-				<box>
+				<box leftPadding="2">
 					<leftPen lineWidth="1.0"/>
 					<bottomPen lineWidth="1.0"/>
 					<rightPen lineWidth="1.0"/>
@@ -311,7 +314,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" "+$F{adresse}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="54" y="112" width="83" height="36" uuid="09544d93-7f21-4587-b6f5-6b77eb028884"/>
@@ -338,7 +341,7 @@
 			<textField pattern="##0.000" isBlankWhenNull="false">
 				<reportElement key="textField" x="235" y="0" width="56" height="16" uuid="3d7434a4-20d6-4f2b-8bd7-b0f92b8edc90"/>
 				<box leftPadding="3"/>
-				<textElement verticalAlignment="Top">
+				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="8"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{prix_u}]]></textFieldExpression>
@@ -351,7 +354,7 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_HT}]]></textFieldExpression>
 			</textField>
-			<textField pattern="##0.00" isBlankWhenNull="false">
+			<textField pattern="##0.000" isBlankWhenNull="true">
 				<reportElement key="textField-2" x="480" y="0" width="40" height="16" uuid="d6941d79-3c7a-43c0-b3bb-b4c798ae8640"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">

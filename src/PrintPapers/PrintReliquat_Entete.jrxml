@@ -2,9 +2,9 @@
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" isSummaryNewPage="true" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
 	<property name="ireport.scriptlethandling" value="0"/>
 	<property name="ireport.encoding" value="UTF-8"/>
-	<property name="ireport.zoom" value="1.000000000000004"/>
+	<property name="ireport.zoom" value="1.4641000000000064"/>
 	<property name="ireport.x" value="0"/>
-	<property name="ireport.y" value="240"/>
+	<property name="ireport.y" value="0"/>
 	<import value="net.sf.jasperreports.engine.*"/>
 	<import value="java.util.*"/>
 	<import value="net.sf.jasperreports.engine.data.*"/>
@@ -50,7 +50,7 @@
 	<parameter name="TOTAL_REMISE" class="java.lang.String"/>
 	<parameter name="PathImg" class="java.lang.String"/>
 	<queryString>
-		<![CDATA[SELECT *, ROUND(prix_u , 3) as prix_formated FROM `ligne_reliquat` ld left join reliquat d on ld.id_reliquat=d.Num_reliquat left join client c on c.numero_client=d.id_client  where d.Num_reliquat=$P{num_reliquat} group by ld.ref_article]]>
+		<![CDATA[SELECT *, ROUND(prix_u , 3) as prix_formated FROM `ligne_reliquat` ld left join reliquat d on ld.id_reliquat=d.Num_reliquat left join client c on c.numero_client=d.id_client  where d.Num_reliquat=$P{num_reliquat} group by ld.ref_article  order by cast(ld.rank as unsigned)]]>
 	</queryString>
 	<field name="id" class="java.lang.Integer">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -80,6 +80,9 @@
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="total_TTC" class="java.lang.Double">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="rank" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
 	</field>
 	<field name="Num_reliquat" class="java.lang.String">
@@ -228,7 +231,7 @@
 		<band height="842">
 			<image>
 				<reportElement x="9" y="0" width="579" height="842" uuid="ac74345b-03be-4095-a411-03ea4b607326"/>
-				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
+				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5-no-ttc.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
 			</image>
 		</band>
 	</background>
@@ -276,7 +279,7 @@
 				<textElement>
 					<font isBold="true"/>
 				</textElement>
-				<textFieldExpression><![CDATA[" "+$F{nom}]]></textFieldExpression>
+				<textFieldExpression><![CDATA[($F{id_client} == 99999999 ? $F{passager}:$F{nom})]]></textFieldExpression>
 			</textField>
 			<staticText>
 				<reportElement x="354" y="137" width="53" height="20" uuid="0a05cb1d-805f-48a0-bfb3-f0bb824d11d9"/>
@@ -295,18 +298,6 @@
 				</textElement>
 				<textFieldExpression><![CDATA[$F{id_Fiscale}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="354" y="156" width="185" height="38" uuid="f6f1a3a0-a175-4083-9112-d2225cb216ae"/>
-				<box>
-					<leftPen lineWidth="1.0"/>
-					<bottomPen lineWidth="1.0"/>
-					<rightPen lineWidth="1.0"/>
-				</box>
-				<textElement>
-					<font isBold="true"/>
-				</textElement>
-				<textFieldExpression><![CDATA[" "+$F{adresse}]]></textFieldExpression>
-			</textField>
 			<staticText>
 				<reportElement x="31" y="207" width="100" height="20" uuid="0a2addd4-1990-4da9-b48f-41dbba824502"/>
 				<text><![CDATA[Désignation produit]]></text>
@@ -320,7 +311,7 @@
 				<text><![CDATA[Quant.]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="450" y="207" width="47" height="20" uuid="bd201e5d-c4d2-4900-9431-539b990f7eaf"/>
+				<reportElement x="446" y="207" width="47" height="20" uuid="bd201e5d-c4d2-4900-9431-539b990f7eaf"/>
 				<text><![CDATA[Total HT]]></text>
 			</staticText>
 			<staticText>
@@ -334,6 +325,18 @@
 			<textField>
 				<reportElement x="545" y="207" width="39" height="20" uuid="f3e0b78c-04ef-421b-9812-a6e226ed9464"/>
 				<textFieldExpression><![CDATA[$P{remise} == "Non" ?"":"Remise"]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="354" y="157" width="185" height="36" uuid="a9ac96f9-8768-4944-be92-8d33bd73bc54"/>
+				<box leftPadding="2">
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{adresse}]]></textFieldExpression>
 			</textField>
 		</band>
 	</pageHeader>
@@ -351,7 +354,7 @@
 				<textFieldExpression><![CDATA[$F{ref_article} + " "+  $F{designation_article}]]></textFieldExpression>
 			</textField>
 			<textField pattern="##0.000" isBlankWhenNull="false">
-				<reportElement key="textField-2" x="450" y="2" width="40" height="12" uuid="adedfa15-0033-42f9-a515-ea67b7d44153"/>
+				<reportElement key="textField-2" x="446" y="2" width="40" height="12" uuid="adedfa15-0033-42f9-a515-ea67b7d44153"/>
 				<box leftPadding="3"/>
 				<textElement textAlignment="Right" verticalAlignment="Top">
 					<font size="8"/>

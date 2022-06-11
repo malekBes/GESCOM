@@ -11,11 +11,20 @@ package Facture;
  */
 public class ligne_facture {
 
+    int id;
     String num_facture;
     String num_bl;
 
     public String getNum_facture() {
         return num_facture;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 
     public void setNum_facture(String num_facture) {

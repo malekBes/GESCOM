@@ -731,7 +731,7 @@ public class ReglementFormDetail extends javax.swing.JInternalFrame {
                 nomclient = jTable.getModel().getValueAt(jTable.getSelectedRow(), 1).toString();
                 txt_search.setText(nomclient);
                 ArticleDao d = new ArticleDao();
-                String s = d.getNameItemById("client", "numero_client", "nom", txt_search.getText());
+                String s = jTable.getModel().getValueAt(jTable.getSelectedRow(), 0).toString();
                 id_client = s;
 
                 ReglementDAO r = new ReglementDAO();

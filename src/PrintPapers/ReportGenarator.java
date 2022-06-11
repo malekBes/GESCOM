@@ -48,6 +48,7 @@ public class ReportGenarator {
     public static String REPORT_Avoir_Entete = "PrintPapers/PrintAvoir_Entete.jrxml";
     public static String STAT_Pre_Commande = "statPrint/Pre_Commande.jrxml";
     public static String STAT_Commande = "statPrint/Commande.jrxml";
+    
 
     public void genarateReport(String reportPath,
             Map<String, Object> map, Connection con, String filename, JTable table, String num) {

@@ -5,7 +5,6 @@
  */
 package alerts;
 
-import Recherche.RechercheDAO;
 import stat.*;
 import Recherche.*;
 import BL.*;

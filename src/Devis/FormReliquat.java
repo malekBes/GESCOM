@@ -94,7 +94,9 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         initComponents();
         jPanel2.setVisible(false);
         jButton6.setVisible(false);
-        jButton4.setVisible(false);
+        jLabelPassager.setVisible(false);
+        txt_passager.setVisible(false);
+
         setIconifiable(true);
         setMaximizable(true);
         setResizable(true);
@@ -455,7 +457,6 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         CheckBox_proformat = new javax.swing.JCheckBox();
         CheckBox_afficher_totale = new javax.swing.JCheckBox();
-        CheckBox_exh_tva = new javax.swing.JCheckBox();
         CheckBox_Afficher_prix = new javax.swing.JCheckBox();
         CheckBox_editer_ref = new javax.swing.JCheckBox();
         CheckBox_afficher_validiter = new javax.swing.JCheckBox();
@@ -466,6 +467,9 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         jButton7 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         CheckBox_timbre = new javax.swing.JCheckBox();
+        CheckBox_exh_tva = new javax.swing.JCheckBox();
+        txt_passager = new javax.swing.JTextField();
+        jLabelPassager = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         Ajouter = new javax.swing.JButton();
@@ -512,6 +516,12 @@ public class FormReliquat extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Nom Client");
 
+        txt_Code_TVA.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txt_Code_TVAActionPerformed(evt);
+            }
+        });
+
         jLabel2.setText("Date Reliquat");
 
         jLabel6.setText("Code TVA");
@@ -521,13 +531,6 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         CheckBox_proformat.setText("Facture proformat");
 
         CheckBox_afficher_totale.setText("Afficher Total");
-
-        CheckBox_exh_tva.setText("Exh TVA");
-        CheckBox_exh_tva.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CheckBox_exh_tvaActionPerformed(evt);
-            }
-        });
 
         CheckBox_Afficher_prix.setText("Afficher Prix");
 
@@ -549,7 +552,6 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                     .addComponent(CheckBox_Afficher_prix, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckBox_afficher_validiter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckBox_proformat, javax.swing.GroupLayout.PREFERRED_SIZE, 127, Short.MAX_VALUE)
-                    .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(CheckBox_afficher_entet, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(0, 0, Short.MAX_VALUE))
         );
@@ -558,9 +560,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(CheckBox_afficher_totale, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(3, 3, 3)
-                .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(33, 33, 33)
                 .addComponent(CheckBox_proformat, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(CheckBox_afficher_validiter, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -611,6 +611,15 @@ public class FormReliquat extends javax.swing.JInternalFrame {
             }
         });
 
+        CheckBox_exh_tva.setText("Exh TVA");
+        CheckBox_exh_tva.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CheckBox_exh_tvaActionPerformed(evt);
+            }
+        });
+
+        jLabelPassager.setText("Passager");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -629,24 +638,29 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                                 .addGap(18, 18, 18)
                                 .addComponent(jButton9)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 17, Short.MAX_VALUE)
-                                .addComponent(jLabel4)
-                                .addGap(18, 18, 18)
-                                .addComponent(txt_num_devis, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addComponent(jLabel4))
+                            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, jPanel1Layout.createSequentialGroup()
+                                .addGap(75, 75, 75)
+                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(CheckBox_timbre)
+                                    .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(jLabel6)
                                 .addGap(18, 18, 18)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(CheckBox_timbre)
-                                    .addComponent(txt_Code_TVA, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))))
+                                .addComponent(txt_Code_TVA, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(18, 18, 18)
+                        .addComponent(txt_num_devis, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel2)
-                            .addComponent(jLabel5))
+                            .addComponent(jLabel5)
+                            .addComponent(jLabelPassager))
                         .addGap(18, 18, 18)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txt_infos_devis)
-                            .addComponent(Date_Devis, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addGap(132, 132, 132)
+                            .addComponent(Date_Devis, javax.swing.GroupLayout.PREFERRED_SIZE, 153, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(txt_passager))))
+                .addGap(120, 120, 120)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(28, Short.MAX_VALUE))
         );
@@ -670,11 +684,18 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                         .addComponent(txt_Code_TVA, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel5)
-                        .addComponent(txt_infos_devis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel5)
+                            .addComponent(txt_infos_devis, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabelPassager)
+                            .addComponent(txt_passager, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(CheckBox_timbre))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(CheckBox_exh_tva, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(62, 62, 62))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, Short.MAX_VALUE))
@@ -1029,7 +1050,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                 .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -1116,10 +1137,17 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                 r.setNum_Devis("");
             }
             if (id_client != null) {
+                if (id_client.equals("99999999")) {
+                    r.setPassager(txt_passager.getText());
+                } else {
+                    r.setPassager("");
+                }
+
                 r.setId_client(Integer.valueOf(id_client));
             } else {
                 r.setId_client(0);
             }
+
             java.text.SimpleDateFormat sdf
                     = new java.text.SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 
@@ -1233,6 +1261,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                             devisDao.modifierLigneDevis(lstd);
                             JOptionPane.showMessageDialog(null, "Devis num " + txt_num_devis.getText() + " à été bien Modifié !");
                             //devisDao.modifierStock(lstd);
+                            this.dispose();
 
                             clearDevisLFields();
                             setNumDevis();
@@ -1252,27 +1281,37 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                 if (c.DateCheckOnUpdate("devis", "date_devis", "num_devis", d.getNum_Devis(), d.getDate_devis())) {
                     ArrayList<ligneDevis> lstd;
                     lstd = setLigneDevisFromDevisTable();
+                    String nom_passager = "s";
+                    if (id_client.equals("99999999") && txt_passager.getText().isEmpty()) {
+                        nom_passager = null;
+                    }
                     //JOptionPane.showMessageDialog(null, s.toString());
-                    if (lstd != null) {
+                    if (nom_passager != null) {
 
-                        String s = "";// VerifStock(lstd);
-                        if (s.isEmpty()) {
-                            if (devisDao.ajouterReliquat(d)) {
-                                devisDao.ajouterLigneReliquat(lstd);
-                                JOptionPane.showMessageDialog(null, "Reliquat num " + txt_num_devis.getText() + " à été bien enregistré !");
-                                //devisDao.modifierStock(lstd);
+                        if (lstd != null) {
 
-                                clearDevisLFields();
-                                setNumDevis();
+                            String s = "";// VerifStock(lstd);
+                            if (s.isEmpty()) {
+                                if (devisDao.ajouterReliquat(d)) {
+                                    devisDao.ajouterLigneReliquat(lstd);
+                                    JOptionPane.showMessageDialog(null, "Reliquat num " + txt_num_devis.getText() + " à été bien enregistré !");
+                                    //devisDao.modifierStock(lstd);
+
+                                    clearDevisLFields();
+                                    setNumDevis();
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Error in CreateDevis ActionPerformed ");
+                                }
                             } else {
-                                JOptionPane.showMessageDialog(null, "Error in CreateDevis ActionPerformed ");
+                                JOptionPane.showMessageDialog(null, s);
+
                             }
                         } else {
-                            JOptionPane.showMessageDialog(null, s);
+                            JOptionPane.showMessageDialog(null, "Ref Article est vide !");
 
                         }
                     } else {
-                        JOptionPane.showMessageDialog(null, "Ref Article est vide !");
+                        JOptionPane.showMessageDialog(null, "Nom Passager est vide !");
 
                     }
                 } else {
@@ -1542,7 +1581,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
-        HistoriqueDevis c = new HistoriqueDevis();
+        HistoriqueDevisReliquat c = new HistoriqueDevisReliquat();
         Home.App.d.add(c);
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -1613,8 +1652,10 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         c.moveToFront();
         try {
             c.setSelected(true);
+
         } catch (PropertyVetoException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(App.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         c.show();
         ds.repaint();
@@ -1724,6 +1765,13 @@ public class FormReliquat extends javax.swing.JInternalFrame {
                 String code_tva = d.getNameItemById("client", "id_Fiscale", "nom", txt_search.getText());
                 String s = jTable.getModel().getValueAt(jTable.getSelectedRow(), 0).toString();
                 id_client = s;
+                if (id_client.equals("99999999") && nomclient.equals("Client Passager")) {
+                    jLabelPassager.setVisible(true);
+                    txt_passager.setVisible(true);
+                } else {
+                    jLabelPassager.setVisible(false);
+                    txt_passager.setVisible(false);
+                }
                 txt_Code_TVA.setText(code_tva);
                 Date_Devis.setDate(new Date());
                 Date_Devis.setEnabled(false);
@@ -1867,8 +1915,10 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         c.moveToFront();
         try {
             c.setSelected(true);
+
         } catch (PropertyVetoException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(App.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         c.show();
         ds.repaint();
@@ -1887,8 +1937,10 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         c.moveToFront();
         try {
             c.setSelected(true);
+
         } catch (PropertyVetoException ex) {
-            Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(App.class
+                    .getName()).log(Level.SEVERE, null, ex);
         }
         c.show();
         ds.repaint();
@@ -1925,6 +1977,10 @@ public class FormReliquat extends javax.swing.JInternalFrame {
         txt_TVA.setText(tva);
         // TODO add your handling code here:
     }//GEN-LAST:event_Devis_TableMousePressed
+
+    private void txt_Code_TVAActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txt_Code_TVAActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txt_Code_TVAActionPerformed
     private ArrayList<LigneBL> setLigneDevisFromDevisTableExport() {
         ArrayList<LigneBL> lst = new ArrayList();
         try {
@@ -2063,6 +2119,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
+    private javax.swing.JLabel jLabelPassager;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
@@ -2079,6 +2136,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
     private javax.swing.JTextField txt_design_article;
     private javax.swing.JTextField txt_infos_devis;
     private javax.swing.JTextField txt_num_devis;
+    private javax.swing.JTextField txt_passager;
     private javax.swing.JTextField txt_qte;
     private javax.swing.JTextField txt_remise;
     private javax.swing.JTextField txt_search;
@@ -2114,6 +2172,7 @@ public class FormReliquat extends javax.swing.JInternalFrame {
 
             for (int j = 0; j < Devis_Table.getRowCount(); j++) {
                 ligneDevis ld = new ligneDevis();
+                ld.setId(Integer.valueOf(Devis_Table.getValueAt(j, 0).toString()));
                 ld.setId_Devis(txt_num_devis.getText());
                 ld.setRef_article(Devis_Table.getValueAt(j, 1).toString());
                 ld.setDesign(Devis_Table.getValueAt(j, 2).toString());

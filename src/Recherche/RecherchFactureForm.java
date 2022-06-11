@@ -16,6 +16,7 @@ import Home.App;
 import PrintPapers.ReportGenarator;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
+import java.awt.FlowLayout;
 import java.awt.List;
 import java.awt.Toolkit;
 import java.beans.PropertyVetoException;
@@ -44,6 +45,7 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.RowFilter;
+import static javax.swing.WindowConstants.DISPOSE_ON_CLOSE;
 import javax.swing.event.DocumentEvent;
 import javax.swing.event.DocumentListener;
 import javax.swing.event.InternalFrameAdapter;
@@ -812,7 +814,6 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
         FactureHist_Table.getColumnModel().getColumn(3).setHeaderValue("Total TTC");
         FactureHist_Table.getColumnModel().getColumn(4).setHeaderValue("Passager");
         FactureHist_Table.getColumnModel().getColumn(5).setHeaderValue("Remise");
-
         FactureHist_Table.getTableHeader().resizeAndRepaint();
 
     }
@@ -914,6 +915,9 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
         ds.repaint();
     }//GEN-LAST:event_ExporterActionPerformed
 
+    JButton jbtValiderarticle;
+    JButton jbRecherchearticle;
+    JTextField jtxtRecherchearticle;
     private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
         // TODO add your handling code here:
         /*  JFrame frame = new JFrame("Row Filter");
@@ -938,13 +942,29 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
         JTextField jtfFilter = new JTextField();
 
         jbtValider = new JButton("Valider");
-
-        //jTable.setRowSorter(rowSorter);
+        jbRecherchearticle = new JButton("Recherche");
+        jtxtRecherchearticle = new JTextField(30);
+//jTable.setRowSorter(rowSorter);
         JPanel Homepanel = new JPanel(new BorderLayout());
 
         JPanel panel = new JPanel(new BorderLayout());
+        JPanel panelbtn = new JPanel(new FlowLayout());
 
-        panel.add(jbtValider, BorderLayout.SOUTH);
+        panelbtn.add(jbtValider, BorderLayout.SOUTH);
+        panelbtn.add(jbRecherchearticle, BorderLayout.NORTH);
+        panelbtn.add(jtxtRecherchearticle, BorderLayout.NORTH);
+
+        panel.add(panelbtn, BorderLayout.SOUTH);
+        jbRecherchearticle.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+
+                ClientDao articleDao = new ClientDao();
+                Vector<Vector<Object>> data1 = articleDao.afficherListClientByName(jtxtRecherchearticle.getText());
+
+                DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+                jTable.setModel(model);
+            }
+        });
 
         Homepanel.add(panel, BorderLayout.SOUTH);
 
@@ -1088,7 +1108,7 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
                 String total_ttc = FactureHist_Table.getModel().getValueAt(row, 3).toString();
 
                 String sql1;
-                sql1 = "select tva,HT,timbre,remise from facture where num_facture='" + num_devis + "'";
+                sql1 = "select tva,HT,timbre,remise, type_facture from facture where num_facture='" + num_devis + "'";
                 PreparedStatement pst;
                 ResultSet rs = null;
                 pst = conn.prepareStatement(sql1);
@@ -1098,11 +1118,13 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
                 String isTimbre = "0";
                 String remise = "0";
                 String total_tva = "0";
+                String type_facture = "";
                 while (rs.next()) {
                     total_tva = rs.getString("tva");
                     total_ht = rs.getString("HT");
                     isTimbre = rs.getString("timbre");
                     remise = rs.getString("remise");
+                    type_facture = rs.getString("type_facture");
                 }
                 String timbre = Commen_Proc.TimbreVal;
 
@@ -1146,6 +1168,7 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
                     JasperViewer.viewReport(jp, false);
 
                     File myObj = new File(Commen_Proc.PathExcel + file_name + ".xls");
+
                     Config.ExpotToExcel.exportExcel(Detail_ligne_facture, myObj, num_devis, map);
                     //  new ReportGenarator().genarateReport(
                     //        ReportGenarator.REPORT_Facture_Entete, map, conn, file_name, Detail_ligne_facture, num_devis);
@@ -1163,6 +1186,7 @@ public class RecherchFactureForm extends javax.swing.JInternalFrame {
                     JasperViewer.viewReport(jp, false);
 
                     File myObj = new File(Commen_Proc.PathExcel + file_name + ".xls");
+
                     Config.ExpotToExcel.exportExcel(Detail_ligne_facture, myObj, num_devis, map);
                     //new ReportGenarator().genarateReport(
                     //     ReportGenarator.REPORT_Facture, map, conn, file_name, Detail_ligne_facture, num_devis);

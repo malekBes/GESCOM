@@ -124,7 +124,127 @@ public class RechercheDAO {
         }
     }
 
-    public String afficherAlertArticle(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, String InClause, String ref_article) {
+    public void afficherEtatDuJour(JTable table, String FromDate, String ToDate, String FromMontant, String ToMontant, String NumDevis, String NomClient, String type_filtre) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            String sql = "";
+            String sql2 = "";
+            /*  if ((type_filtre.equals("passager"))) {
+                sql = "SELECT 'Client Passager' as `Client` ,d.`Num_devis`,DATE_FORMAT(d.`date_devis`,'%d/%m/%Y'),d.`Total_TTC`,d.passager FROM `devis` d left join client c on (d.id_client=c.numero_client) where d.statut =1 ";
+
+            } else {*/
+            data = new Vector<Vector<Object>>();
+            // }
+            //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
+            String FiltreClauseFrom = "";
+            if ((type_filtre.equals("client"))) {
+                FiltreClauseFrom = " and d.id_client <> 0 ";
+                sql = sql + FiltreClauseFrom;
+            } else if ((type_filtre.equals("passager"))) {
+                FiltreClauseFrom = " and d.id_client = 0 ";
+                sql = sql + FiltreClauseFrom;
+            }
+
+            String DateClauseFromDevis = "";
+            String DateClauseFromBL = "";
+            String DateClauseFromFacture = "";
+
+            if (!(FromDate.isEmpty())) {
+                DateClauseFromDevis = " and d.date_devis >= '" + FromDate + "' ";
+                DateClauseFromBL = " and d.date_bl >= '" + FromDate + "' ";
+                DateClauseFromFacture = " and d.date_facture >= '" + FromDate + "' ";
+
+            }
+
+            String DateClauseToDevis = "";
+            String DateClauseToBL = "";
+            String DateClauseToFacture = "";
+
+            if (!(ToDate.isEmpty())) {
+                DateClauseToDevis = " and d.date_devis <= '" + ToDate + "' ";
+                DateClauseToBL = " and d.date_bl <= '" + ToDate + "' ";
+                DateClauseToFacture = " and d.date_facture <= '" + ToDate + "' ";
+
+            }
+            /*     String MontantClauseFrom = "";
+            if (!(FromMontant.isEmpty())) {
+                MontantClauseFrom = " and d.total_TTC >= " + FromMontant + " ";
+                sql = sql + MontantClauseFrom;
+            }
+            String MontantClauseTo = "";
+            if (!(ToMontant.isEmpty())) {
+                MontantClauseTo = " and d.total_TTC <= " + ToMontant + " ";
+                sql = sql + MontantClauseTo;
+            }
+
+            String NumDevisClause = "";
+            if (!(NumDevis.isEmpty())) {
+                NumDevisClause = " and d.Num_devis  like '%" + NumDevis + "%' ";
+                sql = sql + NumDevisClause;
+
+            }*/
+            String ClientClause = "";
+            if (!(NomClient.isEmpty())) {
+                ClientClause = " and c.nom  like '%" + NomClient + "%' ";
+                sql = sql + ClientClause;
+
+            }
+            sql += " ORDER BY d.`Num_devis` DESC ";
+
+            sql2 = "select c.nom as nom,d.Num_devis as num,d.date_devis as 'date',d.Total_TTC as TTC,if(d.passager is null,'',d.passager ) as passager from devis d left join client c on c.numero_client=d.id_client where 1=1 " + FiltreClauseFrom + ClientClause + DateClauseToDevis + DateClauseFromDevis + " union "
+                    + "select c.nom as nom,d.Num_bl as num,d.date_bl as 'date',d.Total_TTC as TTC,'' as passager from bl d left join client c on c.numero_client=d.id_client where 1=1  " + FiltreClauseFrom + ClientClause + DateClauseFromBL + DateClauseToBL + "  union "
+                    + "select c.nom as nom,d.Num_facture as num,d.date_facture as 'date',d.ttc as TTC,if(d.passager is null,'',d.passager ) as passager from facture d left join client c on c.numero_client=d.id_client where 1=1  " + FiltreClauseFrom + DateClauseToFacture + ClientClause + DateClauseFromFacture + "";
+
+            pst = conn.prepareStatement(sql2);
+
+            rs = pst.executeQuery();
+            /*    DefaultTableModel dm = (DefaultTableModel) table.getModel();
+            int rowCount = dm.getRowCount();
+            for (int i = rowCount - 1; i >= 0; i--) {
+                dm.removeRow(i);
+            }*/
+            ResultSetMetaData metaData = rs.getMetaData();
+
+            // names of columns
+            Vector<String> columnNames = new Vector<String>();
+            int columnCount = metaData.getColumnCount();
+            for (int column = 1; column <= columnCount; column++) {
+                columnNames.add(metaData.getColumnName(column).toString());
+            }
+
+            // data of the table
+            while (rs.next()) {
+                Vector<Object> vector = new Vector<Object>();
+                for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                    vector.add(rs.getObject(columnIndex));
+                }
+                data.add(vector);
+            }
+            DefaultTableModel df = new DefaultTableModel(data, columnNames);
+
+            table.setModel(df);
+            for (int j = 0; j < table.getRowCount(); j++) {
+                Object PU = df.getValueAt(j, 3);
+                df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble(PU.toString())), j, 3);
+            }
+            table.setModel(df);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(BLDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+    }
+
+    public Vector<Vector<Object>> afficherAlertArticle(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, String InClause, String ref_article) {
         PreparedStatement pst;
 
         DataBase_connect obj = new DataBase_connect();
@@ -132,7 +252,7 @@ public class RechercheDAO {
         Connection conn = obj.Open();
         try {
             //  if (!id_client.isEmpty()) {
-            addRowsAlertArticle(table, FromDate, ToDate, id_marque, refArticle, id_client, df, InClause, ref_article);
+            addRowsStatAchatVenduV3(table, FromDate, ToDate, id_marque, refArticle, id_client, df, InClause, ref_article);
             /*   } else {
                 String clients = AllClientsList(table, FromDate, ToDate, id_marque, refArticle, id_client, df);
                 String[] lstClient = clients.split(",");
@@ -140,7 +260,7 @@ public class RechercheDAO {
 
             }*/
 
-            return sqlReturn;
+            return data;
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, e);
         } finally {
@@ -153,7 +273,160 @@ public class RechercheDAO {
                         .getName()).log(Level.SEVERE, null, ex);
             }
         }
-        return sqlReturn;
+        return data;
+    }
+
+    public Vector<Vector<Object>> addRowsStatAchatVenduV3(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, DefaultTableModel df, String InClause, String ref_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            String RefArticles = lstArticleVendu(FromDate, ToDate, id_marque, "", id_client);
+
+            // sql = "SELECT c.nom,lb.ref_article,lb.designation_article,b.Num_bl, DATE_FORMAT(b.date_bl,'%d/%m/%Y'),lb.prix_u,lb.qte FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join client c on b.id_client=c.numero_Client left join marque_produit mp on r.id_marque = mp.id WHERE b.statut=1 ";
+            //  sql = "SELECT c.nom,lb.ref_article,lb.designation_article FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join commercial c on b.id_commercial=c.id left join client cl on b.id_client=cl.numero_client  WHERE b.statut=1  ";
+            sqlReturn = "SELECT cl.nom, lb.ref_article,DATE_FORMAT(max(b.date_bl),'%d/%m/%Y') as dt, "
+                    + "CONVERT((DATEDIFF(CURDATE(),max(b.date_bl))), CHAR(50)) as nbjrs, "
+                    + " if((select nb_jours_alert from alert_client_article where ref_article =lb.ref_article AND b.id_client=id_client) IS NULL , 45 ,(select nb_jours_alert from alert_client_article where ref_article = lb.ref_article AND b.id_client=id_client)) as frequence_vente, "
+                    + "if( CONVERT((DATEDIFF(CURDATE(),max(b.date_bl))), int) > if((select nb_jours_alert from alert_client_article where ref_article = lb.ref_article AND b.id_client=id_client) IS NULL , 45 ,(select nb_jours_alert from alert_client_article where ref_article = lb.ref_article AND b.id_client=id_client)) , \"Oui\",\"Non\" ) as depasse "
+                    + "FROM `ligne_bl` lb "
+                    + "left join bl b on (lb.id_bl=b.Num_bl) "
+                    + "left join client cl on cl.numero_client=b.id_client "
+                    + "left join article r on lb.ref_article=r.ref "
+                    + "left join pourcentagebonus pb on pb.id_client=b.id_client "
+                    // + "left join commercial c on b.id_commercial=c.id "
+                    + "WHERE b.statut=1 ";
+            String DateClauseFrom = "";
+
+            if (!(FromDate.isEmpty())) {
+                DateClauseFrom = " and b.date_bl >= '" + FromDate + "'";
+                sqlReturn += DateClauseFrom;
+            }
+            String clientClauseTo = "";
+            if (!(id_client.isEmpty())) {
+                clientClauseTo = " and b.id_client = " + id_client + "";
+                sqlReturn += clientClauseTo;
+            }
+            String DateClauseTo = "";
+            if (!(ToDate.isEmpty())) {
+                DateClauseTo = " and b.date_bl <= '" + ToDate + "'";
+                sqlReturn += DateClauseTo;
+            }
+
+            /* String commercialClause = "";
+            if (!(id_commercial.isEmpty())) {
+                commercialClause = " and pb.id_commercial  = " + id_commercial + "";
+                sqlReturn += commercialClause;
+
+            }*/
+            sqlReturn += " group by cl.nom,lb.ref_article order by  DATEDIFF(CURDATE(),max(b.date_bl)) ";
+            pst = conn.prepareStatement(sqlReturn);
+
+            rs = pst.executeQuery();
+
+            int qteTotalClient = 0;
+            int startAdd = 0;
+
+            Vector<String> columnNames = new Vector<String>();
+
+            columnNames.add("Client");
+            columnNames.add("Ref Article");
+            columnNames.add("Derniére BL");
+
+            columnNames.add("Nb Jrs dés la Dernière Vente");// dés la Dernière Vente
+            columnNames.add("Frequence Vente (Jr)");//nbjrs
+            columnNames.add("Relancer");// ? (O/N)
+
+            columnNames.add("Coucher");
+
+            /*    columnNames.add("Designation");
+            columnNames.add("Num BL");
+            columnNames.add("Prix Unitaire");
+
+            columnNames.add("Quantité");*/
+            Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
+            DefaultTableModel model = buildTableModelColsultAlertArticleClient(rs);
+            df = model;
+
+            while (rs.next()) {
+
+                Object LigneData[] = new Object[6];
+//cl.nom, lb.ref_article,b.date_bl
+                LigneData[0] = rs.getString("cl.nom");
+                LigneData[1] = rs.getString("lb.ref_article");
+                LigneData[2] = rs.getString("dt").toString();
+                //  LigneData[3] = rs.getString("r.classification");
+
+                LigneData[3] = rs.getString("nbjrs");
+                LigneData[4] = rs.getString("frequence_vente");
+
+                LigneData[5] = rs.getString("depasse");
+                //  LigneData[2] = rs.getString("lb.designation_article");
+                //  LigneData[3] = rs.getString("b.Num_bl");
+                // LigneData[5] = rs.getString("lb.prix_u");
+                // LigneData[6] = rs.getString("lb.qte");
+                df.insertRow(startAdd, LigneData);
+
+                // qteTotalClient += Integer.valueOf(rs.getString("lb.qte"));
+                startAdd++;
+
+            }
+            //    Object LigneData[] = new Object[4];
+
+            /*   LigneData[0] = "Total";
+            LigneData[1] = "";
+            LigneData[2] = "";
+            LigneData[3] = "";
+
+            /*  LigneData[3] = "";
+            LigneData[4] = "";
+            LigneData[5] = "";
+            LigneData[6] = qteTotalClient;*/
+            //  df.insertRow(startAdd, LigneData);
+            table.setModel(df);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+        return data;
+    }
+
+    public static DefaultTableModel buildTableModelColsultAlertArticleClient(ResultSet rs)
+            throws SQLException {
+
+        ResultSetMetaData metaData = rs.getMetaData();
+        columnNamesreg = new Vector<String>();
+        columnNamesreg.add("Client");
+        columnNamesreg.add("Ref Article");
+        columnNamesreg.add("Derniére BL");
+
+        columnNamesreg.add("Nb Jrs dés la Dernière Vente");// dés la Dernière Vente
+        columnNamesreg.add("Frequence Vente (Jr)");//nbjrs
+        columnNamesreg.add("Relancer");
+        columnNamesreg.add("Coucher");
+
+        // names of columns
+        int columnCount = metaData.getColumnCount();
+        /*    for (int column = 1; column <= columnCount; column++) {
+            columnNames.add(metaData.getColumnName(column));
+        }*/
+
+        // data of the table
+        data = new Vector<Vector<Object>>();
+
+        while (rs.next()) {
+            Vector<Object> vector = new Vector<Object>();
+            for (int columnIndex = 1; columnIndex <= columnCount; columnIndex++) {
+                vector.add(rs.getObject(columnIndex));
+            }
+            vector.add(false);
+            data.add(vector);
+        }
+
+        return new DefaultTableModel(data, columnNamesreg);
+
     }
 
     public void addRowsAlertArticle(JTable table, String FromDate, String ToDate, String id_marque, String id_commercial, String id_client, DefaultTableModel df, String InClause, String ref_article) {
@@ -177,6 +450,8 @@ public class RechercheDAO {
             columnNames.add("Date Facture");
 
             columnNames.add("Qte");
+            columnNames.add("Fréquence vente (Jr)");
+            columnNames.add("Relancer");
 
             Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
             DefaultTableModel model = new DefaultTableModel(data1, columnNames);
@@ -191,6 +466,8 @@ public class RechercheDAO {
                 // sql = "SELECT c.nom,lb.ref_article,lb.designation_article,b.Num_bl, DATE_FORMAT(b.date_bl,'%d/%m/%Y'),lb.prix_u,lb.qte FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join client c on b.id_client=c.numero_Client left join marque_produit mp on r.id_marque = mp.id WHERE b.statut=1 ";
                 //  sql = "SELECT c.nom,lb.ref_article,lb.designation_article FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join commercial c on b.id_commercial=c.id left join client cl on b.id_client=cl.numero_client  WHERE b.statut=1  ";
                 sqlReturn = "SELECT cl.nom, lb.ref_article,f.num_facture,b.num_bl,b.date_bl ,lb.qte,f.date_facture,DATE_FORMAT(b.date_bl,'%d/%m/%Y') as dt,r.classification, CONVERT((DATEDIFF(CURDATE(),b.date_bl)), CHAR(50)) as nbjrs, if( CONVERT((DATEDIFF(CURDATE(),b.date_bl)), CHAR(50))>45,\"Oui\",\"Non\" ) as depasse "
+                        + ",(select nb_jours_alert from alert_client_article where ref_article = lb.ref_article and b.id_client=id_client) as frequence_vente"
+                        + ", if(DATEDIFF(current_date(),b.date_bl)> (select if(nb_jours_alert is null,0,nb_jours_alert) from alert_client_article where ref_article = lb.ref_article and b.id_client=id_client),'Relancer','-' ) as Relancer  "
                         + "FROM `ligne_bl` lb "
                         + "left join bl b on (lb.id_bl=b.Num_bl) "
                         + "left join client cl on cl.numero_client=b.id_client "
@@ -228,7 +505,7 @@ public class RechercheDAO {
                     sqlReturn += commercialClause;
 
                 }
-                sqlReturn += " order by b.date_bl desc limit 1";
+                sqlReturn += " order by b.date_bl desc ";
                 pst = conn.prepareStatement(sqlReturn);
 
                 rs = pst.executeQuery();
@@ -236,7 +513,7 @@ public class RechercheDAO {
                 // startAdd = 0;
                 while (rs.next()) {
 
-                    Object LigneData[] = new Object[7];
+                    Object LigneData[] = new Object[9];
 
                     LigneData[0] = rs.getString("cl.nom");
                     LigneData[1] = rs.getString("lb.ref_article");
@@ -247,6 +524,9 @@ public class RechercheDAO {
 
                     LigneData[5] = rs.getString("date_facture");
                     LigneData[6] = rs.getString("qte");
+                    LigneData[7] = rs.getString("frequence_vente");
+                    LigneData[8] = rs.getString("Relancer");
+
                     //  LigneData[2] = rs.getString("lb.designation_article");
                     //  LigneData[3] = rs.getString("b.Num_bl");
                     // LigneData[5] = rs.getString("lb.prix_u");
@@ -258,7 +538,7 @@ public class RechercheDAO {
 
                 }
             }
-            Object LigneData[] = new Object[7];
+            Object LigneData[] = new Object[9];
 
             LigneData[0] = "Total";
             LigneData[1] = "";
@@ -269,6 +549,140 @@ public class RechercheDAO {
             LigneData[4] = "";
             LigneData[5] = "";
             LigneData[6] = String.valueOf(qteTotalClient);
+            LigneData[7] = "";
+            LigneData[8] = "";
+
+            df.insertRow(startAdd, LigneData);
+            table.setModel(df);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    public void addRowsAlertArticleV2(JTable table, String FromDate, String ToDate, String id_marque, String id_commercial, String id_client, DefaultTableModel df, String InClause, String ref_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            String RefArticles = "";
+            String RefClients = "";
+            Vector<String> columnNames = new Vector<String>();
+
+            columnNames.add("Client");
+            columnNames.add("Ref Article");
+
+            columnNames.add("Num BL");
+            columnNames.add("Date BL");
+
+            columnNames.add("Num Facture");
+            columnNames.add("Date Facture");
+
+            columnNames.add("Qte");
+            columnNames.add("Fréquence vente (Jr)");
+            columnNames.add("Relancer");
+
+            Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
+            DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+            df = model;
+
+            RefClients = lstAlertClients(FromDate, ToDate, id_marque, id_commercial, id_client, ref_article);
+            String[] lstclient = RefClients.split(",");
+            int qteTotalClient = 0;
+            int startAdd = 0;
+            for (String client : lstclient) {
+
+                // sql = "SELECT c.nom,lb.ref_article,lb.designation_article,b.Num_bl, DATE_FORMAT(b.date_bl,'%d/%m/%Y'),lb.prix_u,lb.qte FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join client c on b.id_client=c.numero_Client left join marque_produit mp on r.id_marque = mp.id WHERE b.statut=1 ";
+                //  sql = "SELECT c.nom,lb.ref_article,lb.designation_article FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join commercial c on b.id_commercial=c.id left join client cl on b.id_client=cl.numero_client  WHERE b.statut=1  ";
+                sqlReturn = "SELECT cl.nom, lb.ref_article,f.num_facture,b.num_bl,b.date_bl ,lb.qte,f.date_facture,DATE_FORMAT(b.date_bl,'%d/%m/%Y') as dt,r.classification, CONVERT((DATEDIFF(CURDATE(),b.date_bl)), CHAR(50)) as nbjrs, if( CONVERT((DATEDIFF(CURDATE(),b.date_bl)), CHAR(50))>45,\"Oui\",\"Non\" ) as depasse "
+                        + ",(select nb_jours_alert from alert_client_article where ref_article = lb.ref_article and b.id_client=id_client) as frequence_vente"
+                        + ", if(DATEDIFF(current_date(),b.date_bl)> (select if(nb_jours_alert is null,0,nb_jours_alert) from alert_client_article where ref_article = lb.ref_article and b.id_client=id_client),'Relancer','-' ) as Relancer  "
+                        + "FROM `ligne_bl` lb "
+                        + "left join bl b on (lb.id_bl=b.Num_bl) "
+                        + "left join client cl on cl.numero_client=b.id_client "
+                        + "left join article r on lb.ref_article=r.ref "
+                        + "left join pourcentagebonus pb on pb.id_client=b.id_client "
+                        + "left join ligne_facture lf on lf.num_bl=lb.id_bl "
+                        + "left join facture f on f.num_facture=lf.num_facture "
+                        // + "left join commercial c on b.id_commercial=c.id "
+                        + "WHERE b.statut=1 ";
+                String DateClauseFrom = "";
+
+                if (!(FromDate.isEmpty())) {
+                    DateClauseFrom = " and b.date_bl >= '" + FromDate + "'";
+                    sqlReturn += DateClauseFrom;
+                }
+                String clientClauseTo = "";
+                if (!(client.isEmpty())) {
+                    clientClauseTo = " and b.id_client = " + client + "";
+                    sqlReturn += clientClauseTo;
+                }
+                String DateClauseTo = "";
+                if (!(ToDate.isEmpty())) {
+                    DateClauseTo = " and b.date_bl <= '" + ToDate + "'";
+                    sqlReturn += DateClauseTo;
+                }
+                String refClause = "";
+                if (!(ref_article.isEmpty())) {
+                    refClause = " and lb.ref_article in (" + ref_article + ")";
+                    sqlReturn += refClause;
+
+                }
+                String commercialClause = "";
+                if (!(id_commercial.isEmpty())) {
+                    commercialClause = " and pb.id_commercial  = " + id_commercial + "";
+                    sqlReturn += commercialClause;
+
+                }
+                sqlReturn += " order by b.date_bl   desc ";
+                pst = conn.prepareStatement(sqlReturn);
+
+                rs = pst.executeQuery();
+
+                // startAdd = 0;
+                while (rs.next()) {
+
+                    Object LigneData[] = new Object[9];
+
+                    LigneData[0] = rs.getString("cl.nom");
+                    LigneData[1] = rs.getString("lb.ref_article");
+                    LigneData[2] = rs.getString("num_bl").toString();
+                    LigneData[3] = rs.getString("date_bl");
+
+                    LigneData[4] = rs.getString("num_facture");
+
+                    LigneData[5] = rs.getString("date_facture");
+                    LigneData[6] = rs.getString("qte");
+                    LigneData[7] = rs.getString("frequence_vente");
+                    LigneData[8] = rs.getString("Relancer");
+
+                    //  LigneData[2] = rs.getString("lb.designation_article");
+                    //  LigneData[3] = rs.getString("b.Num_bl");
+                    // LigneData[5] = rs.getString("lb.prix_u");
+                    // LigneData[6] = rs.getString("lb.qte");
+                    df.insertRow(startAdd, LigneData);
+
+                    qteTotalClient += Integer.valueOf(rs.getString("qte"));
+                    startAdd++;
+
+                }
+            }
+            Object LigneData[] = new Object[9];
+
+            LigneData[0] = "Total";
+            LigneData[1] = "";
+            LigneData[2] = "";
+            LigneData[3] = "";
+
+            LigneData[3] = "";
+            LigneData[4] = "";
+            LigneData[5] = "";
+            LigneData[6] = String.valueOf(qteTotalClient);
+            LigneData[7] = "";
+            LigneData[8] = "";
+
             df.insertRow(startAdd, LigneData);
             table.setModel(df);
 
@@ -447,7 +861,13 @@ public class RechercheDAO {
         Connection conn = obj.Open();
         try {
             String sql;//DATE_FORMAT(r.`date_regelemnt`,'%d/%m/%Y')
-            sql = "SELECT r.id,c.nom, f.Nom ,comm.nom , r.`id_facture` , DATE_FORMAT(r.`date_regelemnt`,'%d/%m/%Y'), DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'), r.`type_reglement`, "
+            sql = "SELECT r.id,c.nom, f.Nom ,comm.nom , r.`id_facture` ,  "
+                    //
+                    //  + " if(r.type_reglement in ('cheque','EFFET')  ,DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'),'') as  date_regelemnt, "
+                    //  + "if(r.type_reglement in ('espece','virement')  ,DATE_FORMAT(r.`date_regelemnt`,'%d/%m/%Y'),'') as  date_echeance"
+                    + "if(r.`date_regelemnt` is null && r.type_reglement in ('virement'), DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'),DATE_FORMAT(r.`date_regelemnt`,'%d/%m/%Y')) , if(r.type_reglement in ('espece','virement')  ,'-',DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y')) as  date_echeance"
+                    // "  DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y')"
+                    + ", r.`type_reglement`, "
                     + "r.`regle`,IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) as TTC,"
                     + "IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- r.regle) , (fct_a.TTC- r.regle)) as Restant "
                     + ", r.`banque`, r.`num_cheque`, r.`passager` FROM `reglement` r "
@@ -520,7 +940,7 @@ public class RechercheDAO {
                 sql = sql + ClientClause;
 
             }
-            sql += " ORDER BY r.date_regelemnt desc ";
+            sql += " ORDER BY fct.num_facture desc ";
 
             pst = conn.prepareStatement(sql);
 
@@ -569,10 +989,12 @@ public class RechercheDAO {
         try {
             String sql;//DATE_FORMAT(r.`date_regelemnt`,'%d/%m/%Y')
             sql = "SELECT r.id,c.nom ,/* f.Nom ,comm.nom , */  fct.`num_facture` , fct.date_facture , DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'), /*DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'), */ r.`type_reglement`, "
-                    + "count(r.`regle`),"
-                    + "/*IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) as TTC,*/"
+                    + "count(r.`regle`),/*(select count(*) from reglement dr where fct.`num_facture`=dr.`id_facture`) as nb_reg,*/ "
+                    + "/*IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) as TTC,*/ "
                     + " fct.TTC as TTC, "
-                    + "IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- sum(r.regle)) , (fct_a.TTC- sum(r.regle))) as Restant "
+                    //  + "IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- sum(r.regle)) , (fct_a.TTC- sum(r.regle))) as Restant "
+                    //+ "IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- (select sum(r1.regle) from reglement r1 where r1.id_facture=fct.num_facture and r1.statut=1)) , (fct_a.TTC- sum(r.regle))) as Restant "
+                    + "IF((r.isClient_Four_Passager = 'Client'), if((select count(*) from reglement r2 where r2.id_facture=fct.num_facture and r2.statut=1 and upper(r2.type_reglement) = 'AVOIR') > 0,(fct.TTC - (select sum(r1.regle) from reglement r1 where r1.id_facture=fct.num_facture and r1.statut=1 and upper(r1.type_reglement)='AVOIR')), (fct.TTC - (select sum(r1.regle) from reglement r1 where r1.id_facture=fct.num_facture and r1.statut=1))) , (fct_a.TTC- sum(r.regle))) as Restant  "
                     + ", r.`banque`, r.`num_cheque`, fct.`passager` ,r.statut "
                     + "FROM facture fct "
                     + "left outer join `reglement` r on (r.`id_facture`=fct.num_facture) "
@@ -692,6 +1114,58 @@ public class RechercheDAO {
                 }
                 df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble(PU.toString())), j, 8);
 
+                // begin condition 1% et décalage timbre 0.600 
+                /*   if (df.getValueAt(j, 5).toString().equalsIgnoreCase("ESPECE")) {
+                    if (String.valueOf(Double.parseDouble(df.getValueAt(j, 7).toString()) - Double.parseDouble(df.getValueAt(j, 8).toString())).contains("0.60")) {
+                        df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble("0.600")), j, 7);
+                        df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble("0.000")), j, 8);
+                    }
+                } else if (df.getValueAt(j, 5).toString().equalsIgnoreCase("CHEQUE") || df.getValueAt(j, 5).toString().equalsIgnoreCase("EFFET")) {
+                    if (Double.parseDouble(df.getValueAt(j, 7).toString()) >= 1000) {
+                        DecimalFormat df_format = new DecimalFormat("0.00");
+
+                        String one_percent = Config.Commen_Proc.formatDouble(Double.parseDouble(df.getValueAt(j, 7).toString()) * 0.01);
+                        one_percent = one_percent.substring(0, one_percent.length() - 1);
+                        one_percent = one_percent.substring(0, one_percent.length() - 1);
+                        String ss = "";
+                        ss = df.getValueAt(j, 8).toString().substring(0, df.getValueAt(j, 8).toString().length() - 1);
+                        ss = ss.substring(0, ss.length() - 1);
+                        if (one_percent.equals(ss)) {
+                            df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble("0.000")), j, 8);
+                        }
+                    }
+                } else if (df.getValueAt(j, 5).toString().equalsIgnoreCase("VIREMENT")) {
+                    if (df.getValueAt(j, 1).toString().equals("FIGEAC  AERO")) {
+                        DecimalFormat df_format = new DecimalFormat("0.00");
+
+                        String one_percent = Config.Commen_Proc.formatDouble(Double.parseDouble(df.getValueAt(j, 7).toString()) * 0.01);
+                        one_percent = one_percent.substring(0, one_percent.length() - 1);
+                        one_percent = one_percent.substring(0, one_percent.length() - 1);
+                        String ss = "";
+                        ss = df.getValueAt(j, 8).toString().substring(0, df.getValueAt(j, 8).toString().length() - 1);
+                        ss = ss.substring(0, ss.length() - 1);
+                        if (one_percent.equals(ss)) {
+                            df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble("0.000")), j, 8);
+                        }
+                    } else {
+
+                        if (Double.parseDouble(df.getValueAt(j, 7).toString()) >= 1000) {
+                            DecimalFormat df_format = new DecimalFormat("0.00");
+
+                            String one_percent = Config.Commen_Proc.formatDouble(Double.parseDouble(df.getValueAt(j, 7).toString()) * 0.01);
+                            one_percent = one_percent.substring(0, one_percent.length() - 1);
+                            one_percent = one_percent.substring(0, one_percent.length() - 1);
+                            String ss = "";
+                            ss = df.getValueAt(j, 8).toString().substring(0, df.getValueAt(j, 8).toString().length() - 1);
+                            ss = ss.substring(0, ss.length() - 1);
+                            if (one_percent.equals(ss)) {
+                                df.setValueAt(Config.Commen_Proc.formatDouble(Double.parseDouble("0.000")), j, 8);
+                            }
+                        }
+
+                    }
+                } // end condition 1% et décalage timbre 0.600 
+                 */
             }
             table.setModel(df);
             return data;
@@ -717,7 +1191,9 @@ public class RechercheDAO {
         try {
             String sql = "";
 
-            sql = "SELECT  d.`Num_facture` as num_fact, if(c.nom is null , '',c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,if(sum(r.regle) is NULL, 0, sum(r.regle)) as \"regle\", (d.`TTC`-if(sum(r.regle) is NULL, 0, sum(r.regle))) as \"Impaye\", if(comm.nom is null , '',comm.nom) as \"Commercial\" "
+            sql = "SELECT  d.`Num_facture` as num_fact, if(c.nom is null , '',c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,"
+                    + "if(sum(if(r.facture_avoir='Facture',r.regle,0)) is NULL, 0, sum(if(r.facture_avoir='Facture',r.regle,0))) as \"regle\", "
+                    + "(d.`TTC`-if(sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))) is NULL, 0, sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))))) as \"Impaye\", if(comm.nom is null , '',comm.nom) as \"Commercial\" "
                     + "FROM `Facture` d "
                     + "left join client c on (d.id_client=c.numero_client) "
                     + "left join reglement r on d.Num_facture = r.id_facture "
@@ -784,7 +1260,7 @@ public class RechercheDAO {
                 sql = sql + ClientClause;
             }
             if (!(nom_ville.isEmpty())) {
-                ClientClause = " and c.ville  like '%" + nom_ville + "%'";
+                ClientClause = " and c.zone_geo  like '%" + nom_ville + "%'";
                 sql = sql + ClientClause;
             }
 
@@ -918,9 +1394,10 @@ public class RechercheDAO {
             sql = "SELECT r.id,c.nom,/* f.Nom ,comm.nom , */ fct.`num_facture`, fct.date_facture , DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y') as dt_echeance, /*DATE_FORMAT(r.`date_echeance`,'%d/%m/%Y'), */ r.`type_reglement`, "
                     + "if( r.`regle` is null ,0,r.`regle`) as regle,"
                     + " /*IF((r.isClient_Four_Passager = 'Client'), if(fct.TTC is null,0, fct.TTC)  , if(fct_a.TTC is null ,0,fct_a.TTC)) as TTC */"
-                    + " fct.TTC as TTC"
-                    + "  , IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- r.regle) , (fct_a.TTC- r.regle)) as Restant "
-                    + " , if((IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) - (select if(sum(regle) is null,0,sum(regle)) from reglement where id_facture = fct.num_facture)) is null,0, (IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) - (select if(sum(regle) is null,0,sum(regle)) from reglement where id_facture = fct.num_facture)))as rst"
+                    + " fct.TTC as TTC , "
+                    //   + " IF((r.isClient_Four_Passager = 'Client'), (fct.TTC- r.regle) , (fct_a.TTC- r.regle)) as Restant "
+                    + " IF((r.isClient_Four_Passager = 'Client'), if((select count(*) from reglement r2 where r2.id_facture=fct.num_facture and r2.statut=1 and upper(r2.type_reglement) = 'AVOIR') > 0,(fct.TTC - (select sum(r1.regle) from reglement r1 where r1.id_facture=fct.num_facture and r1.statut=1 and upper(r1.type_reglement)='AVOIR')), (fct.TTC - (select sum(r1.regle) from reglement r1 where r1.id_facture=fct.num_facture and r1.statut=1))) , (fct_a.TTC- sum(r.regle))) as rst  "
+                    //  + " , if((IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) - (select if(sum(regle) is null,0,sum(regle)) from reglement where id_facture = fct.num_facture and statut = 1 )) is null,0, (IF((r.isClient_Four_Passager = 'Client'), fct.TTC , fct_a.TTC) - (select if(sum(regle) is null,0,sum(regle)) from reglement where id_facture = fct.num_facture and statut = 1)))as rst"
                     + ", r.`banque`, r.`num_cheque`, r.`passager` ,r.statut "
                     + "FROM facture fct "
                     + "left outer join `reglement` r on (r.`id_facture`=fct.num_facture) "
@@ -1005,7 +1482,7 @@ public class RechercheDAO {
             }*/
             sql += ""
                     //  + "and  fct.`num_facture` in (\"18F00511\",\"18F00598\",\"18F00841\",\"18F00961\",\"18F00976\",\"18F00976\",\"18F00979\",\"18F00993\",\"18F01047\",\"18F01055\",\"18F01061\",\"18F01073\",\"18F01164\",\"19F00019\",\"19F00114\",\"19F00115\",\"19F00128\",\"19F00139\",\"19F00139\",\"19F00139\",\"19F00224\",\"19F00344\",\"19F00545\",\"19F00565\",\"19F00671\",\"19F00757\",\"19F00764\",\"19F00842\",\"19F00957\",\"19F00975\",\"19F00999\",\"19F01048\",\"19F01058\",\"19F01062\",\"20F00005\",\"20F00010\",\"20F00022\",\"20F00111\",\"20F00113\",\"20F00135\",\"20F00158\",\"20F00222\",\"20F00255\",\"20F00319\",\"20F00405\",\"20F00445\",\"20F00445\",\"20F00457\",\"20F00493\",\"20F00494\",\"20F00508\",\"20F00596\",\"20F00599\",\"20F00604\",\"20F00694\",\"20F00700\",\"20F00703\",\"20F00758\",\"20F00781\",\"20F00782\",\"20F00158\",\"20F00222\",\"20F00255\",\"20F00319\",\"20F00405\",\"20F00445\",\"20F00445\",\"20F00457\",\"20F00493\",\"20F00494\",\"20F00508\",\"20F00596\",\"20F00599\",\"20F00604\",\"20F00694\",\"20F00700\",\"20F00703\",\"20F00758\",\"20F00781\",\"20F00782\",\"20F00783\",\"20F00784\",\"20F00784\",\"20F00785\",\"20F00786\",\"20F00800\",\"20F00803\",\"20F00807\",\"20F00809\",\"20F00812\",\"20F00813\",\"20F00822\",\"20F00826\",\"20F00832\",\"20F00837\",\"20F00838\",\"20F00862\",\"20F00870\",\"20F00890\",\"20F00891\",\"20F00892\",\"20F00792\",\"20F00793\",\"20F00868\",\"20F00731\",\"19F00660\",\"19F00767\",\"19F00980\",\"18F01201\",\"19F00612\",\"19F00691\",\"19F00710\",\"19F00921\",\"19F00988\",\"19F00994\",\"20F00081\",\"20F00097\",\"20F00128\",\"20F00186\",\"20F00187\",\"20F00305\",\"20F00347\",\"20F00348\",\"20F00608\",\"20F00650\",\"20F00661\",\"20F00771\",\"20F00880\",\"19F00380\",\"19F00538\",\"19F00743\",\"20F00214\",\"20F00654\",\"20F00274\",\"20F00343\",\"20F00344\",\"20F00345\",\"20F00429\",\"20F00430\",\"20F00551\",\"20F00634\",\"20F00663\",\"20F00664\",\"20F00664\",\"20F00798\",\"20F00844\",\"20F00845\",\"20F00846\",\"20F00873\",\"20F00315\",\"20F00544\",\"20F00755\",\"20F00785\",\"20F00841\",\"20F00277\",\"20F00277\",\"20F00387\",\"20F00412\",\"20F00525\",\"20F00579\",\"20F00584\",\"20F00658\",\"20F00668\",\"20F00738\",\"20F00885\",\"20F00815\",\"20F00815\",\"20F00823\",\"20F00754\",\"20F00483\",\"20F00620\",\"20F00621\",\"20F00746\",\"20F00747\",\"20F00881\",\"20F00379\",\"20F00520\",\"20F00757\",\"20F00627\",\"20F00695\",\"20F00696\",\"20F00697\",\"20F00855\",\"20F00339\",\"20F00340\",\"20F00762\",\"20F00856\",\"20F00857\",\"20F00001\",\"20F00016\",\"20F00103\",\"20F00117\",\"20F00239\",\"20F00248\",\"20F00249\",\"20F00310\",\"20F00420\",\"20F00495\",\"20F00496\",\"20F00565\",\"20F00566\",\"20F00725\",\"20F00728\",\"20F00729\",\"20F00818\",\"20F00750\",\"20F00858\",\"20F00691\",\"20F00805\",\"20F00456\",\"20F00632\",\"20F00686\",\"20F00753\",\"20F00869\",\"20F00794\",\"20F00006\",\"20F00105\",\"20F00656\",\"19F01046\",\"20F00506\",\"20F00638\",\"20F00699\",\"20F00699\",\"20F00733\",\"20F00760\",\"20F00705\",\"20F00705\",\"20F00833\",\"20F00787\",\"20F00876\",\"20F00576\",\"20F00576\",\"20F00665\",\"20F00665\",\"20F00743\",\"20F00879\",\"20F00618\",\"20F00678\",\"20F00759\",\"20F00859\",\"20F00652\",\"20F00653\",\"20F00726\",\"20F00727\",\"20F00817\",\"20F00629\",\"20F00629\",\"20F00690\",\"20F00789\",\"20F00789\",\"20F00884\",\"20F00751\",\"20F00863\",\"19F01055\",\"20F00054\",\"20F00636\",\"20F00828\",\"20F00419\",\"20F00490\",\"20F00711\",\"20F00646\",\"20F00647\",\"20F00648\",\"20F00824\",\"20F00065\",\"20F00148\",\"20F00271\",\"20F00375\",\"20F00472\",\"20F00541\",\"20F00720\",\"20F00827\",\"20F00814\",\"20F00721\",\"19F00269\",\"19F00326\",\"19F00615\",\"20F00843\",\"20F00630\",\"20F00681\",\"20F00780\",\"20F00780\",\"20F00780\",\"20F00842\",\"17F01114\",\"17F01114\",\"20F00660\",\"20F00660\",\"20F00742\",\"20F00742\",\"20F00888\",\"20F00888\",\"20F00558\",\"20F00580\",\"20F00667\",\"20F00799\",\"20F00867\",\"20F00585\",\"20F00739\",\"17F00973\",\"20F00871\",\"20F00871\",\"17F00648\",\"18F01143\",\"20F00034\",\"20F00080\",\"20F00151\",\"20F00590\",\"20F00631\",\"20F00680\",\"20F00717\",\"20F00790\",\"20F00849\",\"20F00851\",\"20F00853\",\"20F00581\",\"20F00719\",\"20F00776\",\"20F00744\",\"20F00744\",\"20F00889\",\"20F00702\",\"20F00806\",\"20F00878\",\"20F00592\",\"20F00682\",\"20F00777\",\"20F00852\",\"20F00722\",\"20F00587\",\"20F00692\",\"20F00692\",\"20F00692\",\"20F00788\",\"20F00872\",\"17F00866\",\"17F00866\",\"20F00854\",\"20F00469\",\"20F00670\",\"20F00671\",\"20F00671\",\"20F00772\",\"20F00773\",\"20F00773\",\"20F00874\",\"20F00875\",\"19F00828\",\"19F00956\",\"19F00956\",\"19F01056\",\"18F00397\",\"19F00598\",\"19F00831\",\"20F00718\",\"20F00768\",\"20F00848\",\"18F00722\",\"18F00849\",\"18F00971\",\"19F00051\",\"16F00291\",\"16F00311\",\"16F00439\",\"16F00440\",\"20F00126\",\"20F00732\",\"20F00831\",\"20F00835\",\"17F00117\",\"17F00523\",\"17F01004\",\"20F00840\",\"20F00516\",\"20F00669\",\"20F00740\",\"20F00861\",\"20F00883\",\"20F00883\",\"20F00591\",\"20F00591\",\"20F00704\",\"20F00767\",\"20F00767\",\"20F00847\",\"20F00865\",\"17F01002\",\"18F00742\",\"18F01032\",\"19F00140\",\"19F00776\",\"19F00850\",\"19F00935\",\"19F01066\",\"20F00055\",\"20F00295\",\"20F00594\",\"20F00804\",\"20F00748\",\"20F00864\",\"20F00460\",\"20F00547\",\"20F00642\",\"20F00091\",\"20F00091\",\"20F00137\",\"20F00137\",\"20F00392\",\"20F00392\",\"19F00102\",\"18F00333\",\"18F00333\",\"18F00333\",\"18F01039\",\"18F01039\",\"19F00491\",\"20F00104\",\"20F00501\",\"20F00796\",\"20F00836\",\"20F00666\",\"20F00797\",\"20F00810\",\"20F00820\",\"20F00830\",\"20F00839\",\"20F00601\",\"20F00687\",\"20F00749\",\"20F00877\",\"20F00860\",\"18F00494\",\"18F00522\",\"18F00594\",\"18F00594\",\"18F00737\",\"18F00737\",\"18F00867\",\"18F00953\",\"18F00953\",\"18F01137\",\"20F00511\",\"20F00511\",\"20F00614\",\"20F00614\",\"20F00673\",\"20F00673\",\"20F00795\",\"20F00795\",\"20F00887\",\"18F00840\",\"18F00840\",\"18F01016\",\"18F01016\",\"18F01016\",\"18F01200\",\"20F00528\",\"20F00530\",\"20F00643\",\"20F00644\",\"20F00712\",\"20F00735\",\"20F00736\",\"20F00737\",\"20F00819\",\"20F00517\",\"20F00613\",\"20F00791\",\"20F00791\",\"20F00451\",\"20F00582\",\"20F00685\",\"20F00775\",\"20F00331\",\"20F00765\",\"20F00766\",\"19F00772\",\"19F00837\",\"19F00963\",\"19F01065\",\"20F00092\",\"20F00202\",\"20F00408\",\"20F00510\",\"20F00615\",\"20F00802\",\"20F00589\",\"20F00701\",\"20F00769\",\"20F00180\",\"20F00180\",\"20F00834\",\"20F00716\",\"20F00716\",\"20F00886\",\"20F00617\",\"20F00684\",\"20F00801\",\"20F00850\",\"20F00118\",\"20F00573\",\"20F00574\",\"20F00808\",\"20F00829\",\"20F00659\",\"20F00882\",\"20F00715\",\"20F00866\",\"20F00734\")"
-                    + " ORDER BY num_facture desc ";
+                    + " GROUP BY r.id ORDER BY num_facture desc ";
 
             pst = conn.prepareStatement(sql);
 
@@ -1046,7 +1523,11 @@ public class RechercheDAO {
             String ttc = "";
             String ttc_old = "";
 
+            double total_ttc = 0.0;
+            double total_ttc_regle = 0.0;
+
             while (rs.next()) {
+
                 Object LigneData[] = new Object[10];
                 boolean isDouble = false;
 
@@ -1068,6 +1549,7 @@ public class RechercheDAO {
 
                 } else {
                     LigneData[2] = ttc;
+                    total_ttc += Double.valueOf(ttc);
 
                 }
                 //   ttc_old = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("TTC")));
@@ -1087,7 +1569,7 @@ public class RechercheDAO {
 
                 LigneData[5] = rs.getString("r.type_reglement");
                 //  String HTAvoir = rs.getString("sum(av.total_ht)") == null ? "0" : rs.getString("sum(av.total_ht)");
-
+                total_ttc_regle += Double.valueOf(rs.getString("regle"));
                 LigneData[6] = Config.Commen_Proc.formatDouble(Double.valueOf(rs.getString("regle")));
                 LigneData[7] = rs.getString("r.banque");
                 LigneData[8] = rs.getString("r.num_cheque");
@@ -1097,8 +1579,20 @@ public class RechercheDAO {
 
                 startAdd++;
             }
+            Object LigneData[] = new Object[10];
+            LigneData[0] = "";
+            LigneData[1] = "Total : ";
+            LigneData[2] = "" + Config.Commen_Proc.formatDouble(total_ttc);
+            LigneData[3] = "";
+            LigneData[4] = "";
+            LigneData[5] = "Total : ";
+            LigneData[6] = "" + Config.Commen_Proc.formatDouble(total_ttc_regle);
+            LigneData[7] = "";
+            LigneData[8] = "";
+            LigneData[9] = "";
+            df.insertRow((startAdd++), LigneData);
 
-            //  DefaultTableModel df1 = buildTableModelColsultReglementComptableDetail(rs);
+//  DefaultTableModel df1 = buildTableModelColsultReglementComptableDetail(rs);
             table.setModel(df);
 
             return dataDetail;
@@ -1124,13 +1618,15 @@ public class RechercheDAO {
         try {
             String sql = "";
 
-            sql = "SELECT  d.`Num_facture` as num_fact, if(c.nom is null , '',c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,if(sum(r.regle) is NULL, 0, sum(r.regle)) as \"regle\", (d.`TTC`-if(sum(r.regle) is NULL, 0, sum(r.regle))) as \"Impaye\", if(comm.nom is null , '',comm.nom) as \"Commercial\" "
+            sql = "SELECT  d.`Num_facture` as num_fact, if(c.nom is null , '',c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,"
+                    + "if(sum(if(r.facture_avoir='Facture',r.regle,0)) is NULL, 0, sum(if(r.facture_avoir='Facture',r.regle,0))) as \"regle\", "
+                    + "(d.`TTC`-if(sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))) is NULL, 0, sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))))) as \"Impaye\", if(comm.nom is null , '',comm.nom) as \"Commercial\" "
                     + "FROM `Facture` d "
                     + "left join client c on (d.id_client=c.numero_client) "
                     + "left join reglement r on d.Num_facture = r.id_facture "
                     + "left join pourcentagebonus pb on pb.id_client=c.numero_client "
                     + "left join commercial comm on pb.id_commercial=comm.id "
-                    + "where d.statut=1 and d.reglement in ('Semi','Non')";
+                    + "where d.statut=1  and d.reglement in ('Semi','Non')";
 
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String FiltreClauseFrom = "";
@@ -1319,7 +1815,7 @@ public class RechercheDAO {
 
         columnNamesreg.add("Num Facture");
 
-        columnNamesreg.add("Date Facture");
+        columnNamesreg.add("Date Reglement");
         columnNamesreg.add("Date Echéance");
         columnNamesreg.add("Type Réglement");
         columnNamesreg.add("Montant Relge");
@@ -1805,6 +2301,66 @@ public class RechercheDAO {
         try {
             //  if (!id_client.isEmpty()) {
             addRowsStatAchatVendu(table, FromDate, ToDate, id_marque, refArticle, id_client, df, InClause);
+            /*   } else {
+                String clients = AllClientsList(table, FromDate, ToDate, id_marque, refArticle, id_client, df);
+                String[] lstClient = clients.split(",");
+                addRowsStatAchatAllClients(table, FromDate, ToDate, id_marque, refArticle, id_client, df, lstClient);
+
+            }*/
+
+            return sqlReturn;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(BLDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return sqlReturn;
+    }
+
+    public String afficherProspection(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, String InClause, String groupe_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+        DefaultTableModel df = null;
+        Connection conn = obj.Open();
+        try {
+            //  if (!id_client.isEmpty()) {
+            addRowsProspection(table, FromDate, ToDate, id_marque, refArticle, id_client, df, InClause, groupe_article);
+            /*   } else {
+                String clients = AllClientsList(table, FromDate, ToDate, id_marque, refArticle, id_client, df);
+                String[] lstClient = clients.split(",");
+                addRowsStatAchatAllClients(table, FromDate, ToDate, id_marque, refArticle, id_client, df, lstClient);
+
+            }*/
+
+            return sqlReturn;
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, e);
+        } finally {
+            try {
+                conn.close();
+                System.out.println("disconnected");
+            } catch (SQLException ex) {
+                Logger.getLogger(BLDao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+        return sqlReturn;
+    }
+
+    public String afficherSaisieProspection(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, String InClause, String groupe_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+        DefaultTableModel df = null;
+        Connection conn = obj.Open();
+        try {
+            //  if (!id_client.isEmpty()) {
+            addRowsSaisieProspection(table, FromDate, ToDate, id_marque, refArticle, id_client, df, InClause, groupe_article);
             /*   } else {
                 String clients = AllClientsList(table, FromDate, ToDate, id_marque, refArticle, id_client, df);
                 String[] lstClient = clients.split(",");
@@ -2455,6 +3011,215 @@ public class RechercheDAO {
         }
     }
 
+    public void addRowsProspection(JTable table, String FromDate, String ToDate, String id_marque, String id_commercial, String id_client, DefaultTableModel df, String InClause, String groupe_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            // String RefArticlesByGroupe = lstArticleGroupe(FromDate, ToDate, groupe_article, id_commercial, id_client);
+
+            // sql = "SELECT c.nom,lb.ref_article,lb.designation_article,b.Num_bl, DATE_FORMAT(b.date_bl,'%d/%m/%Y'),lb.prix_u,lb.qte FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join client c on b.id_client=c.numero_Client left join marque_produit mp on r.id_marque = mp.id WHERE b.statut=1 ";
+            //  sql = "SELECT c.nom,lb.ref_article,lb.designation_article FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join commercial c on b.id_commercial=c.id left join client cl on b.id_client=cl.numero_client  WHERE b.statut=1  ";
+            sqlReturn = "SELECT distinct a.ref,(SELECT concat(concat(b.date_bl ,' Qte : '),lb.qte) FROM ligne_bl lb LEFT JOIN bl b ON b.Num_bl=lb.id_bl WHERE lb.ref_article=a.ref AND b.date_bl >= '" + FromDate + "' AND b.date_bl <='" + ToDate + "' AND b.id_client=" + id_client + " ORDER BY lb.id_bl desc LIMIT 1 ) AS vente, "
+                    + " (SELECT date_visite FROM prospection p WHERE ref_article=a.ref AND id_client=" + id_client + " AND date_visite >= '" + FromDate + "' AND date_visite <='" + ToDate + "' order by date_visite desc limit 1 ) AS prospection "
+                    + " from article a where a.groupe_prospection='" + groupe_article + "'; ";
+
+            String DateClauseFrom = "";
+
+            /*  if (!(FromDate.isEmpty())) {
+                DateClauseFrom = " and b.date_bl >= '" + FromDate + "'";
+                sqlReturn += DateClauseFrom;
+            }
+            String clientClauseTo = "";
+            if (!(id_client.isEmpty())) {
+                clientClauseTo = " and b.id_client = " + id_client + "";
+                sqlReturn += clientClauseTo;
+            }
+            String DateClauseTo = "";
+            if (!(ToDate.isEmpty())) {
+                DateClauseTo = " and b.date_bl <= '" + ToDate + "'";
+                sqlReturn += DateClauseTo;
+            }
+
+            String commercialClause = "";
+            if (!(id_commercial.isEmpty())) {
+                commercialClause = " and pb.id_commercial  = " + id_commercial + "";
+                sqlReturn += commercialClause;
+
+            }
+            sqlReturn += " order by b.date_bl desc ";*/
+            pst = conn.prepareStatement(sqlReturn);
+
+            rs = pst.executeQuery();
+
+            int qteTotalClient = 0;
+            int startAdd = 0;
+
+            Vector<String> columnNames = new Vector<String>();
+
+            columnNames.add("Article");
+            columnNames.add("Vente");
+            columnNames.add("Prospection");
+
+            /*    columnNames.add("Designation");
+            columnNames.add("Num BL");
+            columnNames.add("Prix Unitaire");
+
+            columnNames.add("Quantité");*/
+            Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
+            DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+            df = model;
+
+            while (rs.next()) {
+
+                Object LigneData[] = new Object[3];
+//cl.nom, lb.ref_article,b.date_bl
+                LigneData[0] = rs.getString("a.ref");
+                LigneData[1] = rs.getString("vente");
+                LigneData[2] = rs.getString("prospection");
+                /*  LigneData[3] = rs.getString("r.classification");
+
+                LigneData[4] = rs.getString("nbjrs");
+
+                LigneData[5] = rs.getString("depasse");*/
+                //  LigneData[2] = rs.getString("lb.designation_article");
+                //  LigneData[3] = rs.getString("b.Num_bl");
+                // LigneData[5] = rs.getString("lb.prix_u");
+                // LigneData[6] = rs.getString("lb.qte");
+                df.insertRow(startAdd, LigneData);
+
+                // qteTotalClient += Integer.valueOf(rs.getString("lb.qte"));
+                startAdd++;
+
+            }
+            //    Object LigneData[] = new Object[4];
+
+            /*   LigneData[0] = "Total";
+            LigneData[1] = "";
+            LigneData[2] = "";
+            LigneData[3] = "";
+
+            /*  LigneData[3] = "";
+            LigneData[4] = "";
+            LigneData[5] = "";
+            LigneData[6] = qteTotalClient;*/
+            //  df.insertRow(startAdd, LigneData);
+            table.setModel(df);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
+    public void addRowsSaisieProspection(JTable table, String FromDate, String ToDate, String id_marque, String id_commercial, String id_client, DefaultTableModel df, String InClause, String groupe_article) {
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        try {
+            // String RefArticlesByGroupe = lstArticleGroupe(FromDate, ToDate, groupe_article, id_commercial, id_client);
+
+            // sql = "SELECT c.nom,lb.ref_article,lb.designation_article,b.Num_bl, DATE_FORMAT(b.date_bl,'%d/%m/%Y'),lb.prix_u,lb.qte FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join client c on b.id_client=c.numero_Client left join marque_produit mp on r.id_marque = mp.id WHERE b.statut=1 ";
+            //  sql = "SELECT c.nom,lb.ref_article,lb.designation_article FROM `ligne_bl` lb left join bl b on (lb.id_bl=b.Num_bl) left join article r on lb.ref_article=r.ref left join commercial c on b.id_commercial=c.id left join client cl on b.id_client=cl.numero_client  WHERE b.statut=1  ";
+            sqlReturn = " SELECT  p.ref_article,c.nom,p.date_visite,a.groupe_prospection FROM prospection p LEFT JOIN client c ON c.numero_Client=p.id_client LEFT JOIN article a ON a.ref=p.ref_article WHERE 1=1 ";
+
+            String DateClauseFrom = "";
+
+            if (!(FromDate.isEmpty())) {
+                DateClauseFrom = " and p.date_visite >= '" + FromDate + "'";
+                sqlReturn += DateClauseFrom;
+            }
+            String clientClauseTo = "";
+            if (!(id_client.isEmpty())) {
+                clientClauseTo = " and p.id_client = " + id_client + "";
+                sqlReturn += clientClauseTo;
+            }
+            String DateClauseTo = "";
+            if (!(ToDate.isEmpty())) {
+                DateClauseTo = " and p.date_visite <= '" + ToDate + "'";
+                sqlReturn += DateClauseTo;
+            }
+
+            String clientClause = "";
+            if (!(id_client.isEmpty())) {
+                clientClause = " and p.id_client  = " + id_client + "";
+                sqlReturn += clientClause;
+
+            }
+
+            String commercialClause = "";
+            if (!(groupe_article.isEmpty())) {
+                commercialClause = " and a.groupe_prospection  = '" + groupe_article + "'";
+                sqlReturn += commercialClause;
+
+            }
+            sqlReturn += " order by p.date_visite desc ";
+            pst = conn.prepareStatement(sqlReturn);
+
+            rs = pst.executeQuery();
+
+            int qteTotalClient = 0;
+            int startAdd = 0;
+
+            Vector<String> columnNames = new Vector<String>();
+
+            columnNames.add("Article");
+            columnNames.add("Client");
+            columnNames.add("Date Visite");
+
+            /*    columnNames.add("Designation");
+            columnNames.add("Num BL");
+            columnNames.add("Prix Unitaire");
+
+            columnNames.add("Quantité");*/
+            Vector<Vector<Object>> data1 = new Vector<Vector<Object>>();
+            DefaultTableModel model = new DefaultTableModel(data1, columnNames);
+            df = model;
+
+            while (rs.next()) {
+
+                Object LigneData[] = new Object[3];
+//cl.nom, lb.ref_article,b.date_bl
+                LigneData[0] = rs.getString("p.ref_article");
+                LigneData[1] = rs.getString("c.nom");
+                LigneData[2] = rs.getString("p.date_visite");
+                /*  LigneData[3] = rs.getString("r.classification");
+
+                LigneData[4] = rs.getString("nbjrs");
+
+                LigneData[5] = rs.getString("depasse");*/
+                //  LigneData[2] = rs.getString("lb.designation_article");
+                //  LigneData[3] = rs.getString("b.Num_bl");
+                // LigneData[5] = rs.getString("lb.prix_u");
+                // LigneData[6] = rs.getString("lb.qte");
+                df.insertRow(startAdd, LigneData);
+
+                // qteTotalClient += Integer.valueOf(rs.getString("lb.qte"));
+                startAdd++;
+
+            }
+            //    Object LigneData[] = new Object[4];
+
+            /*   LigneData[0] = "Total";
+            LigneData[1] = "";
+            LigneData[2] = "";
+            LigneData[3] = "";
+
+            /*  LigneData[3] = "";
+            LigneData[4] = "";
+            LigneData[5] = "";
+            LigneData[6] = qteTotalClient;*/
+            //  df.insertRow(startAdd, LigneData);
+            table.setModel(df);
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e);
+        }
+    }
+
     public void addRowsStatAchatAllClients(JTable table, String FromDate, String ToDate, String id_marque, String refArticle, String id_client, DefaultTableModel df, String[] lstclient) {
         PreparedStatement pst;
 
@@ -2706,7 +3471,7 @@ public class RechercheDAO {
         Connection conn = obj.Open();
         try {
 
-            String sql = "SELECT distinct c.numero_client as `Client` FROM `Facture` d left join client c on (d.id_client=c.numero_client) left join reglement r on d.Num_facture = r.id_facture left join pourcentagebonus pb on pb.id_client=c.numero_client left join commercial comm on pb.id_commercial=comm.id where d.statut=1 and d.reglement in ('Semi','Non') and c.numero_client != '99999999'";
+            String sql = "SELECT distinct c.numero_client as `Client` FROM `Facture` d left join client c on (d.id_client=c.numero_client) left join reglement r on d.Num_facture = r.id_facture left join pourcentagebonus pb on pb.id_client=c.numero_client left join commercial comm on pb.id_commercial=comm.id where d.statut=1 and d.reglement in ('Semi','Non') /*and c.numero_client != '99999999' */ ";
             String FiltreClauseFrom = "";
             if ((type_filtre.equals("client"))) {
                 FiltreClauseFrom = " and d.id_client <> 0 ";
@@ -3234,6 +3999,65 @@ public class RechercheDAO {
         return RefArticles;
     }
 
+    public String lstArticleGroupe(String FromDate, String ToDate, String groupe_article, String id_commercial, String id_client) {
+
+        PreparedStatement pst;
+
+        DataBase_connect obj = new DataBase_connect();
+
+        Connection conn = obj.Open();
+        String RefArticles = "";
+
+        try {
+
+            String sql2 = "SELECT distinct ref from article where groupe_article = '" + groupe_article + "'";
+            String DateClauseFrom = "";
+
+            /* if (!(FromDate.isEmpty())) {
+                DateClauseFrom = " and b.date_bl >= '" + FromDate + "'";
+                sql2 += DateClauseFrom;
+            }
+            String clientClauseTo = "";
+            if (!(id_client.isEmpty())) {
+                clientClauseTo = " and b.id_client = " + id_client + "";
+                sql2 += clientClauseTo;
+            }
+            String DateClauseTo = "";
+            if (!(ToDate.isEmpty())) {
+                DateClauseTo = " and b.date_bl <= '" + ToDate + "'";
+                sql2 += DateClauseTo;
+            }
+
+            String commercialClause = "";
+            if (!(id_commercial.isEmpty())) {
+                commercialClause = " and pb.id_commercial  = " + id_commercial + "";
+                sql2 += commercialClause;
+
+            }
+
+            String marqueClause = "";
+            if (!(groupe_article.isEmpty())) {
+                marqueClause = " and r.id_marque  = " + groupe_article + "";
+                sql2 = sql2 + marqueClause;
+
+            }*/
+            pst = conn.prepareStatement(sql2);
+
+            rs = pst.executeQuery();
+
+            while (rs.next()) {
+                RefArticles += "'" + rs.getString("ref") + "',";
+            }
+            if (!RefArticles.isEmpty()) {
+
+                RefArticles = RefArticles.substring(0, RefArticles.length() - 1);
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, e.getMessage());
+        }
+        return RefArticles;
+    }
+
     public void addRowsStatAchatParCommercial(JTable table, String FromDate, String ToDate, String id_marque, String id_commercial, String id_client, DefaultTableModel df) {
         PreparedStatement pst;
 
@@ -3544,7 +4368,10 @@ public class RechercheDAO {
 
                 String sql = "";
 
-                sql = "SELECT  d.`Num_facture` as num_fact,c.nom as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,if(sum(r.regle) is NULL, 0, sum(r.regle)) as \"regle\", (d.`TTC`-if(sum(r.regle) is NULL, 0, sum(r.regle))) as \"Impaye\",comm.nom as \"Commercial\" "
+                sql = "SELECT  d.`Num_facture` as num_fact,if(c.numero_client='99999999',concat(concat(c.nom,' : '),d.passager),c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,"
+                        + "if(sum(r.regle) is NULL, 0, sum(if(r.facture_avoir='Facture',r.regle,0))) as \"regle\", "
+                        + "(d.`TTC`-if(sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))) is NULL, 0, sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))))) as \"Impaye\","
+                        + "comm.nom as \"Commercial\" "
                         + "FROM `Facture` d "
                         + "left join client c on (d.id_client=c.numero_client) "
                         + "left join reglement r on d.Num_facture = r.id_facture "
@@ -3723,13 +4550,16 @@ public class RechercheDAO {
 
             String sql = "";
 
-            sql = "SELECT  d.`Num_facture` as num_fact,c.nom as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc,if(sum(r.regle) is NULL, 0, sum(r.regle)) as \"regle\", (d.`TTC`-if(sum(r.regle) is NULL, 0, sum(r.regle))) as \"Impaye\",comm.nom as \"Commercial\" "
+            sql = "SELECT  d.`Num_facture` as num_fact,if(c.numero_client='99999999',concat(concat(c.nom,' : '),d.passager),c.nom) as `Client`,DATE_FORMAT(d.`date_facture`,'%d/%m/%Y') as date,d.`TTC` as ttc, "
+                    + "if(sum(r.regle) is NULL, 0, sum(if(r.facture_avoir='Facture',r.regle,0))) as \"regle\", "
+                    + "(d.`TTC`-if(sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))) is NULL, 0, sum(if(r.statut=0,0,if(r.facture_avoir='Facture',r.regle,0))))) as \"Impaye\""
+                    + ",comm.nom as \"Commercial\" "
                     + "FROM `Facture` d "
                     + "left join client c on (d.id_client=c.numero_client) "
                     + "left join reglement r on d.Num_facture = r.id_facture "
                     + "left join pourcentagebonus pb on pb.id_client=c.numero_client "
                     + "left join commercial comm on pb.id_commercial=comm.id "
-                    + "where d.statut=1 and d.reglement in ('Semi','Non')";
+                    + "where d.statut=1 and  d.reglement in ('Semi','Non')";
 
             //numero_Client, nom, num_Tel, adresse, Ville, pays, code_Postale, zone_Geo, id_Fiscale, Email, site, fax, adresse_livraison, contact_Client, type_Client, Etat_Paiement, agence, Compte_Bank, Fournisseur_Preced, actif, Id_Commercial
             String FiltreClauseFrom = "";
