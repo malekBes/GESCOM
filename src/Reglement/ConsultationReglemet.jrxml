@@ -1,0 +1,314 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.4641000000000013"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="table_title" class="java.lang.String"/>
+	<parameter name="FromDate" class="java.lang.String"/>
+	<parameter name="ToDate" class="java.lang.String"/>
+	<parameter name="type_reglement" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="Num Facture" class="java.lang.String"/>
+	<field name="Date Echéance" class="java.lang.String"/>
+	<field name="Total TTC" class="java.lang.String"/>
+	<field name="Montant Restant" class="java.lang.String"/>
+	<field name="Type Réglement" class="java.lang.String"/>
+	<field name="Banque" class="java.lang.String"/>
+	<field name="Num Cheque" class="java.lang.String"/>
+	<field name="Montant Relge" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="64">
+			<textField isStretchWithOverflow="true">
+				<reportElement x="180" y="23" width="242" height="26" uuid="a80b2ce0-8092-4f14-88c0-45f9e4617968"/>
+				<textElement textAlignment="Center">
+					<font size="11" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{table_title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="17" y="37" width="159" height="27" uuid="1af82ae4-cec3-404b-b52e-b0d6a9c0acbd"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Date Du :"+ $P{FromDate} +"\nDate à : "+$P{ToDate}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="18" y="19" width="158" height="20" uuid="6559ee43-db52-4b46-8962-86cad6b12e45"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Type Règlement : "+$P{type_reglement}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="530" y="26" width="43" height="11" uuid="15d7beb1-b57a-4769-9686-ac0902fcffe1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="29">
+			<staticText>
+				<reportElement key="staticText-9" x="38" y="0" width="59" height="29" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num Facture]]></text>
+			</staticText>
+			<elementGroup/>
+			<staticText>
+				<reportElement key="staticText-9" x="97" y="0" width="69" height="29" uuid="7ef6ae92-3453-4761-83fd-fd5b3a265fd3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Echéance]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="166" y="0" width="56" height="29" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total TTC]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="222" y="0" width="66" height="29" uuid="8271bdd1-9e2e-4e16-b311-7ac6ee85e1eb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Montant Reglé]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="0" width="82" height="29" uuid="5752d202-32f9-4636-98b7-ed70afdd8e2b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Montant Restant]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="370" y="0" width="65" height="29" uuid="8eb2e3f3-df50-463b-b229-a728ebf72aa9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Type Réglement]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="435" y="0" width="59" height="29" uuid="f752c360-1b13-40d2-a1b6-4df91894e434"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Banque]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="494" y="0" width="70" height="29" uuid="2ccf098e-4d20-4b7a-b6b9-b226afcccca9"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Num Cheque]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="15">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="38" y="0" width="59" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Num Facture}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement key="textField" x="97" y="0" width="69" height="15" uuid="e9e58914-2d3d-40b1-bd8c-dda5de106583"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Date Echéance}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="0" width="82" height="15" uuid="afdae2b4-7aad-4b60-9890-8d16aae49fa4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Montant Restant}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="166" y="0" width="56" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Total TTC}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="370" y="0" width="65" height="15" uuid="9d67fabc-8a4b-4134-a416-05e4b1f24005"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Type Réglement}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="222" y="0" width="66" height="15" uuid="f1f90f55-309a-4691-b494-f8e276663f64"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Montant Relge}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="435" y="0" width="59" height="15" uuid="3c83bc2a-43f6-4692-8c09-b3a3b9f58b1e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{Banque}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="494" y="0" width="70" height="15" uuid="f6503817-6ab3-4ae2-94cb-cf93a7e11f56"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Num Cheque}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="32">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="538" y="9" width="23" height="13" uuid="cc6600d4-8fe3-4173-a403-6a7f1ee45aa9"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="562" y="9" width="21" height="13" uuid="71e127fe-1179-4c65-94db-ea9331ab065b"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="483" y="9" width="54" height="13" uuid="40097a76-9c4e-4bc5-999c-7aa3c9a95b81"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

@@ -1,0 +1,244 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="2.143588810000002"/>
+	<property name="ireport.x" value="409"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="table_title" class="java.lang.String"/>
+	<parameter name="query" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="Ref Article" class="java.lang.String"/>
+	<field name="Activité" class="java.lang.String"/>
+	<field name="Derniére BL" class="java.lang.String"/>
+	<field name="Client" class="java.lang.String"/>
+	<field name="Nb Jrs dés la Dernière Vente" class="java.lang.String"/>
+	<field name="Dépasse 45 jrs ? (O/N)" class="java.lang.String"/>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="41">
+			<textField>
+				<reportElement x="179" y="14" width="242" height="26" uuid="a80b2ce0-8092-4f14-88c0-45f9e4617968"/>
+				<textElement textAlignment="Center">
+					<font size="15" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{table_title}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="534" y="14" width="43" height="11" uuid="9d2b8f92-8ee7-4cc0-8a23-79f764942ce1"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="14">
+			<staticText>
+				<reportElement key="staticText-9" x="22" y="0" width="116" height="14" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Client]]></text>
+			</staticText>
+			<elementGroup/>
+			<staticText>
+				<reportElement key="staticText-9" x="214" y="0" width="86" height="14" uuid="7ef6ae92-3453-4761-83fd-fd5b3a265fd3"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Date Dernière BL]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="138" y="0" width="76" height="14" uuid="107a2469-6f4c-4dbb-bcee-00141183437c"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="7" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Réference Article]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="300" y="0" width="47" height="14" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Activité]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="347" y="0" width="131" height="14" uuid="edf31367-a622-406a-ba5f-dd3abcff533e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nb Jrs dés la Dernière Vente]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="478" y="0" width="99" height="14" uuid="cc672697-4aed-41a0-a826-47a888c9547e"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Dépasse 45 jrs ? (O/N)]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="23">
+			<textField>
+				<reportElement x="138" y="0" width="76" height="23" uuid="f7d01475-7d11-47b1-8685-9278b7e68ea6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Ref Article}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="300" y="0" width="47" height="23" uuid="229b4760-bda4-423b-8bf6-55e5f7b5bfa2"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Activité}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="214" y="0" width="86" height="23" uuid="f7bcc6c1-7482-4fb5-9940-5c3a164d31ce"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Derniére BL}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="22" y="0" width="116" height="23" uuid="1959e856-e9a5-4781-8bfd-39edac6aa681"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement>
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{Client}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="347" y="0" width="131" height="23" uuid="b55b1b0b-7424-499e-bbed-b72ab3147252"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Nb Jrs dés la Dernière Vente}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="478" y="0" width="99" height="23" uuid="82035b02-03ec-4c24-89e1-195f57b32850"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{Dépasse 45 jrs ? (O/N)}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="30">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="533" y="6" width="23" height="13" uuid="cc6600d4-8fe3-4173-a403-6a7f1ee45aa9"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " of "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="557" y="6" width="21" height="13" uuid="71e127fe-1179-4c65-94db-ea9331ab065b"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="478" y="6" width="54" height="13" uuid="40097a76-9c4e-4bc5-999c-7aa3c9a95b81"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

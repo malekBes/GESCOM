@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="df19f5b2-c29f-45ac-bb34-2af6f39d1408">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<field name="Client" class="java.lang.String"/>
+	<field name="Commercial" class="java.lang.String"/>
+	<field name="Num Fact" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="40" width="77" height="20" uuid="0952c7ca-f9c9-47be-9098-30c3d6f4082b"/>
+				<text><![CDATA[Commercial]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="60" width="555" height="1" uuid="1049cd34-51ff-4201-9e82-fb43f18fa416"/>
+			</line>
+			<staticText>
+				<reportElement x="77" y="41" width="102" height="20" uuid="04034fe2-d4bd-41e1-b7dc-e44cd4de2d91"/>
+				<text><![CDATA[Client]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="179" y="40" width="100" height="20" uuid="b24dfbbf-6000-4c0b-a0a1-f1f9f1d742a8"/>
+				<text><![CDATA[Num Fact]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="77" y="1" width="102" height="20" uuid="c9ecca23-62fe-44ae-b7b5-f06cd10b0c44"/>
+				<textFieldExpression><![CDATA[$F{Client}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="1" width="100" height="20" uuid="d39b2d79-8150-4afb-89ba-4a878096b9c5"/>
+				<textFieldExpression><![CDATA[$F{Commercial}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="0" y="20" width="555" height="1" uuid="997bcf2f-ce60-4fb7-8fc9-2a9c527f89d7"/>
+			</line>
+			<textField>
+				<reportElement x="179" y="1" width="100" height="20" uuid="28a7367f-7abc-413a-baab-26d83eb7ed0e"/>
+				<textFieldExpression><![CDATA[$F{Num Fact}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+</jasperReport>

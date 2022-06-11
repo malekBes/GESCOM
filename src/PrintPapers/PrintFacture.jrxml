@@ -1,0 +1,407 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.331000000000003"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="336"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="num_facture" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="CUST_ACC" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="TOTAL_HT" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="date_facture" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="LOGO_PATH" class="java.lang.String" isForPrompting="false">
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
+	</parameter>
+	<parameter name="remise" class="java.lang.String"/>
+	<parameter name="TOTAL_TVA" class="java.lang.String"/>
+	<parameter name="TOTAL_TTC" class="java.lang.String"/>
+	<parameter name="isTimbre" class="java.lang.String"/>
+	<parameter name="valTimbre" class="java.lang.String"/>
+	<parameter name="TOTAL_REMISE" class="java.lang.String"/>
+	<parameter name="TOTAL_TTC_Lettre" class="java.lang.String"/>
+	<parameter name="PathImg" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_bl" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="ref_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="designation_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qte" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="prix_u" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_HT" class="java.lang.String"/>
+	<field name="total_TTC" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="remise" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="num_facture" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="adresse" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nom" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="id_Fiscale" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="date_bl_fomrated" class="java.lang.String"/>
+	<field name="tva" class="java.lang.String"/>
+	<background>
+		<band height="842">
+			<image>
+				<reportElement x="10" y="0" width="579" height="842" uuid="926b3576-e4a6-460c-841a-54f64319c89e"/>
+				<imageExpression><![CDATA[$P{remise}== "Non"?$P{PathImg}+"template-table-5.png":$P{PathImg}+"template-table-5-remise.png"]]></imageExpression>
+			</image>
+		</band>
+	</background>
+	<title>
+		<band/>
+	</title>
+	<pageHeader>
+		<band height="230">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" mode="Transparent" x="64" y="136" width="126" height="13" backcolor="#FFFFFF" uuid="926ff090-e7a0-4892-b4c7-18b01b2fa229"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA["N° : " + $P{num_facture}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" mode="Transparent" x="101" y="161" width="78" height="13" backcolor="#FFFFFF" uuid="62bb44d5-e203-4850-a9ca-a822f9ee95bc"/>
+				<textElement textAlignment="Left">
+					<font size="10"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$P{date_facture}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-1" x="64" y="104" width="74" height="32" uuid="f7cb9405-700b-46ae-a95c-1782557a0705"/>
+				<textElement>
+					<font size="18" isBold="true" pdfFontName="Helvetica-Bold"/>
+				</textElement>
+				<text><![CDATA[Facture]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-3" x="64" y="161" width="37" height="13" uuid="e7ec47f3-4339-4128-8e15-611a8d43af5e"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Date]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-6" x="446" y="207" width="40" height="14" uuid="c5055aec-fb63-4fb5-8252-6ac13b30c3f3"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Total HT]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-7" x="333" y="207" width="56" height="14" uuid="b5343856-2335-485c-8337-f1e12088bc9d"/>
+				<textElement>
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Prix.U]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-8" x="393" y="207" width="36" height="14" uuid="0fabc39e-9f51-4593-aa9a-8bb4582155e4"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[QTE]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="61" y="207" width="139" height="14" uuid="674d4991-3653-4bd3-b186-5bb2fb89da4a"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[Désignation produit]]></text>
+			</staticText>
+			<elementGroup/>
+			<staticText>
+				<reportElement key="staticText-6" x="503" y="207" width="30" height="14" uuid="37a3c423-2daf-4908-8957-80bfa6c81116"/>
+				<textElement textAlignment="Center">
+					<font size="10"/>
+				</textElement>
+				<text><![CDATA[TVA]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="356" y="143" width="185" height="43" uuid="b6e024e3-bd5f-477d-827a-03535ba46f00"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$F{adresse}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="409" y="122" width="132" height="21" uuid="5f26e0c8-421e-4c9f-921a-b97462fbda37"/>
+				<box>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_Fiscale}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="356" y="122" width="53" height="21" uuid="901d862c-5009-4ba8-9869-40f2ccb42149"/>
+				<box>
+					<leftPen lineWidth="1.0"/>
+				</box>
+				<text><![CDATA[ Code TVA :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="356" y="94" width="185" height="28" uuid="cf36c585-0b40-4b94-ae42-164e943bc2ae"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[" "+$F{nom}]]></textFieldExpression>
+			</textField>
+			<textField pattern="##0.00" isBlankWhenNull="false">
+				<reportElement key="textField-2" x="539" y="206" width="37" height="16" uuid="68b55594-a11e-41de-a0aa-8f9e788341dd"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "" : "Remise" )]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="16">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="117" y="1" width="221" height="15" uuid="14a647b6-9bb1-4b7e-bbca-fcf2dedb726a"/>
+				<box leftPadding="3"/>
+				<textElement verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_article} + " "+  $F{designation_article}]]></textFieldExpression>
+			</textField>
+			<break>
+				<reportElement x="0" y="15" width="100" height="1" uuid="054aa7ca-c4a5-4d07-bc7e-b35ae5fca42a">
+					<printWhenExpression><![CDATA[$V{REPORT_COUNT} % 25 == 0]]></printWhenExpression>
+				</reportElement>
+			</break>
+			<textField isBlankWhenNull="true">
+				<reportElement x="16" y="1" width="51" height="15" uuid="d685e2db-6f17-40c7-90fb-000cea317e9c"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_bl}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="396" y="1" width="33" height="14" uuid="0a36685e-581e-4b0d-8bbf-db44b84cdaeb"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qte}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="334" y="0" width="56" height="15" uuid="71f63c84-3dbd-415e-b231-b77421aae8c9"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{prix_u}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="448" y="1" width="40" height="14" uuid="70617ce3-c704-46b2-b0c3-399df54769be"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{total_HT}]]></textFieldExpression>
+			</textField>
+			<textField isBlankWhenNull="true">
+				<reportElement x="66" y="1" width="52" height="15" uuid="b8c6b536-aa4b-4ad5-b7b6-8b806f39fa61"/>
+				<textElement verticalAlignment="Middle">
+					<font size="10" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{date_bl_fomrated}]]></textFieldExpression>
+			</textField>
+			<textField pattern="">
+				<reportElement x="507" y="1" width="29" height="14" uuid="a7485cb7-76b1-4a52-9479-b834592436f0"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{tva}]]></textFieldExpression>
+			</textField>
+			<textField pattern="#,##0.00 %">
+				<reportElement x="542" y="0" width="29" height="14" uuid="18a18fb4-e99a-4050-a1ae-58bd19cea153"/>
+				<textElement verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "" : $F{remise}+" %")]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="182">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="513" y="117" width="23" height="13" uuid="76f38611-4f93-4421-85a3-a9827fba820a"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="471" y="117" width="41" height="13" uuid="d26dd473-9429-48da-bb40-30fff48fcdb0"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="537" y="117" width="21" height="13" uuid="7cd0087e-4b9c-486c-a3c4-9774a6c0e3d9"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<lastPageFooter>
+		<band height="213">
+			<textField>
+				<reportElement x="483" y="32" width="58" height="15" uuid="7ec0ab57-053b-41d8-8725-bd0e3f570979"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{TOTAL_TVA}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-10" x="411" y="32" width="130" height="1" uuid="d2ad0d35-bbfb-4dcf-a84f-f56861b98116"/>
+			</line>
+			<textField>
+				<reportElement x="483" y="17" width="58" height="15" uuid="41c529a1-1c10-429d-af8d-f2b7942d99c1"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{TOTAL_HT}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement key="line-9" x="411" y="17" width="130" height="1" uuid="6079d86f-bc9d-4278-9c24-b9af543aff4e"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-11" x="411" y="32" width="72" height="14" uuid="885a40e5-4f76-434e-bfcc-6c355ebfd393"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total TVA]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-9" x="411" y="45" width="130" height="1" uuid="ab14e34d-2223-45b1-a651-d9856a401ad5"/>
+			</line>
+			<staticText>
+				<reportElement key="staticText-11" x="411" y="18" width="69" height="14" uuid="86260af9-e150-4536-be48-ef7e6d855a17"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Total HT]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="166" y="77" width="252" height="34" uuid="43bb1861-0383-46bf-995c-60b08eb8a6fe"/>
+				<textElement>
+					<font size="8" isUnderline="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{TOTAL_TTC_Lettre}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="483" y="62" width="58" height="15" uuid="d729fe18-8f8b-4b41-8a30-226f425f3900"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Right">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? $P{TOTAL_TTC} :  $P{TOTAL_REMISE}+"\n"+$P{TOTAL_TTC} )]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-11" x="411" y="47" width="72" height="14" uuid="88a8d183-885a-4e05-a610-cdb758f1ddc9"/>
+				<textElement verticalAlignment="Middle"/>
+				<text><![CDATA[Timbe]]></text>
+			</staticText>
+			<line>
+				<reportElement key="line-9" x="411" y="61" width="130" height="1" uuid="9dd881a9-85ac-495e-a789-273b31dcc7dc"/>
+			</line>
+			<textField>
+				<reportElement x="483" y="47" width="58" height="15" uuid="a0c50194-4282-4ad2-ba90-e9db582be369"/>
+				<textElement textAlignment="Right"/>
+				<textFieldExpression><![CDATA[$P{valTimbre}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="13" y="78" width="154" height="20" uuid="c4606024-f7f4-4b3a-bd94-337d0f5322ec"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Arrêté la présente facture à la somme de :]]></text>
+			</staticText>
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="514" y="148" width="23" height="13" uuid="7b254823-2213-403e-9994-1c23b69b19ab"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " sur "]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="472" y="148" width="41" height="13" uuid="f2ecd729-75ee-4bfc-8a87-54559f9cb664"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="542" y="148" width="21" height="13" uuid="0f06b12d-640d-4243-a3bd-a0f34c64c035"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="411" y="62" width="74" height="15" uuid="7c02502d-cf78-4d85-bbff-3803b884e5b0"/>
+				<box>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+				</box>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[($P{remise} =="Non" ? "Total Facture" :  "Remise \n"+"Total Facture" )]]></textFieldExpression>
+			</textField>
+		</band>
+	</lastPageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>

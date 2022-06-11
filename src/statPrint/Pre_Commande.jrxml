@@ -1,0 +1,206 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="invoice_czone_preprinted_a5_fanfold" pageWidth="595" pageHeight="842" whenNoDataType="AllSectionsNoDetail" columnWidth="595" leftMargin="0" rightMargin="0" topMargin="0" bottomMargin="0" uuid="301c7fa8-60f3-4609-abd8-e67610b37b6d">
+	<property name="ireport.scriptlethandling" value="0"/>
+	<property name="ireport.encoding" value="UTF-8"/>
+	<property name="ireport.zoom" value="1.9487171000000016"/>
+	<property name="ireport.x" value="289"/>
+	<property name="ireport.y" value="0"/>
+	<import value="net.sf.jasperreports.engine.*"/>
+	<import value="java.util.*"/>
+	<import value="net.sf.jasperreports.engine.data.*"/>
+	<parameter name="table_title" class="java.lang.String"/>
+	<parameter name="num_pre_cmd" class="java.lang.String"/>
+	<parameter name="nom_founisseur" class="java.lang.String"/>
+	<parameter name="nom_client" class="java.lang.String"/>
+	<parameter name="date_pre_cmd" class="java.lang.String"/>
+	<parameter name="nb_rows" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[select lc.ref_article,lc.designation_article,lc.qte  from ligne_pre_commande lc WHERE lc.id_pre_commande=$P{num_pre_cmd}]]>
+	</queryString>
+	<field name="ref_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="designation_article" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="qte" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band/>
+	</background>
+	<title>
+		<band height="75">
+			<staticText>
+				<reportElement x="23" y="16" width="90" height="20" uuid="e6766be0-a3ac-4c89-9f2d-84a3c8076acb"/>
+				<text><![CDATA[COMMANDE N° :]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="23" y="46" width="90" height="20" uuid="2130b776-c600-4abd-92db-5646ceb340d0"/>
+				<text><![CDATA[Date Commande :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="113" y="46" width="100" height="20" uuid="eb13689e-52c6-4409-ae62-456267156254"/>
+				<textFieldExpression><![CDATA[$P{date_pre_cmd}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="113" y="16" width="100" height="20" uuid="d83807b3-d985-47d4-89c1-e7b10fff410b"/>
+				<textFieldExpression><![CDATA[$P{num_pre_cmd}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="277" y="41" width="154" height="29" uuid="3fc858d9-f1e0-4f41-9004-5d689d23dc22"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nom_client}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true">
+				<reportElement x="277" y="13" width="154" height="28" uuid="1f98443c-f39f-4520-9903-f6d534bed0af"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$P{nom_founisseur}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="474" y="16" width="44" height="20" uuid="4c45e9db-abcd-47c1-ad41-c6591953edf4"/>
+				<text><![CDATA[Tunis, le :]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="520" y="16" width="62" height="20" uuid="e31d61a8-a0d9-47c8-86ff-d89a52cf29b4"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy").format(new Date())]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="14">
+			<elementGroup/>
+			<staticText>
+				<reportElement key="staticText-9" x="39" y="0" width="126" height="14" uuid="309425c3-2c8b-497d-b42f-e6d3e4141e9b"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Ref Article]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="165" y="0" width="322" height="14" uuid="8271bdd1-9e2e-4e16-b311-7ac6ee85e1eb"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Designation]]></text>
+			</staticText>
+			<staticText>
+				<reportElement key="staticText-9" x="487" y="0" width="100" height="14" uuid="372bfc04-35ac-42d2-b9a0-76264e8013f6"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.5"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.5"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantite]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band/>
+	</columnHeader>
+	<detail>
+		<band height="15">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="39" y="0" width="126" height="15" uuid="d13f9295-98ac-474b-b217-c8e152ce5eb4"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{ref_article}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="487" y="0" width="100" height="15" uuid="1ea56c44-8e48-4743-b2a1-87af221e1b5d"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{qte}]]></textFieldExpression>
+			</textField>
+			<textField isStretchWithOverflow="true" isBlankWhenNull="false">
+				<reportElement key="textField" x="165" y="0" width="322" height="15" uuid="830ce53d-c1e7-4384-af7c-7ec5c17aa294"/>
+				<box>
+					<pen lineWidth="0.5"/>
+					<topPen lineWidth="0.0"/>
+					<leftPen lineWidth="0.5"/>
+					<bottomPen lineWidth="0.0"/>
+					<rightPen lineWidth="0.5"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="6"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{designation_article}]]></textFieldExpression>
+			</textField>
+			<line>
+				<reportElement x="39" y="14" width="548" height="1" uuid="0cc8bc78-f3ec-4721-97a8-d8a189114be0">
+					<printWhenExpression><![CDATA[($V{COLUMN_COUNT}).toString().equals($P{nb_rows})]]></printWhenExpression>
+				</reportElement>
+			</line>
+		</band>
+	</detail>
+	<columnFooter>
+		<band/>
+	</columnFooter>
+	<pageFooter>
+		<band height="31">
+			<textField isBlankWhenNull="false">
+				<reportElement key="textField" x="538" y="8" width="23" height="13" uuid="cc6600d4-8fe3-4173-a403-6a7f1ee45aa9"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[": "+$V{PAGE_NUMBER}.toString() + " of "]]></textFieldExpression>
+			</textField>
+			<textField evaluationTime="Report" isBlankWhenNull="false">
+				<reportElement key="textField-3" x="562" y="8" width="21" height="13" uuid="71e127fe-1179-4c65-94db-ea9331ab065b"/>
+				<textElement textAlignment="Left">
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$V{PAGE_NUMBER}.toString()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement key="staticText-2" x="483" y="8" width="54" height="13" uuid="40097a76-9c4e-4bc5-999c-7aa3c9a95b81"/>
+				<textElement textAlignment="Right">
+					<font size="8"/>
+				</textElement>
+				<text><![CDATA[Page]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band/>
+	</summary>
+</jasperReport>
